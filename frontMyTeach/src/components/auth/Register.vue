@@ -5,11 +5,24 @@
 			<div v-if="!showLogo" class="loginCont">
 				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
 				<form action="" class="loginForm">
-					<input type="text" placeholder="Login">
+					<input type="text" placeholder="Email">
 					<input type="text" placeholder="Password">
-					<button>Auth</button>
+					<input type="text" placeholder="Access Password">
+                    <input type="text" placeholder="First Name">
+                    <input type="text" placeholder="Last Name">
+                    <div class="checkboxRole">
+                        <div class="checkbox">
+                            <p>Student</p>
+                            <input type="checkbox">
+                        </div>
+                        <div class="checkbox">
+                            <p>Teacher</p>
+                            <input type="checkbox">
+                        </div>
+                    </div>
+					<button>Register</button>
+                    <a href="/auth">Redirect auth</a>
 				</form>
-				<a href="/register">Don't have account?</a>
 			</div>
 		</transition>
 	</div>
@@ -29,9 +42,21 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
+.loginCont a {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	text-decoration: none;
+	color: white;
+	font-size: 14px;
+	margin-top: 5%;
+
+	font-family: 'Anonymous Pro', monospace;
+}
 #logo{
 	position: absolute;
-	top: -90%;
+	top: -25%;
 	left: 35%;
 	width: 100px;
 }
@@ -42,7 +67,11 @@ onMounted(() => {
 	height: 97vh;
 	position: relative;
 }
-
+.checkboxRole{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
 .loginCont {
 	width: 300px;
 	transition: opacity 1s ease-in-out;
@@ -58,7 +87,7 @@ onMounted(() => {
 	align-items: center;
 }
 
-.loginForm input {
+.loginForm input[type="text"] {
     width: 240px;
     height: 30px;
     margin: 10px;
@@ -69,6 +98,15 @@ onMounted(() => {
     font-size: 24px;
 }
 
+.loginForm input[type="checkbox"] {
+    border-radius: 15px;
+    display: flex;
+    align-items: center; 
+    font-size: 24px;
+    height: 20px;
+    width: 20px;
+    margin: 10px;
+}
 .loginForm button {
 	width: 140px;
 	height: 30px;
@@ -79,20 +117,6 @@ onMounted(() => {
 	margin:10px;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400&display=swap');
-
-.loginCont a {
-	display: flex;
-	justify-content: center;
-	text-align: center;
-	text-decoration: none;
-	color: white;
-	font-size: 14px;
-	margin-top: 10%;
-	font-family: 'Anonymous Pro', monospace;
-}
-
-
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 1s ease-in-out;
@@ -102,7 +126,11 @@ onMounted(() => {
 .fade-leave-to {
 	opacity: 0;
 }
-
+.checkbox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .fade-enter-to,
 .fade-leave-from {
 	opacity: 1;
