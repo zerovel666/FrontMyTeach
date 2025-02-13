@@ -9,7 +9,7 @@
 					<input type="text" placeholder="Password">
 					<button>Auth</button>
 				</form>
-				<a href="/register">Don't have account?</a>
+				<router-link to="/register">Don't have account?</router-link>
 			</div>
 		</transition>
 	</div>
@@ -24,7 +24,7 @@ const showLogo = ref(true);
 onMounted(() => {
 	setTimeout(() => {
 		showLogo.value = false;
-	}, 1000);
+	}, 500);
 });
 </script>
 

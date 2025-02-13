@@ -13,15 +13,15 @@
                     <div class="checkboxRole">
                         <div class="checkbox">
                             <p>Student</p>
-                            <input type="checkbox">
+                            <input type="checkbox" v-model="studentCheckBox">
                         </div>
                         <div class="checkbox">
                             <p>Teacher</p>
-                            <input type="checkbox">
+                            <input type="checkbox" v-model="teacherCheckBox">
                         </div>
                     </div>
 					<button>Register</button>
-                    <a href="/auth">Redirect auth</a>
+                    <router-link to="/auth">Redirect auth</router-link>
 				</form>
 			</div>
 		</transition>
@@ -29,15 +29,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import PreLoad from '@/components/auth/PreLoad.vue';
 
 const showLogo = ref(true);
+const studentCheckBox = ref(false)
+const teacherCheckBox = ref(false)
+
+
+watch(studentCheckBox, (val) => {
+  if (val) teacherCheckBox.value = false;
+});
+
+watch(teacherCheckBox, (val) => {
+  if (val) studentCheckBox.value = false;
+});
 
 onMounted(() => {
 	setTimeout(() => {
 		showLogo.value = false;
-	}, 1000);
+	}, 500);
 });
 </script>
 
@@ -56,7 +67,7 @@ onMounted(() => {
 }
 #logo{
 	position: absolute;
-	top: -25%;
+	top: -20%;
 	left: 35%;
 	width: 100px;
 }
@@ -71,6 +82,7 @@ onMounted(() => {
     display: flex;
     justify-content:space-between;
     align-items: center;
+    accent-color: #af00b8;
 }
 .loginCont {
 	width: 300px;
