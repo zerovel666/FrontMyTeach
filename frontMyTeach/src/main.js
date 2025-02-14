@@ -7,6 +7,7 @@ import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Auth from './components/auth/Login.vue';
 import Register from './components/auth/Register.vue';
+import Main from './components/pages/Main.vue';
 
 VueCookies.config('7d', '', '', false);
 axios.interceptors.request.use(
@@ -21,7 +22,7 @@ axios.interceptors.request.use(
 );
 
 const routes = [
-  { path: '/', redirect: '/auth' },
+  { path: '/', component: Main },
   { path: '/auth', component: Auth },
   { path: '/register', component: Register }
 ];

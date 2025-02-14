@@ -23,9 +23,11 @@ import Notification from '@/components/Notification.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import VueCookies from 'vue-cookies';
+import { useRouter } from 'vue-router';
 
 const showLogo = ref(true);
 const notificationRef = ref(null);
+const router = useRouter();
 
 const data = ref({
 	type: 'MyTAuth',
@@ -44,6 +46,7 @@ const auth = async () => {
 
 		VueCookies.set('token', encodeURIComponent(token), '7d');
 		decodeURIComponent(VueCookies.get('token'));
+		router.push('/');
 	} catch (err) {
 		notificationRef.value.showNotification('Ошибка авторизации. Проверьте данные.');
 		console.error('Auth error:', err);
