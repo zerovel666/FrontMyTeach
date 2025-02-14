@@ -4,9 +4,9 @@
 	<div class="container">
 		<PreLoad :show-logo="showLogo" />
 		<transition name="fade">
-			<div v-if="!showLogo" class="loginCont">
+			<div v-if="!showLogo" class="registerCont">
 				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
-				<form @submit.prevent="register" class="loginForm">
+				<form @submit.prevent="register" class="registerForm">
 					<input type="text" v-model="data.email" placeholder="Email">
 					<input type="password" v-model="data.password" placeholder="Password">
 					<input type="password" v-model="data.accessPassword" placeholder="Access Password">
@@ -106,7 +106,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.loginCont a {
+.registerCont a {
 	display: flex;
 	justify-content: center;
 	text-align: center;
@@ -145,7 +145,7 @@ onMounted(() => {
 	accent-color: #af00b8;
 }
 
-.loginCont {
+.registerCont {
 	width: 300px;
 	transition: opacity 1s ease-in-out;
 	position: absolute;
@@ -154,14 +154,35 @@ onMounted(() => {
 	align-items: center;
 }
 
-.loginForm {
+.registerForm {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }
+.registerForm input:-webkit-autofill[type="text"],[type="password"] {
+	box-shadow: 0 0 0 1000px white inset !important;
+	transition: background-color 5000s ease-in-out 0s;
+}
 
-.loginForm input[type="text"],
+.registerForm input[type="text"]:hover, 
+.registerForm input[type="password"]:hover {
+  box-shadow: 0px 0px 1000px #f200ff, 0 0 0 1000px white inset !important;
+  transform: scale(1.05);
+}
+
+.registerForm button:hover {
+	box-shadow: 0px 0px 1000px #f200ff,
+		inset 0px 4px 4px rgba(0, 0, 0, 0.5);
+	transform: scale(1.05);
+	cursor: pointer;
+}
+
+.registerForm button {
+	transition: all 0.25s ease-in-out;
+}
+
+.registerForm input[type="text"],
 [type="password"] {
 	width: 240px;
 	height: 30px;
@@ -173,7 +194,7 @@ onMounted(() => {
 	font-size: 24px;
 }
 
-.loginForm input[type="checkbox"] {
+.registerForm input[type="checkbox"] {
 	border-radius: 15px;
 	display: flex;
 	align-items: center;
@@ -183,7 +204,7 @@ onMounted(() => {
 	margin: 10px;
 }
 
-.loginForm button {
+.registerForm button {
 	width: 140px;
 	height: 30px;
 	border-radius: 15px;

@@ -6,8 +6,8 @@
 			<div v-if="!showLogo" class="loginCont">
 				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
 				<form @submit.prevent="auth" action="" class="loginForm">
-					<input type="text" placeholder="Email" v-model="data.email" required>
-					<input type="password" placeholder="Password" v-model="data.password" required>
+					<input type="text" placeholder="Email" v-model="data.email">
+					<input type="password" placeholder="Password" v-model="data.password">
 					<button type="submit">Auth</button>
 				</form>
 				<router-link to="/register">Don't have account?</router-link>
@@ -28,13 +28,17 @@ const showLogo = ref(true);
 const notificationRef = ref(null);
 
 const data = ref({
-  type: 'MyTAuth',
-  email: '',
-  password: ''
+	type: 'MyTAuth',
+	email: '',
+	password: ''
 });
 
 const auth = async () => {
 	try {
+		if (!data.value.email || !data.value.password) {
+			notificationRef.value.showNotification('Заполните все поля');
+			return;
+		}
 		const response = await axios.post(API_URL + '/auth/login', data.value);
 		const token = response.data.token;
 
@@ -108,6 +112,24 @@ onMounted(() => {
 	align-items: center;
 	padding-left: 10px;
 	font-size: 24px;
+	transition: all 0.25s ease-in-out !important;
+}
+
+.loginForm input:-webkit-autofill {
+	box-shadow: 0 0 0 1000px white inset !important;
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+.loginForm input:hover {
+	box-shadow: 0px 0px 1000px #f200ff, 0 0 0 1000px white inset !important;
+	transform: scale(1.05);
+}
+
+.loginForm button:hover {
+	box-shadow: 0px 0px 1000px #f200ff,
+		inset 0px 4px 4px rgba(0, 0, 0, 0.5);
+	transform: scale(1.05);
+	cursor: pointer;
 }
 
 .loginForm button {
@@ -118,6 +140,12 @@ onMounted(() => {
 	font-weight: 100;
 	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
 	margin: 10px;
+}
+
+
+
+.loginForm button {
+	transition: all 0.25s ease-in-out;
 }
 
 .loginCont a {
