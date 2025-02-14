@@ -4,10 +4,10 @@
 		<transition name="fade">
 			<div v-if="!showLogo" class="loginCont">
 				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
-				<form action="" class="loginForm">
-					<input type="text" placeholder="Login">
-					<input type="text" placeholder="Password">
-					<button>Auth</button>
+				<form @submit.prevent="auth" action="" class="loginForm">
+					<input type="text" placeholder="Email" v-model="data.email" required>
+					<input type="text" placeholder="Password" v-model="data.password" required>
+					<button type="submit">Auth</button>
 				</form>
 				<router-link to="/register">Don't have account?</router-link>
 			</div>
@@ -18,23 +18,60 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import PreLoad from '@/components/auth/PreLoad.vue';
+import axios from 'axios';
+import { API_URL } from '@/config';
+import VueCookies from 'vue-cookies';
 
 const showLogo = ref(true);
+const data = ref({
+  type: 'MyTAuth',
+  email: '',
+  password: ''
+});
+
+const auth = async () => {
+	try {
+		const response = await axios.post(API_URL + '/auth/login', data.value);
+		const token = response.data.token;
+
+		VueCookies.set('token', encodeURIComponent(token), '7d');
+
+		decodeURIComponent(VueCookies.get('token'));
+	} catch (err) {
+		console.error('Auth error:', err);
+	}
+};
+
+axios.interceptors.request.use(
+	(config) => {
+		const token = VueCookies.get('token');
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
+		return config;
+	},
+	(error) => Promise.reject(error)
+);
+
 
 onMounted(() => {
 	setTimeout(() => {
+		console.log('Auth');
 		showLogo.value = false;
 	}, 500);
 });
 </script>
 
 <style scoped>
-#logo{
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400&display=swap');
+
+#logo {
 	position: absolute;
 	top: -90%;
 	left: 35%;
 	width: 100px;
 }
+
 .container {
 	display: flex;
 	justify-content: center;
@@ -51,6 +88,7 @@ onMounted(() => {
 	justify-content: center;
 	align-items: center;
 }
+
 .loginForm {
 	display: flex;
 	flex-direction: column;
@@ -59,14 +97,14 @@ onMounted(() => {
 }
 
 .loginForm input {
-    width: 240px;
-    height: 30px;
-    margin: 10px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center; 
-    padding-left: 10px; 
-    font-size: 24px;
+	width: 240px;
+	height: 30px;
+	margin: 10px;
+	border-radius: 15px;
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+	font-size: 24px;
 }
 
 .loginForm button {
@@ -76,10 +114,8 @@ onMounted(() => {
 	font-size: 22px;
 	font-weight: 100;
 	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
-	margin:10px;
+	margin: 10px;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400&display=swap');
 
 .loginCont a {
 	display: flex;

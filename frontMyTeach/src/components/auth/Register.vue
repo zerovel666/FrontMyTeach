@@ -4,25 +4,28 @@
 		<transition name="fade">
 			<div v-if="!showLogo" class="loginCont">
 				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
-				<form action="" class="loginForm">
-					<input type="text" placeholder="Email">
-					<input type="text" placeholder="Password">
-					<input type="text" placeholder="Access Password">
-                    <input type="text" placeholder="First Name">
-                    <input type="text" placeholder="Last Name">
-                    <div class="checkboxRole">
-                        <div class="checkbox">
-                            <p>Student</p>
-                            <input type="checkbox" v-model="studentCheckBox">
-                        </div>
-                        <div class="checkbox">
-                            <p>Teacher</p>
-                            <input type="checkbox" v-model="teacherCheckBox">
-                        </div>
-                    </div>
-					<button>Register</button>
-                    <router-link to="/auth">Redirect auth</router-link>
+				<form @submit.prevent="register" class="loginForm">
+					<input type="text" v-model="data.email" placeholder="Email" required>
+					<input type="password" v-model="data.password" placeholder="Password" required>
+					<input type="password" v-model="data.accessPassword" placeholder="Access Password" required>
+					<p v-if="error" id="errorPassword">{{ error }}</p>
+					<input type="text" v-model="data.first_name" placeholder="First Name" required>
+					<input type="text" v-model="data.last_name" placeholder="Last Name" required>
+					<div class="checkboxRole" required>
+						<div class="checkbox">
+							<p>Student</p>
+							<input type="checkbox" v-model="studentCheckBox">
+						</div>
+						<div class="checkbox">
+							<p>Teacher</p>
+							<input type="checkbox" v-model="teacherCheckBox">
+						</div>
+					</div>
+					<button type="submit">Register</button>
 				</form>
+
+				<router-link to="/auth">Redirect auth</router-link>
+
 			</div>
 		</transition>
 	</div>
@@ -30,19 +33,76 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { API_URL } from '@/config';
+
+const router = useRouter();
 import PreLoad from '@/components/auth/PreLoad.vue';
 
 const showLogo = ref(true);
 const studentCheckBox = ref(false)
 const teacherCheckBox = ref(false)
 
+const error = ref('');
+
+const data = ref({
+	email: '',
+	password: '',
+	accessPassword: '',
+	first_name: '',
+	last_name: '',
+	image_path: null,
+	role: '',
+	type: 'MyTAuth'
+});
+
+
+const register = async () => {
+	if (data.value.password !== data.value.accessPassword) {
+		error.value = 'Пароли не совпадают';
+		setTimeout(() => {
+			error.value = '';
+		}, 3000);
+		return;
+	} else {
+		error.value = '';
+	}
+
+	data.value.role = studentCheckBox.value ? 'student' : teacherCheckBox.value ? 'teacher' : '';
+
+	if (!data.value.role) {
+		error.value = 'Выберите роль';
+		setTimeout(() => {
+			error.value = '';
+		}, 3000);
+		return;
+	}
+
+	try {
+		console.log(data.value);
+		const response = await axios.post(API_URL + '/auth/register', data.value);
+		if (response.data.status === '200' && response.data.message === 'Succefully request into create new User'){
+			router.push('/auth');
+		} else {
+			error.value = 'Ошибка регистрации';
+			setTimeout(() => {
+				error.value = '';
+			}, 3000);
+		}
+		router.push('/auth');
+	} catch (err) {
+		console.error('Auth error:', err);
+	}
+};
+
 
 watch(studentCheckBox, (val) => {
-  if (val) teacherCheckBox.value = false;
+	if (val) teacherCheckBox.value = false;
 });
 
 watch(teacherCheckBox, (val) => {
-  if (val) studentCheckBox.value = false;
+	if (val) studentCheckBox.value = false;
 });
 
 onMounted(() => {
@@ -53,7 +113,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
 .loginCont a {
 	display: flex;
 	justify-content: center;
@@ -65,12 +124,19 @@ onMounted(() => {
 
 	font-family: 'Anonymous Pro', monospace;
 }
-#logo{
+
+#errorPassword {
+	color: red;
+	font-size: 14px;
+}
+
+#logo {
 	position: absolute;
 	top: -20%;
 	left: 35%;
 	width: 100px;
 }
+
 .container {
 	display: flex;
 	justify-content: center;
@@ -78,12 +144,14 @@ onMounted(() => {
 	height: 97vh;
 	position: relative;
 }
-.checkboxRole{
-    display: flex;
-    justify-content:space-between;
-    align-items: center;
-    accent-color: #af00b8;
+
+.checkboxRole {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	accent-color: #af00b8;
 }
+
 .loginCont {
 	width: 300px;
 	transition: opacity 1s ease-in-out;
@@ -92,6 +160,7 @@ onMounted(() => {
 	justify-content: center;
 	align-items: center;
 }
+
 .loginForm {
 	display: flex;
 	flex-direction: column;
@@ -99,26 +168,28 @@ onMounted(() => {
 	align-items: center;
 }
 
-.loginForm input[type="text"] {
-    width: 240px;
-    height: 30px;
-    margin: 10px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center; 
-    padding-left: 10px; 
-    font-size: 24px;
+.loginForm input[type="text"],
+[type="password"] {
+	width: 240px;
+	height: 30px;
+	margin: 10px;
+	border-radius: 15px;
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+	font-size: 24px;
 }
 
 .loginForm input[type="checkbox"] {
-    border-radius: 15px;
-    display: flex;
-    align-items: center; 
-    font-size: 24px;
-    height: 20px;
-    width: 20px;
-    margin: 10px;
+	border-radius: 15px;
+	display: flex;
+	align-items: center;
+	font-size: 24px;
+	height: 20px;
+	width: 20px;
+	margin: 10px;
 }
+
 .loginForm button {
 	width: 140px;
 	height: 30px;
@@ -126,7 +197,7 @@ onMounted(() => {
 	font-size: 22px;
 	font-weight: 100;
 	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
-	margin:10px;
+	margin: 10px;
 }
 
 .fade-enter-active,
@@ -138,11 +209,13 @@ onMounted(() => {
 .fade-leave-to {
 	opacity: 0;
 }
-.checkbox{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.checkbox {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
+
 .fade-enter-to,
 .fade-leave-from {
 	opacity: 1;
