@@ -1,4 +1,5 @@
 <template>
+	<Notification ref="notificationRef" />
 	<div class="container">
 		<PreLoad :show-logo="showLogo" />
 		<transition name="fade">
@@ -6,7 +7,7 @@
 				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
 				<form @submit.prevent="auth" action="" class="loginForm">
 					<input type="text" placeholder="Email" v-model="data.email" required>
-					<input type="text" placeholder="Password" v-model="data.password" required>
+					<input type="password" placeholder="Password" v-model="data.password" required>
 					<button type="submit">Auth</button>
 				</form>
 				<router-link to="/register">Don't have account?</router-link>
@@ -18,11 +19,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import PreLoad from '@/components/auth/PreLoad.vue';
+import Notification from '@/components/Notification.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import VueCookies from 'vue-cookies';
 
 const showLogo = ref(true);
+const notificationRef = ref(null);
+
 const data = ref({
   type: 'MyTAuth',
   email: '',
@@ -35,9 +39,9 @@ const auth = async () => {
 		const token = response.data.token;
 
 		VueCookies.set('token', encodeURIComponent(token), '7d');
-
 		decodeURIComponent(VueCookies.get('token'));
 	} catch (err) {
+		notificationRef.value.showNotification('Ошибка авторизации. Проверьте данные.');
 		console.error('Auth error:', err);
 	}
 };
@@ -53,14 +57,13 @@ axios.interceptors.request.use(
 	(error) => Promise.reject(error)
 );
 
-
 onMounted(() => {
 	setTimeout(() => {
-		console.log('Auth');
 		showLogo.value = false;
 	}, 500);
 });
 </script>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400&display=swap');

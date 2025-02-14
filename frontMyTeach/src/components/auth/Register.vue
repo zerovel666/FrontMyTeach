@@ -1,17 +1,18 @@
 <template>
+	<Notification ref="notificationRef" />
+
 	<div class="container">
 		<PreLoad :show-logo="showLogo" />
 		<transition name="fade">
 			<div v-if="!showLogo" class="loginCont">
 				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
 				<form @submit.prevent="register" class="loginForm">
-					<input type="text" v-model="data.email" placeholder="Email" required>
-					<input type="password" v-model="data.password" placeholder="Password" required>
-					<input type="password" v-model="data.accessPassword" placeholder="Access Password" required>
-					<p v-if="error" id="errorPassword">{{ error }}</p>
-					<input type="text" v-model="data.first_name" placeholder="First Name" required>
-					<input type="text" v-model="data.last_name" placeholder="Last Name" required>
-					<div class="checkboxRole" required>
+					<input type="text" v-model="data.email" placeholder="Email">
+					<input type="password" v-model="data.password" placeholder="Password">
+					<input type="password" v-model="data.accessPassword" placeholder="Access Password">
+					<input type="text" v-model="data.first_name" placeholder="First Name">
+					<input type="text" v-model="data.last_name" placeholder="Last Name">
+					<div class="checkboxRole">
 						<div class="checkbox">
 							<p>Student</p>
 							<input type="checkbox" v-model="studentCheckBox">
@@ -39,13 +40,13 @@ import { API_URL } from '@/config';
 
 const router = useRouter();
 import PreLoad from '@/components/auth/PreLoad.vue';
+import Notification from '../Notification.vue';
 
 const showLogo = ref(true);
 const studentCheckBox = ref(false)
 const teacherCheckBox = ref(false)
 
-const error = ref('');
-
+const notificationRef = ref(null);
 const data = ref({
 	email: '',
 	password: '',
@@ -59,40 +60,32 @@ const data = ref({
 
 
 const register = async () => {
+	const requiredFields = ['email', 'password', 'accessPassword', 'first_name', 'last_name'];
+	for (const field of requiredFields) {
+		if (!data.value[field]?.trim()) {
+			notificationRef.value.showNotification(`Поле ${field.replace('_', ' ')} обязательно для заполнения`, 'error');
+			return;
+		}
+	}
+
 	if (data.value.password !== data.value.accessPassword) {
-		error.value = 'Пароли не совпадают';
-		setTimeout(() => {
-			error.value = '';
-		}, 3000);
+		notificationRef.value.showNotification('Пароли не совпадают', 'error');
 		return;
-	} else {
-		error.value = '';
 	}
 
 	data.value.role = studentCheckBox.value ? 'student' : teacherCheckBox.value ? 'teacher' : '';
-
 	if (!data.value.role) {
-		error.value = 'Выберите роль';
-		setTimeout(() => {
-			error.value = '';
-		}, 3000);
+		notificationRef.value.showNotification('Выберите роль', 'error');
 		return;
 	}
 
 	try {
-		console.log(data.value);
-		const response = await axios.post(API_URL + '/auth/register', data.value);
-		if (response.data.status === '200' && response.data.message === 'Succefully request into create new User'){
-			router.push('/auth');
-		} else {
-			error.value = 'Ошибка регистрации';
-			setTimeout(() => {
-				error.value = '';
-			}, 3000);
-		}
+		await axios.post(API_URL + '/auth/register', data.value);
+		notificationRef.value.showNotification('Регистрация успешна!', 'success');
 		router.push('/auth');
 	} catch (err) {
-		console.error('Auth error:', err);
+		notificationRef.value.showNotification('Ошибка регистрации. Проверьте данные.', 'error');
+		console.error('Register error:', err);
 	}
 };
 
