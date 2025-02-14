@@ -24,6 +24,8 @@ import axios from 'axios';
 import { API_URL } from '@/config';
 import VueCookies from 'vue-cookies';
 import { useRouter } from 'vue-router';
+import { onUnmounted } from 'vue';
+
 
 const showLogo = ref(true);
 const notificationRef = ref(null);
@@ -69,6 +71,11 @@ onMounted(() => {
 		showLogo.value = false;
 	}, 500);
 });
+
+onMounted(() => {
+  document.body.style.backgroundImage = 'none';
+});
+
 </script>
 
 
@@ -81,7 +88,9 @@ onMounted(() => {
 	left: 35%;
 	width: 100px;
 }
-
+body {
+  background-image: none !important;
+}
 .container {
 	display: flex;
 	justify-content: center;

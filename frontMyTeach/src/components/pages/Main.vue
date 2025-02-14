@@ -1,15 +1,11 @@
 <template>
-    <div>
-        <h1>Main Page</h1>
-    </div>
+    <TopBar />
 </template>
 
 <script setup>
-    import { ref } from 'vue'
+import TopBar from '@/components/layouts/TopBar.vue'
 </script>
 
 <style scoped>
-    h1 {
-        color: red;
-    }
+
 </style>

@@ -89,7 +89,6 @@ const register = async () => {
 	}
 };
 
-
 watch(studentCheckBox, (val) => {
 	if (val) teacherCheckBox.value = false;
 });
@@ -102,6 +101,7 @@ onMounted(() => {
 	setTimeout(() => {
 		showLogo.value = false;
 	}, 500);
+	document.body.style.backgroundImage = 'none';
 });
 </script>
 

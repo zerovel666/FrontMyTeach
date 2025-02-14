@@ -1,6 +1,6 @@
 <template>
 	<div class="body">
-		<img src="/src/assets/images/auth/BG.svg" alt="" id="bg">
+		<img src="/src/assets/images/auth/BGauth.svg" alt="" id="bg">
 		<transition name="fade">
 			<img v-if="showLogo" src="/src/assets/Icons/Icon.svg" alt="" id="logo">
 		</transition>
