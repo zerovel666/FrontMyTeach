@@ -4,7 +4,7 @@
 		<PreLoad :show-logo="showLogo" />
 		<transition name="fade">
 			<div v-if="!showLogo" class="loginCont">
-				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
+				<img src="/src/assets/Icons/logo.svg" alt="" id="logo">
 				<form @submit.prevent="auth" action="" class="loginForm">
 					<input type="text" placeholder="Email" v-model="data.email">
 					<input type="password" placeholder="Password" v-model="data.password">

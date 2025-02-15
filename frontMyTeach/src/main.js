@@ -36,5 +36,6 @@ const app = createApp(App);
 app.use(router);
 app.use(VueCookies);
 app.mount('#app');
+document.body.classList.add('bg-custom');
 
   

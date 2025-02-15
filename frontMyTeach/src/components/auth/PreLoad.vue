@@ -2,7 +2,7 @@
 	<div class="body">
 		<img src="/src/assets/images/auth/BGauth.svg" alt="" id="bg">
 		<transition name="fade">
-			<img v-if="showLogo" src="/src/assets/Icons/Icon.svg" alt="" id="logo">
+			<img v-if="showLogo" src="/src/assets/Icons/Logo.svg" alt="" id="logo">
 		</transition>
 	</div>
 </template>

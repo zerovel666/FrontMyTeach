@@ -1,5 +1,6 @@
 <template>
     <TopBar />
+    
 </template>
 
 <script setup>

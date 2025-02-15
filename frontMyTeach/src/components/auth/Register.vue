@@ -5,7 +5,7 @@
 		<PreLoad :show-logo="showLogo" />
 		<transition name="fade">
 			<div v-if="!showLogo" class="registerCont">
-				<img src="/src/assets/Icons/Icon.svg" alt="" id="logo">
+				<img src="/src/assets/Icons/Logo.svg" alt="" id="logo">
 				<form @submit.prevent="register" class="registerForm">
 					<input type="text" v-model="data.email" placeholder="Email">
 					<input type="password" v-model="data.password" placeholder="Password">
