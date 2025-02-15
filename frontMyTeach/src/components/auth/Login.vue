@@ -149,7 +149,6 @@ body {
 	height: 30px;
 	border-radius: 15px;
 	font-size: 22px;
-	font-weight: 100;
 	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
 	margin: 10px;
 }
