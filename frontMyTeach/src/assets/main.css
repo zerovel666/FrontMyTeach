@@ -30,3 +30,25 @@ body.bg-custom {
     background-size: auto;
     background-position: center;
 }
+::-webkit-scrollbar {
+    width: 8px; 
+    height: 8px; 
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #8100cc; 
+    border-radius: 4px; 
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #59008E;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #0B0B0B;
+    border: 1px solid white;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-corner {
+  }
