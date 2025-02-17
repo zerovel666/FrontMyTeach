@@ -4,7 +4,8 @@
 body {
     font-size: 20px;
     background-color: #0B0B0B;
-    font-family: "Anonymous Pro", serif;
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
     color: white;

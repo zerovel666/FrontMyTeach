@@ -6,7 +6,7 @@
                 <div class="searchContext">
                     <input class="searchInput" placeholder="Поиск...">
                     <button class="searchButton">
-                        <img src="/src/assets/Icons/Vector.svg" alt="search">
+                        <img src="/src/assets/Icons/Search.svg" alt="search">
                     </button>
                 </div>
             </div>

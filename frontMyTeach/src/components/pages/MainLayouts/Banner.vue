@@ -26,11 +26,7 @@ const currentIndex = ref(0);
 
 const getBanner = async () => {
     try {
-        // const response = await axios.get(API_URL + "/admin/poster/all", {
-        //     headers: {
-        //         'Authorization': token
-        //     }
-        // });
+        // const response = await axios.get(API_URL + "/poster/all");
 
         // Мокаем данные
         const response = [
