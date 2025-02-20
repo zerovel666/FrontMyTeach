@@ -28,12 +28,17 @@ const getBanner = async () => {
     try {
         // const response = await axios.get(API_URL + "/poster/all");
 
-        // Мокаем данные
         const response = [
-            { "image_path": "http://localhost:8083/storage/posters/drMH3uHm2TNSo2woCe9ZiY7pXfdHOp4PG6kI6mXq.svg" },
-            { "image_path": "http://localhost:8083/storage/posters/z9ZMKDbeiTNr36quZBcbJ49n2eT44mY0BD9nKzhx.svg" },
-        ];
+            {
+                "image_path": "http://localhost:8083//storage/posters/6hR5JNOSvUBZEUj6DgZiCEC2KM7R1C0W8iuqxJgQ.svg"
+            },
+            {
+                "image_path": "http://localhost:8083//storage/posters/fzDm4WPCjlQGbPZuf5eyzQufhBsFVlt0W9BNcl5g.svg"
+            }
+
+        ]
         banners.value = response;
+
     } catch (error) {
         console.error(error);
     }
