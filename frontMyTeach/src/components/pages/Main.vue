@@ -2,6 +2,7 @@
     <TopBar />
     <Banner />
     <Categories />
+    <Cards />
 </template>
 
 <script setup>
@@ -10,7 +11,8 @@ import TopBar from '@/components/layouts/TopBar.vue';
 import Banner from './MainLayouts/Banner.vue';
 import Categories from './MainLayouts/Categories.vue';
 import axios from 'axios';
-import VueCookies from "vue-cookies"; 
+import VueCookies from "vue-cookies";
+import Cards from './MainLayouts/Cards.vue'; 
 
 onMounted(() => {
   axios.interceptors.request.use(config => {

@@ -1,8 +1,10 @@
 <template>
     <div class="container">
         <div class="content">
-            <p id="p1">START TODAY</p>
-            <p id="p2">PROFESSIONAL TRAINING</p>
+            <div class="textContent">
+                <p id="p1">START TODAY</p>
+                <p id="p2">PROFESSIONAL TRAINING</p>
+            </div>
             <div class="categories">
                 <div v-for="(category, index) in categories" :key="index" class="category-item">
                     <p>{{ category.category }}</p>
@@ -41,7 +43,9 @@ onMounted(getCategories);
     justify-content: center;
     align-items: center;
 }
-
+.textContent{
+    margin-bottom: 80px;
+}
 p {
     margin: 0;
     padding: 0;
