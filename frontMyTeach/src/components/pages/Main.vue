@@ -3,6 +3,7 @@
     <Banner />
     <Categories />
     <Cards />
+    <!-- <FooterBar /> -->
 </template>
 
 <script setup>
@@ -13,6 +14,7 @@ import Categories from './MainLayouts/Categories.vue';
 import axios from 'axios';
 import VueCookies from "vue-cookies";
 import Cards from './MainLayouts/Cards.vue'; 
+import FooterBar from '../layouts/FooterBar.vue';
 
 onMounted(() => {
   axios.interceptors.request.use(config => {

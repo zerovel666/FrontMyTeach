@@ -1,8 +1,7 @@
 <template>
-    <div class="container" v-if="cards.length">
         <header>Популярное</header>
-        <Carousel :wrap-around="true" ref="carouselRef" :items-to-show="1.7" snapAlign="center" @wheel="onScroll"
-            :autoplay="3000" @update:modelValue="activeIndex = $event">
+        <Carousel :wrap-around="true" ref="carouselRef" :items-to-show="1.7" snapAlign="center" @wheel="onScroll" v-if="cards.length"
+            :autoplay="3000" @update:modelValue="activeIndex = $event" class="carousel">
             <Slide v-for="(card, index) in cards" :key="index" class="slide"
                 :class="{ 'active-slide': index === activeIndex, 'small-slide': index !== activeIndex }">
                 <div class="card" @mouseenter="isHovered = true" @mouseleave="isHovered = false"
@@ -26,7 +25,6 @@
                 </div>
             </Slide>
         </Carousel>
-    </div>
 </template>
 
 <script setup>
@@ -207,15 +205,22 @@ onUnmounted(() => {
     text-align: center;
     padding: 20px;
 }
+.carousel__slide {
+    display: flex;
+    justify-content: center;
+}
 
 header {
     margin: 20px;
     font-size: 52px;
+    text-align: center;
 }
 
 .slide {
+    overflow: hidden; 
     transition: transform 0.3s ease-in-out;
 }
+
 
 .card {
     display: flex;
@@ -238,9 +243,26 @@ header {
 }
 
 .small-slide .card {
+    transform: scale(0.85);
+    transition: transform 0.3s ease-in-out, opacity 0.3s;
     width: 600px;
     height: 300px;
     opacity: 0.7;
+    font-size: 13px;
+}
+.small-slide .card .r-cont-card img{
+    width: 200px;
+    height: 200px;
+}
+
+.small-slide .card .r-cont-card .author_name img{
+    width: 13px;
+    height: 13px;
+}
+.small-slide .card .r-cont-card .rating img{
+    width: 20px;
+    height: 20px; 
+    margin-right: 3px;
 }
 
 .l-cont-card {
