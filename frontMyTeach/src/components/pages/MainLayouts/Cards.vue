@@ -200,11 +200,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.container {
-    height: 400px;
-    text-align: center;
-    padding: 20px;
-}
+
 .carousel__slide {
     display: flex;
     justify-content: center;

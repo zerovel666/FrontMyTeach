@@ -3,7 +3,7 @@
     <Banner />
     <Categories />
     <Cards />
-    <!-- <FooterBar /> -->
+    <FooterBar />
 </template>
 
 <script setup>
