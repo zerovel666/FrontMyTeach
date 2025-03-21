@@ -26,18 +26,18 @@ const currentIndex = ref(0);
 
 const getBanner = async () => {
     try {
-        // const response = await axios.get(API_URL + "/poster/all");
+        const response = await axios.get(API_URL + "/poster/all");
 
-        const response = [
-            {
-                "image_path": "http://localhost:8083//storage/posters/6hR5JNOSvUBZEUj6DgZiCEC2KM7R1C0W8iuqxJgQ.svg"
-            },
-            {
-                "image_path": "http://localhost:8083//storage/posters/fzDm4WPCjlQGbPZuf5eyzQufhBsFVlt0W9BNcl5g.svg"
-            }
+        // const response = [
+        //     {
+        //         "image_path": "http://localhost:8083//storage/posters/6hR5JNOSvUBZEUj6DgZiCEC2KM7R1C0W8iuqxJgQ.svg"
+        //     },
+        //     {
+        //         "image_path": "http://localhost:8083//storage/posters/fzDm4WPCjlQGbPZuf5eyzQufhBsFVlt0W9BNcl5g.svg"
+        //     }
 
-        ]
-        banners.value = response;
+        // ]
+        banners.value = response.data;
 
     } catch (error) {
         console.error(error);
@@ -81,27 +81,38 @@ onMounted(getBanner);
 .banner-wrapper {
     overflow: hidden;
     width: 66%;
+    height: 100%; 
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
 }
 
+
 .banner-container {
     display: flex;
+    gap: 20px;
     position: relative;
     width: 100%;
+    max-height: 500px;
+    border-radius: 300px;
 }
 
 .banner {
-    margin-top: 5px;
     flex: 0 0 100%;
+    overflow: hidden;
     transition: transform 0.5s ease-in-out;
 }
 
+
 .banner img {
     width: 100%;
-    border-radius: 15px;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: inherit; 
+    border-radius: 300px;
 }
 
 .swapBannerButton {

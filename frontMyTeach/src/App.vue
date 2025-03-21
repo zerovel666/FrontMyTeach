@@ -1,20 +1,30 @@
 <template>
-	<router-view/>
+	<div v-if="$loading.active" class="loader">
+		<a-spin size="large" />
+	</div>
+	<router-view />
 </template>
 
 <script setup>
-	import { useRouter } from 'vue-router';
-	import { onMounted } from 'vue';
-	import VueCookies from 'vue-cookies';
+import { watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { getCurrentInstance } from 'vue';
+import VueCookies from 'vue-cookies';
 
+const router = useRouter();
+const instance = getCurrentInstance();
+const loading = instance.appContext.config.globalProperties.$loading;
 
-	onMounted (() => {
-		const token = VueCookies.get('token');
-		if (!token) {
-			const router = useRouter();
-			router.push('/auth');
-		}
-	});
+watch(
+	() => loading.active,
+	(newVal) => {
+		document.body.style.overflow = newVal ? 'hidden' : '';
+	}
+);
+
+if (!VueCookies.get('token')) {
+	router.push('/auth');
+}
 </script>
 
 <style scoped>
