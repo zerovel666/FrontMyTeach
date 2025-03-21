@@ -2,69 +2,51 @@
     <div class="container">
         <img src="/src/assets/Icons/LeftSwap.svg" alt="left" class="swapBannerButton" @click="prevBanner" />
 
-        <div class="banner-wrapper">
-            <transition-group name="swap" tag="div" class="banner-container">
-                <div v-for="(banner, index) in visibleBanners" :key="banner.image_path" class="banner">
-                    <img :src="banner.image_path" alt="image" />
-                </div>
-            </transition-group>
-        </div>
+        <Carousel v-if="banners.length" :autoplay="3000" :wrap-around="true" ref="carouselRef" class="banner-wrapper">
+            <Slide v-for="(banner, index) in banners" :key="banner.image_path" class="banner">
+                <img :src="banner.image_path" alt="image" />
+            </Slide>
+        </Carousel>
 
         <img src="/src/assets/Icons/RightSwap.svg" alt="right" class="swapBannerButton" @click="nextBanner" />
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import { Carousel, Slide } from 'vue3-carousel';
+import 'vue3-carousel/dist/carousel.css';
 import axios from 'axios';
-import { ref, onMounted, computed } from 'vue';
 import { API_URL } from '@/config';
-import VueCookies from 'vue-cookies';
 
-const token = VueCookies.get('token');
 const banners = ref([]);
-const currentIndex = ref(0);
+const carouselRef = ref(null);
 
 const getBanner = async () => {
     try {
         const response = await axios.get(API_URL + "/poster/all");
-
         // const response = [
-        //     {
-        //         "image_path": "http://localhost:8083//storage/posters/6hR5JNOSvUBZEUj6DgZiCEC2KM7R1C0W8iuqxJgQ.svg"
-        //     },
-        //     {
-        //         "image_path": "http://localhost:8083//storage/posters/fzDm4WPCjlQGbPZuf5eyzQufhBsFVlt0W9BNcl5g.svg"
-        //     }
-
-        // ]
+        //     { "image_path": "http://localhost:8083//storage/posters/iq2aHjIVe61IRqm2IDLKLJJ6hcGW6t7DK0nx5rvm.png" },
+        //     { "image_path": "http://localhost:8083//storage/posters/6hR5JNOSvUBZEUj6DgZiCEC2KM7R1C0W8iuqxJgQ.svg" },
+        //     { "image_path": "http://localhost:8083//storage/posters/fzDm4WPCjlQGbPZuf5eyzQufhBsFVlt0W9BNcl5g.svg" }
+        // ];
         banners.value = response.data;
-
     } catch (error) {
         console.error(error);
     }
 };
 
-const visibleBanners = computed(() => {
-    return [
-        banners.value[currentIndex.value],
-        banners.value[(currentIndex.value + 1) % banners.value.length]
-    ].filter(Boolean);
-});
-
-const nextBanner = () => {
-    if (banners.value.length > 1) {
-        currentIndex.value = (currentIndex.value + 1) % banners.value.length;
-    }
+const prevBanner = () => {
+    carouselRef.value?.prev();
 };
 
-const prevBanner = () => {
-    if (banners.value.length > 1) {
-        currentIndex.value = (currentIndex.value - 1 + banners.value.length) % banners.value.length;
-    }
+const nextBanner = () => {
+    carouselRef.value?.next();
 };
 
 onMounted(getBanner);
 </script>
+
 
 <style scoped>
 .container {
@@ -76,62 +58,30 @@ onMounted(getBanner);
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
 }
 
 .banner-wrapper {
-    overflow: hidden;
     width: 66%;
-    height: 100%; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-
-.banner-container {
-    display: flex;
-    gap: 20px;
-    position: relative;
-    width: 100%;
-    max-height: 500px;
-    border-radius: 300px;
-}
-
-.banner {
-    flex: 0 0 100%;
+    height: 100%;
+    border: 1px solid black;
+    border-radius: 350px;
     overflow: hidden;
-    transition: transform 0.5s ease-in-out;
+    position: relative;
 }
-
 
 .banner img {
     width: 100%;
     height: 100%;
-    max-width: 100%;
-    max-height: 100%;
     object-fit: cover;
-    border-radius: inherit; 
-    border-radius: 300px;
+    border-radius: inherit;
+    border-radius: 350px;
 }
+
 
 .swapBannerButton {
     cursor: pointer;
     z-index: 10;
     margin: 10px;
-}
-
-.swap-enter-active, .swap-leave-active {
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-.swap-enter-from {
-    transform: translateX(100%);
-    opacity: 0;
-}
-
-.swap-leave-to {
-    transform: translateX(-100%);
-    opacity: 0;
 }
 </style>

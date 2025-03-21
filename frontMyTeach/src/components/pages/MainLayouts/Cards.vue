@@ -67,124 +67,124 @@ const disablePageScroll = (event) => {
     }
 };
 const getCards = async () => {
-    // const response = await axios.get(`${API_URL}/course/rating/getBest`);
-    const response = [
-        {
-            "id": 2,
-            "name": "Курс по Java",
-            "image_path": "http://localhost:8082/storage/logoCourse/vueLogo.png",
-            "author_id": "4",
-            "category_id": 3,
-            "isActive": true,
-            "amount": null,
-            "sendCheck": false,
-            "checked": true,
-            "created_at": "2025-03-18T14:15:27.000000Z",
-            "updated_at": "2025-03-18T14:15:27.000000Z",
-            "rating": "3",
-            "author_name": "Antonio Banderes",
-            "tags": [
-                {
-                    "id": 4,
-                    "course_id": 2,
-                    "tag": "SDK",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                },
-                {
-                    "id": 5,
-                    "course_id": 2,
-                    "tag": "MAVEN",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                },
-                {
-                    "id": 6,
-                    "course_id": 2,
-                    "tag": "JVM",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                }
-            ]
-        },
-        {
-            "id": 3,
-            "name": "Курс по C#",
-            "image_path": "http://localhost:8082/storage/logoCourse/laravelLogo.png",
-            "author_id": "9",
-            "category_id": 3,
-            "isActive": true,
-            "amount": null,
-            "sendCheck": false,
-            "checked": true,
-            "created_at": "2025-03-18T14:15:27.000000Z",
-            "updated_at": "2025-03-18T14:15:27.000000Z",
-            "rating": "2",
-            "author_name": "Leonardo Di Kaprio",
-            "tags": [
-                {
-                    "id": 7,
-                    "course_id": 3,
-                    "tag": "OOP",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                },
-                {
-                    "id": 8,
-                    "course_id": 3,
-                    "tag": "DOT.NET",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                },
-                {
-                    "id": 9,
-                    "course_id": 3,
-                    "tag": "WebServlet",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "name": "Курс по Laravel:Laravel: Искусство Бэкенда",
-            "image_path": "http://localhost:8082/storage/logoCourse/javaLogo.webp",
-            "author_id": "10",
-            "category_id": 3,
-            "isActive": true,
-            "amount": null,
-            "sendCheck": false,
-            "checked": true,
-            "created_at": "2025-03-18T14:15:27.000000Z",
-            "updated_at": "2025-03-18T14:15:27.000000Z",
-            "rating": "1",
-            "author_name": "Lana Rouz",
-            "tags": [
-                {
-                    "id": 1,
-                    "course_id": 1,
-                    "tag": "Middleware",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                },
-                {
-                    "id": 3,
-                    "course_id": 1,
-                    "tag": "Eloquent",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                },
-                {
-                    "id": 2,
-                    "course_id": 1,
-                    "tag": "Migration",
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z"
-                }
-            ]
-        }
-    ];
-    cards.value = response;
+    const response = await axios.get(`${API_URL}/course/rating/getBest`);
+    // const response = [
+    //     {
+    //         "id": 2,
+    //         "name": "Курс по Java",
+    //         "image_path": "http://localhost:8082/storage/logoCourse/vueLogo.png",
+    //         "author_id": "4",
+    //         "category_id": 3,
+    //         "isActive": true,
+    //         "amount": null,
+    //         "sendCheck": false,
+    //         "checked": true,
+    //         "created_at": "2025-03-18T14:15:27.000000Z",
+    //         "updated_at": "2025-03-18T14:15:27.000000Z",
+    //         "rating": "3",
+    //         "author_name": "Antonio Banderes",
+    //         "tags": [
+    //             {
+    //                 "id": 4,
+    //                 "course_id": 2,
+    //                 "tag": "SDK",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             },
+    //             {
+    //                 "id": 5,
+    //                 "course_id": 2,
+    //                 "tag": "MAVEN",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             },
+    //             {
+    //                 "id": 6,
+    //                 "course_id": 2,
+    //                 "tag": "JVM",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "id": 3,
+    //         "name": "Курс по C#",
+    //         "image_path": "http://localhost:8082/storage/logoCourse/laravelLogo.png",
+    //         "author_id": "9",
+    //         "category_id": 3,
+    //         "isActive": true,
+    //         "amount": null,
+    //         "sendCheck": false,
+    //         "checked": true,
+    //         "created_at": "2025-03-18T14:15:27.000000Z",
+    //         "updated_at": "2025-03-18T14:15:27.000000Z",
+    //         "rating": "2",
+    //         "author_name": "Leonardo Di Kaprio",
+    //         "tags": [
+    //             {
+    //                 "id": 7,
+    //                 "course_id": 3,
+    //                 "tag": "OOP",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             },
+    //             {
+    //                 "id": 8,
+    //                 "course_id": 3,
+    //                 "tag": "DOT.NET",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             },
+    //             {
+    //                 "id": 9,
+    //                 "course_id": 3,
+    //                 "tag": "WebServlet",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "id": 1,
+    //         "name": "Курс по Laravel:Laravel: Искусство Бэкенда",
+    //         "image_path": "http://localhost:8082/storage/logoCourse/javaLogo.webp",
+    //         "author_id": "10",
+    //         "category_id": 3,
+    //         "isActive": true,
+    //         "amount": null,
+    //         "sendCheck": false,
+    //         "checked": true,
+    //         "created_at": "2025-03-18T14:15:27.000000Z",
+    //         "updated_at": "2025-03-18T14:15:27.000000Z",
+    //         "rating": "1",
+    //         "author_name": "Lana Rouz",
+    //         "tags": [
+    //             {
+    //                 "id": 1,
+    //                 "course_id": 1,
+    //                 "tag": "Middleware",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             },
+    //             {
+    //                 "id": 3,
+    //                 "course_id": 1,
+    //                 "tag": "Eloquent",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             },
+    //             {
+    //                 "id": 2,
+    //                 "course_id": 1,
+    //                 "tag": "Migration",
+    //                 "created_at": "2025-03-18T14:15:27.000000Z",
+    //                 "updated_at": "2025-03-18T14:15:27.000000Z"
+    //             }
+    //         ]
+    //     }
+    // ];
+    cards.value = response.data;
 }
 
 onMounted(() => {
@@ -208,6 +208,7 @@ onUnmounted(() => {
 
 header {
     margin: 20px;
+    margin-top: 100px;
     font-size: 52px;
     text-align: center;
 }
