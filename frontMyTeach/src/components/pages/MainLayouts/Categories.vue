@@ -24,10 +24,10 @@ const categories = ref([]);
 
 const getCategories = async () => {
     try {
-        const response = await axios.get(`${API_URL}/course/category/all`);
-        // const response = [{"id":1,"category":"Backend","created_at":"2025-01-31T12:28:37.000000Z","updated_at":"2025-01-31T12:29:47.000000Z"},{"id":3,"category":"Power BI","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":4,"category":"Designer","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":5,"category":"Cyber defender","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":6,"category":"Scram","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":7,"category":"DevOps","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":8,"category":"Frontend","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"}];
+        // const response = await axios.get(`${API_URL}/course/category/all`);
+        const response = [{"id":1,"category":"Backend","created_at":"2025-01-31T12:28:37.000000Z","updated_at":"2025-01-31T12:29:47.000000Z"},{"id":3,"category":"Power BI","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":4,"category":"Designer","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":5,"category":"Cyber defender","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":6,"category":"Scram","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":7,"category":"DevOps","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"},{"id":8,"category":"Frontend","created_at":"2025-02-17T03:32:15.000000Z","updated_at":"2025-02-17T03:32:15.000000Z"}];
 
-        categories.value = response.data;
+        categories.value = response;
     } catch (error) {
         console.error("Ошибка при загрузке категорий:", error);
     }
