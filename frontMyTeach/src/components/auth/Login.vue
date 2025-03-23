@@ -123,8 +123,11 @@ body {
 	display: flex;
 	align-items: center;
 	padding-left: 10px;
-	font-size: 24px;
+	font-size: 20px;
 	transition: all 0.25s ease-in-out !important;
+	color: black;
+	outline: none;
+	padding: 15px;
 }
 
 .loginForm input:-webkit-autofill {
