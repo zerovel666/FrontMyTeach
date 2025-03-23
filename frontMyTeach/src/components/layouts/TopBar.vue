@@ -22,10 +22,10 @@
             </div>
 
             <div class="r-cont">
-                <button class="buttonNav" :class="{ isSelected: isMain }">Главная</button>
-                <button class="buttonNav" :class="{ isMyCourse: isSelected }">Мои курсы</button>
-                <button class="buttonNav" :class="{ isCatalog: isSelected }">Каталог</button>
-                <button class="buttonNav" :class="{ isAboutUs: isSelected }">О нас</button>
+                <button class="buttonNav" :class="{ isSelected: isMain }" @click="goHome">Главная</button>
+                <button class="buttonNav" :class="{ isSelected: isMyCourse }" @click="goMyCourse">Мои курсы</button>
+                <button class="buttonNav" :class="{ isSelected: isCatalog }">Каталог</button>
+                <button class="buttonNav" :class="{ isSelected: isAboutUs }">О нас</button>
                 <div class="user">
                     <img src="/src/assets/Icons/NavIcon.svg" alt="" id="navIcon">
                     <img src="/src/assets/images/auth/avatars.png" alt="" id="avatar">
@@ -46,12 +46,15 @@ const router = useRouter();
 const isSelected = ref('');
 
 const isMain = computed(() => route.path === "/");
-const isMyCourse = computed(() => route.path === "/");
-const isCatalog = computed(() => route.path === "/");
-const isAboutUs = computed(() => route.path === "/");
+const isMyCourse = computed(() => route.path === "/mycourse");
+const isCatalog = computed(() => route.path === "/1");
+const isAboutUs = computed(() => route.path === "/2");
 
 const goHome = async () => {
     router.push('/');
+}
+const goMyCourse = async () => {
+    router.push('/mycourse')
 }
 
 const options = ref([]);
@@ -242,6 +245,7 @@ onUnmounted(() => {
 }
 
 .buttonNav {
+    cursor: pointer;
     height: 30px;
     border-radius: 15px;
     font-size: 75%;

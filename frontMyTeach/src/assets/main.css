@@ -58,6 +58,10 @@ body.bg-custom {
 
 ::-webkit-scrollbar-corner {}
 
+.conteinerBody {
+  margin: 0 160px;
+}
+
 .loader {
   position: fixed;
   top: 0;

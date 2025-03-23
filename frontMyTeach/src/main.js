@@ -10,6 +10,7 @@ import Register from './components/auth/Register.vue';
 import Main from './components/pages/Main.vue';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
+import MyCourse from './components/pages/MyCourse.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -44,7 +45,8 @@ axios.interceptors.response.use(
 const routes = [
   { path: '/', component: Main },
   { path: '/auth', component: Auth },
-  { path: '/register', component: Register }
+  { path: '/register', component: Register },
+  { path: '/mycourse', component: MyCourse },
 ];
 
 const router = createRouter({
