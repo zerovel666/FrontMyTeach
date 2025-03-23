@@ -24,8 +24,8 @@
             <div class="r-cont">
                 <button class="buttonNav" :class="{ isSelected: isMain }" @click="goHome">Главная</button>
                 <button class="buttonNav" :class="{ isSelected: isMyCourse }" @click="goMyCourse">Мои курсы</button>
-                <button class="buttonNav" :class="{ isSelected: isCatalog }">Каталог</button>
-                <button class="buttonNav" :class="{ isSelected: isAboutUs }">О нас</button>
+                <button class="buttonNav" :class="{ isSelected: isCatalog }" @click=goCatalog>Каталог</button>
+                <button class="buttonNav" :class="{ isSelected: isAboutUs }" @click="goAboutUs">О нас</button>
                 <div class="user">
                     <img src="/src/assets/Icons/NavIcon.svg" alt="" id="navIcon">
                     <img src="/src/assets/images/auth/avatars.png" alt="" id="avatar">
@@ -47,14 +47,22 @@ const isSelected = ref('');
 
 const isMain = computed(() => route.path === "/");
 const isMyCourse = computed(() => route.path === "/mycourse");
-const isCatalog = computed(() => route.path === "/1");
-const isAboutUs = computed(() => route.path === "/2");
+const isCatalog = computed(() => route.path === "/catalog");
+const isAboutUs = computed(() => route.path === "/aboutUs");
 
 const goHome = async () => {
     router.push('/');
 }
 const goMyCourse = async () => {
     router.push('/mycourse')
+}
+
+const goCatalog = async () => {
+    router.push('/catalog')
+}
+
+const goAboutUs = async () => {
+    router.push('aboutUs')
 }
 
 const options = ref([]);

@@ -11,6 +11,7 @@ import Main from './components/pages/Main.vue';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 import MyCourse from './components/pages/MyCourse.vue';
+import Catalog from './components/pages/Catalog.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -47,6 +48,7 @@ const routes = [
   { path: '/auth', component: Auth },
   { path: '/register', component: Register },
   { path: '/mycourse', component: MyCourse },
+  { path: '/catalog', component: Catalog }
 ];
 
 const router = createRouter({

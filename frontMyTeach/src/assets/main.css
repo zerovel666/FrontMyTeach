@@ -58,8 +58,9 @@ body.bg-custom {
 
 ::-webkit-scrollbar-corner {}
 
-.conteinerBody {
+.containerBody {
   margin: 0 160px;
+  min-height: 200px;
 }
 
 .loader {

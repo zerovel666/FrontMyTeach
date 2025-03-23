@@ -1,6 +1,6 @@
 <template>
     <TopBar />
-    <div class="conteinerBody">
+    <div class="containerBody">
         <div class="content" v-if="cards">
             <div class="card" v-for="(card, index) in cards" :key="index" :style="{ background: getGradient(index) }">
                 <div class="cardBgImg" :style="{backgroundImage: `url(${getBgImage(index)})`}">
@@ -256,7 +256,7 @@ onMounted(getCards);
 </script>
 
 <style scoped>
-.conteinerBody {
+.containerBody {
     min-height: 200px;
 }
 
