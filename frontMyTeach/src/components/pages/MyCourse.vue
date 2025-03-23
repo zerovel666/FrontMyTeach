@@ -2,34 +2,36 @@
     <TopBar />
     <div class="conteinerBody">
         <div class="content" v-if="cards">
-            <div class="card" v-for="(card, index) in cards" :key="index" :style="{ background: getGradient(index) }" >
-                <div class="cardInfo">
-                    <div class="lInfo">
-                        <h1>{{ card.course.name }}</h1>
-                        <ul>
-                            <li v-for="(tag, key) in card.course.tags">
-                                {{ tag.tag }}
-                            </li>
-                        </ul>
-                        <p class="author_name">{{ card.course.author_name }} <img src="/src/assets/Icons/Tap.svg"
-                                alt=""></p>
-                        <button>Продолжить</button>
+            <div class="card" v-for="(card, index) in cards" :key="index" :style="{ background: getGradient(index) }">
+                <div class="cardBgImg" :style="{backgroundImage: `url(${getBgImage(index)})`}">
+                    <div class="cardInfo">
+                        <div class="lInfo">
+                            <h1>{{ card.course.name }}</h1>
+                            <ul>
+                                <li v-for="(tag, key) in card.course.tags">
+                                    {{ tag.tag }}
+                                </li>
+                            </ul>
+                            <p class="author_name">{{ card.course.author_name }} <img src="/src/assets/Icons/Tap.svg"
+                                    alt=""></p>
+                            <button>Продолжить</button>
+                        </div>
+                        <div class="rInfo">
+                            <p class="ratingNum">{{ card.course.rating_course.rating }}
+                                <img src="/src/assets/Icons/Star.svg" alt="">
+                            </p>
+                            <img :src="card.course.image_path" alt="">
+                        </div>
                     </div>
-                    <div class="rInfo">
-                        <p class="ratingNum">{{ card.course.rating_course.rating }} <img
-                                src="/src/assets/Icons/Star.svg" alt=""></p>
-                        <img :src="card.course.image_path" alt="">
+                    <div class="percentCompletesCont">
+                        <div class="lineCont">
+                            <div class="line" :style="{ width: card.percentCompleted + '%' }"></div>
+                        </div>
+                        <div class="pCont">
+                            {{ card.percentCompleted }}%
+                        </div>
                     </div>
                 </div>
-                <div class="percentCompletesCont">
-                    <div class="lineCont">
-                        <div class="line" :style="{ width: card.percentCompleted + '%' }"></div>
-                    </div>
-                    <div class="pCont">
-                        {{ card.percentCompleted }}%
-                    </div>
-                </div>
-
             </div>
 
         </div>
@@ -43,6 +45,7 @@ import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
+
 const cards = ref([]);
 const getCards = async () => {
     // const response = await axios.get(`${API_URL}/student/course/allMe`);
@@ -235,9 +238,19 @@ const gradients = [
     "linear-gradient(120deg, #11001D, #8800FF 100%)"
 ];
 
+const bgImages = [
+    'src/assets/images/cardsMyCourse/bgElemRed.svg',
+    'src/assets/images/cardsMyCourse/bgElemGreen.svg',
+    'src/assets/images/cardsMyCourse/bgElemPurple.svg',
+];
+
 const getGradient = (index) => {
     return gradients[index % gradients.length];
 };
+
+const getBgImage = (index) => {
+    return bgImages[index % bgImages.length];
+}
 
 onMounted(getCards);
 </script>
@@ -253,6 +266,10 @@ onMounted(getCards);
     max-height: 500px;
     margin: 60px 0;
     border-radius: 40px;
+    overflow: hidden;
+    border: 1px solid #0022FF;
+}
+.cardBgImg{
     padding: 30px 60px;
 
 }
@@ -262,6 +279,8 @@ onMounted(getCards);
     display: flex;
     justify-content: space-between;
 }
+
+
 
 .lInfo {
     width: 50%;
@@ -311,6 +330,8 @@ onMounted(getCards);
     cursor: pointer;
     transition: transform ease 0.3s;
     margin-top: 50px;
+    color: white;
+
 }
 
 .lInfo button:hover {
