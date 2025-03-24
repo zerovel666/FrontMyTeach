@@ -18,17 +18,24 @@
             </label>
 
         </div>
-        <div class="settingFilter">
+        <div class="settingFilter" @click="showSettingModal = true" @applyFilters="updateFilters" @close="showSettingModal = false">
             <p>Фильтры</p>
             <img src="/src/assets/Icons/Filter.svg" alt="">
         </div>
         <button class="searchAllFitler">Искать</button>
     </div>
+    <SettingFilter :showModal="showSettingModal" @close="showSettingModal = false" />
+
 </template>
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
+import SettingFilter from './SettingFilter.vue';
+import axios from 'axios';
+import { API_URL } from '@/config';
 
+
+const showSettingModal = ref(false);
 const searchInput = ref('');
 const showOption = ref(false);
 const options = ref([])
@@ -38,6 +45,10 @@ const allFilterOption = ref({
     amountEnd: null,
     category: null
 });
+
+const updateFilters = () => {
+    //logic write
+};
 
 const getOptions = async () => {
     // const response = await axios.get(`${API_URL}/student/course/all`);
