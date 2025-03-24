@@ -5,7 +5,10 @@
                 <h3>Все Фильтры</h3>
                 <h4>Категории</h4>
                 <div class="buttons">
-                    <button v-for="(category, index) in categories" :key="index">{{ category }}</button>
+                    <button v-for="(category, index) in categories" :key="index" @click="pushInFiltersCategory(index)"
+                        :class="{ 'buttonSelected': filters.category.includes(category) }">
+                        {{ category }}
+                    </button>
                 </div>
                 <h4>Дополнительные фильтры</h4>
                 <div class="addFilters">
@@ -13,74 +16,68 @@
                         <p>Цена</p>
                         <Slider v-model="rangeAmount" :min="minValue" :max="maxValue" :tooltip="'always'"
                             class="slider" />
+                        <div class="switchCont" id="sw1">
+                            <p>Бесплатные</p>
+                            <Toggle v-model="isFree" class="toogle" />
+                        </div>
                     </div>
                     <div class="ratingFilter">
-                        <h4>Рейтинг</h4>
+                        <p>Рейтинг</p>
                         <Slider v-model="rangeRating" :min="1" :max="5" :tooltip="'always'" class="slider" />
                     </div>
                     <div class="switchCertificate">
-                        Наличие сертификата
-                       <div class="switchCont">
-                            <Toggle v-model="isChecked" />
+                        <p>Наличие сертификата</p>
+                        <div class="switchCont">
+                            <Toggle v-model="isChecked" class="toogle" />
                             {{ isChecked ? "Да" : "Нет" }}
-                       </div>
+                        </div>
                     </div>
                 </div>
-                
+                <div class="lastAction">
+                    <button>Очистить</button>
+                    <button @click="applyFilters">Искать</button>
+                </div>
             </div>
         </div>
     </Teleport>
 </template>
+
 <script setup>
-import { API_URL } from '@/config';
-import axios from 'axios';
+// import { API_URL } from '@/config';
+// import axios from 'axios';
 import { onMounted, ref, defineProps, defineEmits, watch } from 'vue';
 import Slider from "@vueform/slider";
-import "@vueform/slider/themes/default.css"; 
+import "@vueform/slider/themes/default.css";
 import Toggle from "@vueform/toggle";
 import "@vueform/toggle/themes/default.css";
+import axios from 'axios';
+import { API_URL } from '@/config';
 
 const isChecked = ref(false);
+const isFree = ref(false)
 
-defineProps({ showModal: Boolean });
+const props = defineProps({ showModal: Boolean });
 const emit = defineEmits(["close", "applyFilters"]);
 const categories = ref([]);
 const minValue = ref(null);
 const maxValue = ref(null);
-const rangeAmount = ref([1, 3]);
-const rangeRating = ref([1, 3])
+const rangeAmount = ref([0, 1000000]);
+const rangeRating = ref([1,5])
 
 const getCategories = async () => {
     // const response = await axios.get(`${API_URL}/student/filters`);
     // categories.value = response.data.message.category;
+    // minValue.value = Number(response.data.message.amount.startAmount);
+    // maxValue.value = Number(response.data.message.amount.endAmount);
     const response = {
         "status": true,
         "message": {
             "category": [
                 ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-                "React.js",                ".NET",
-
+                "React.js"
             ],
             "amount": {
-                "startAmount": "500",
+                "startAmount": "0",
                 "endAmount": "10000"
             },
             "certificate": "boolean",
@@ -100,30 +97,61 @@ const getCategories = async () => {
 
 }
 
-const filters = {
-    isFree: true,
-    category: "Программирование",
-    amountStart: 100,
-    amountEnd: 500,
+const pushInFiltersCategory = async (index) => {
+    const value = categories.value[index];
+    const idx = filters.value.category.indexOf(value);
+
+    if (idx !== -1) {
+        filters.value.category.splice(idx, 1);
+    } else {
+        filters.value.category.push(value);
+    }
 };
+
+
+const filters = ref({
+    isFree: false,
+    category: [],
+    ratingStart: null,
+    ratingEnd: null,
+    amountStart: null,
+    amountEnd: null,
+    hasCertificate: false
+});
 
 const applyFilters = () => {
     emit("applyFilters", filters);
+    emit("close");
 };
 
-const updateRange = () => {
-    if (minValue.value >= maxValue.value) {
-        minValue.value = maxValue.value - 1;
-    }
-};
+watch(isFree, (newVal) => {
+    filters.value.isFree = newVal;
+    rangeAmount.value = [0, 0]; 
+})
 
-watch([minValue, maxValue], updateRange);
-
-onMounted(() => {
-    if (categories.value.length === 0) {
-        getCategories();
+watch(rangeAmount, ([newMin, newMax]) => {
+    if (filters.value.isFree) {
+        if (rangeAmount.value[0] !== 0 || rangeAmount.value[1] !== 0) {
+            rangeAmount.value = [0, 0]; 
+        }
+        filters.value.amountStart = null;
+        filters.value.amountEnd = null;
+    } else {
+        filters.value.amountStart = newMin;
+        filters.value.amountEnd = newMax;
     }
 });
+
+watch(rangeRating, ([newMin,newMax]) => {
+    filters.value.ratingStart = newMin;
+    filters.value.ratingEnd = newMax;
+})
+
+watch(isChecked, (newVal) => {
+    filters.value.hasCertificate = newVal
+})
+
+onMounted(getCategories);
 
 </script>
 
@@ -173,6 +201,11 @@ h3 {
     transition: transform 0.3s;
     cursor: pointer;
 }
+.buttonSelected{
+    background: linear-gradient(#FFB8B9, #FF676A) !important;
+    box-shadow: 0 0 20px #fff;
+}
+
 
 .buttons button:hover {
     transform: scale(1.1);
@@ -187,7 +220,6 @@ h3 {
 .amountFilter,
 .ratingFilter,
 .switchCertificate {
-    border: 1px solid yellow;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -195,10 +227,14 @@ h3 {
     min-width: 200px;
 }
 
+.amountFilter p,
+.ratingFilter p {
+    margin-bottom: 30px;
+}
+
 .amountFilter {
     width: 300px;
 }
-
 
 
 .ranges {
@@ -212,7 +248,6 @@ h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
 }
 
 .slider {
@@ -229,4 +264,34 @@ h3 {
 ::v-deep(.slider-tooltip) {
     border: 2px solid white !important;
 }
+
+.lastAction {
+    display: flex;
+    justify-content: right;
+    margin-top: 40px;
+    gap: 20px;
+}
+
+.lastAction button {
+    padding: 3px 40px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(#FFB8B8, #D467FF);
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.lastAction button:hover {
+    transform: scale(1.1);
+}
+
+#sw1{
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+#sw1 p{
+    margin: 0;
+}
+
 </style>

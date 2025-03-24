@@ -16,15 +16,14 @@
                 <input type="checkbox" @click="changeIsFree">
                 <span class="checkmark"></span>
             </label>
-
         </div>
-        <div class="settingFilter" @click="showSettingModal = true" @applyFilters="updateFilters" @close="showSettingModal = false">
+        <div class="settingFilter" @click="showSettingModal = true">
             <p>Фильтры</p>
             <img src="/src/assets/Icons/Filter.svg" alt="">
         </div>
         <button class="searchAllFitler">Искать</button>
     </div>
-    <SettingFilter :showModal="showSettingModal" @close="showSettingModal = false" />
+    <SettingFilter :showModal="showSettingModal" @close="showSettingModal = false" @applyFilters="updateFilters" />
 
 </template>
 
@@ -46,12 +45,13 @@ const allFilterOption = ref({
     category: null
 });
 
-const updateFilters = () => {
+const updateFilters = (filters) => {
     //logic write
 };
 
 const getOptions = async () => {
     // const response = await axios.get(`${API_URL}/student/course/all`);
+    // options.value = response.data;
     const response = [
         {
             "id": 2,
@@ -188,13 +188,11 @@ const handleClickOutside = (event) => {
 };
 
 const changeIsFree = () => {
-
     if (allFilterOption.value.isFree === null || allFilterOption.value.isFree === false){
         allFilterOption.value.isFree = true
     }else{
         allFilterOption.value.isFree = false
     }
-
 }
 
 onMounted(() => {
