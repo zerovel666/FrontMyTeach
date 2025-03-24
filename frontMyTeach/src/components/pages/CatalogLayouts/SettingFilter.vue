@@ -1,7 +1,7 @@
 <template>
     <Teleport to="body">
         <div class="modal-overlay" v-if="showModal" @click="$emit('close')">
-            <div class="content" @click.stop>
+            <div class="content" @click.stop v-if="categories">
                 <h3>Все Фильтры</h3>
                 <h4>Категории</h4>
                 <div class="buttons">
@@ -19,9 +19,14 @@
                         <Slider v-model="rangeRating" :min="1" :max="5" :tooltip="'always'" class="slider" />
                     </div>
                     <div class="switchCertificate">
-                        
+                        Наличие сертификата
+                       <div class="switchCont">
+                            <Toggle v-model="isChecked" />
+                            {{ isChecked ? "Да" : "Нет" }}
+                       </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </Teleport>
@@ -32,6 +37,10 @@ import axios from 'axios';
 import { onMounted, ref, defineProps, defineEmits, watch } from 'vue';
 import Slider from "@vueform/slider";
 import "@vueform/slider/themes/default.css"; 
+import Toggle from "@vueform/toggle";
+import "@vueform/toggle/themes/default.css";
+
+const isChecked = ref(false);
 
 defineProps({ showModal: Boolean });
 const emit = defineEmits(["close", "applyFilters"]);
@@ -49,7 +58,26 @@ const getCategories = async () => {
         "message": {
             "category": [
                 ".NET",
-                "React.js"
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+                "React.js",                ".NET",
+
             ],
             "amount": {
                 "startAmount": "500",
@@ -111,6 +139,7 @@ onMounted(() => {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(5px);
+    overflow-y: auto;
 }
 
 .content {
@@ -131,6 +160,9 @@ h3 {
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
     margin: 40px 0;
+    overflow-y: auto;
+    max-height: 300px;
+    padding: 20px;
 }
 
 .buttons button {
@@ -138,7 +170,6 @@ h3 {
     border-radius: 20px;
     border: none;
     background: linear-gradient(#FFB8B8, #D467FF);
-    color: black;
     transition: transform 0.3s;
     cursor: pointer;
 }

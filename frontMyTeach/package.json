@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vueform/slider": "^2.1.10",
+    "@vueform/toggle": "^2.1.4",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.7.9",
     "frontmyteach": "file:",
