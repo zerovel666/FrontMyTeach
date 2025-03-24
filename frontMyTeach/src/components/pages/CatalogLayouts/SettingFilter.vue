@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="lastAction">
-                    <button>Очистить</button>
+                    <button @click="allClear">Очистить</button>
                     <button @click="applyFilters">Искать</button>
                 </div>
             </div>
@@ -45,7 +45,7 @@
 <script setup>
 // import { API_URL } from '@/config';
 // import axios from 'axios';
-import { onMounted, ref, defineProps, defineEmits, watch } from 'vue';
+import { onMounted, ref, defineProps, defineEmits, watch, nextTick } from 'vue';
 import Slider from "@vueform/slider";
 import "@vueform/slider/themes/default.css";
 import Toggle from "@vueform/toggle";
@@ -123,6 +123,26 @@ const applyFilters = () => {
     emit("applyFilters", filters);
     emit("close");
 };
+
+const allClear = async () => { 
+    isFree.value = false;
+    
+    await nextTick(); 
+
+    filters.value = {
+        isFree: null,
+        category: [],
+        ratingStart: null,
+        ratingEnd: null,
+        amountStart: null,
+        amountEnd: null,
+        hasCertificate: false
+    };
+    isChecked.value = false;
+    rangeAmount.value = [minValue.value, maxValue.value]; 
+    rangeRating.value = [1, 5]; 
+};
+
 
 watch(isFree, (newVal) => {
     filters.value.isFree = newVal;
