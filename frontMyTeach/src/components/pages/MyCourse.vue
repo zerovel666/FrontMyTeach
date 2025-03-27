@@ -3,7 +3,7 @@
     <div class="containerBody">
         <div class="content" v-if="cards">
             <div class="card" v-for="(card, index) in cards" :key="index" :style="{ background: getGradient(index) }">
-                <div class="cardBgImg" :style="{backgroundImage: `url(${getBgImage(index)})`}">
+                <div class="cardBgImg" :style="{ backgroundImage: `url(${getBgImage(index)})` }">
                     <div class="cardInfo">
                         <div class="lInfo">
                             <h1>{{ card.course.name }}</h1>
@@ -54,176 +54,64 @@ const getCards = async () => {
         "status": true,
         "message": [
             {
-                "id": 2,
+                "id": 1,
                 "user_id": 23,
-                "isCompleted": false,
-                "percentCompleted": 100,
-                "created_at": "2025-03-23T10:52:22.000000Z",
-                "updated_at": "2025-03-23T10:52:22.000000Z",
-                "course": {
-                    "id": 1,
-                    "name": "Курс по Laravel:Laravel: Искусство Бэкенда",
-                    "image_path": "http://localhost:8082/storage/logoCourse/javaLogo.webp",
-                    "category_id": 3,
-                    "isActive": true,
-                    "amount": null,
-                    "sendCheck": false,
-                    "checked": true,
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z",
-                    "tags": [
-                        {
-                            "id": 1,
-                            "course_id": 1,
-                            "tag": "Middleware",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
-                        },
-                        {
-                            "id": 3,
-                            "course_id": 1,
-                            "tag": "Eloquent",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
-                        },
-                        {
-                            "id": 2,
-                            "course_id": 1,
-                            "tag": "Migration",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
-                        }
-                    ],
-                    "rating": {
-                        "id": 1,
-                        "course_id": 1,
-                        "rating": "1",
-                        "created_at": "2025-03-18T14:15:27.000000Z",
-                        "updated_at": "2025-03-18T14:15:27.000000Z"
-                    },
-                    "author_name": "Lana Rouz",
-                    "rating_course": {
-                        "id": 1,
-                        "course_id": 1,
-                        "rating": "1",
-                        "created_at": "2025-03-18T14:15:27.000000Z",
-                        "updated_at": "2025-03-18T14:15:27.000000Z"
-                    }
-                }
-            },
-            {
-                "id": 2,
-                "user_id": 23,
+                "course_id": 1,
                 "isCompleted": false,
                 "percentCompleted": 0,
-                "created_at": "2025-03-23T10:52:22.000000Z",
-                "updated_at": "2025-03-23T10:52:22.000000Z",
+                "created_at": null,
+                "updated_at": null,
                 "course": {
                     "id": 1,
-                    "name": "Курс по Laravel:Laravel: Искусство Бэкенда",
-                    "image_path": "http://localhost:8082/storage/logoCourse/javaLogo.webp",
-                    "category_id": 3,
-                    "isActive": true,
+                    "name": "Курс по Django",
+                    "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
+                    "author_id": "9",
+                    "category_id": 1,
+                    "is_active": true,
                     "amount": null,
-                    "sendCheck": false,
+                    "send_check": false,
                     "checked": true,
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z",
+                    "has_certificate": false,
+                    "certificate_id": null,
+                    "created_at": "2025-03-27T08:10:30.000000Z",
+                    "updated_at": "2025-03-27T08:10:30.000000Z",
                     "tags": [
                         {
                             "id": 1,
                             "course_id": 1,
-                            "tag": "Middleware",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
-                        },
-                        {
-                            "id": 3,
-                            "course_id": 1,
-                            "tag": "Eloquent",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
+                            "tag": "quia",
+                            "created_at": "2025-03-27T08:10:30.000000Z",
+                            "updated_at": "2025-03-27T08:10:30.000000Z"
                         },
                         {
                             "id": 2,
                             "course_id": 1,
-                            "tag": "Migration",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
+                            "tag": "rerum",
+                            "created_at": "2025-03-27T08:10:30.000000Z",
+                            "updated_at": "2025-03-27T08:10:30.000000Z"
+                        },
+                        {
+                            "id": 3,
+                            "course_id": 1,
+                            "tag": "ducimus",
+                            "created_at": "2025-03-27T08:10:30.000000Z",
+                            "updated_at": "2025-03-27T08:10:30.000000Z"
                         }
                     ],
                     "rating": {
                         "id": 1,
                         "course_id": 1,
-                        "rating": "1",
-                        "created_at": "2025-03-18T14:15:27.000000Z",
-                        "updated_at": "2025-03-18T14:15:27.000000Z"
+                        "rating": "3",
+                        "created_at": "2025-03-27T08:10:30.000000Z",
+                        "updated_at": "2025-03-27T08:10:30.000000Z"
                     },
-                    "author_name": "Lana Rouz",
+                    "author_name": "Leonardo Di Kaprio",
                     "rating_course": {
                         "id": 1,
                         "course_id": 1,
-                        "rating": "1",
-                        "created_at": "2025-03-18T14:15:27.000000Z",
-                        "updated_at": "2025-03-18T14:15:27.000000Z"
-                    }
-                }
-            },
-            {
-                "id": 2,
-                "user_id": 23,
-                "isCompleted": false,
-                "percentCompleted": 0,
-                "created_at": "2025-03-23T10:52:22.000000Z",
-                "updated_at": "2025-03-23T10:52:22.000000Z",
-                "course": {
-                    "id": 1,
-                    "name": "Курс по Laravel:Laravel: Искусство Бэкенда",
-                    "image_path": "http://localhost:8082/storage/logoCourse/javaLogo.webp",
-                    "category_id": 3,
-                    "isActive": true,
-                    "amount": null,
-                    "sendCheck": false,
-                    "checked": true,
-                    "created_at": "2025-03-18T14:15:27.000000Z",
-                    "updated_at": "2025-03-18T14:15:27.000000Z",
-                    "tags": [
-                        {
-                            "id": 1,
-                            "course_id": 1,
-                            "tag": "Middleware",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
-                        },
-                        {
-                            "id": 3,
-                            "course_id": 1,
-                            "tag": "Eloquent",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
-                        },
-                        {
-                            "id": 2,
-                            "course_id": 1,
-                            "tag": "Migration",
-                            "created_at": "2025-03-18T14:15:27.000000Z",
-                            "updated_at": "2025-03-18T14:15:27.000000Z"
-                        }
-                    ],
-                    "rating": {
-                        "id": 1,
-                        "course_id": 1,
-                        "rating": "1",
-                        "created_at": "2025-03-18T14:15:27.000000Z",
-                        "updated_at": "2025-03-18T14:15:27.000000Z"
-                    },
-                    "author_name": "Lana Rouz",
-                    "rating_course": {
-                        "id": 1,
-                        "course_id": 1,
-                        "rating": "1",
-                        "created_at": "2025-03-18T14:15:27.000000Z",
-                        "updated_at": "2025-03-18T14:15:27.000000Z"
+                        "rating": "3",
+                        "created_at": "2025-03-27T08:10:30.000000Z",
+                        "updated_at": "2025-03-27T08:10:30.000000Z"
                     }
                 }
             }
@@ -269,7 +157,8 @@ onMounted(getCards);
     overflow: hidden;
     border: 1px solid #0022FF;
 }
-.cardBgImg{
+
+.cardBgImg {
     padding: 30px 60px;
 
 }

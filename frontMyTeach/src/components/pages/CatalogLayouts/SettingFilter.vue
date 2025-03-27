@@ -43,8 +43,6 @@
 </template>
 
 <script setup>
-// import { API_URL } from '@/config';
-// import axios from 'axios';
 import { onMounted, ref, defineProps, defineEmits, watch, nextTick } from 'vue';
 import Slider from "@vueform/slider";
 import "@vueform/slider/themes/default.css";
@@ -62,7 +60,7 @@ const categories = ref([]);
 const minValue = ref(null);
 const maxValue = ref(null);
 const rangeAmount = ref([0, 1000000]);
-const rangeRating = ref([1,5])
+const rangeRating = ref([1, 5])
 
 const getCategories = async () => {
     // const response = await axios.get(`${API_URL}/student/filters`);
@@ -70,33 +68,36 @@ const getCategories = async () => {
     // minValue.value = Number(response.data.message.amount.startAmount);
     // maxValue.value = Number(response.data.message.amount.endAmount);
     const response = {
-        "status": true,
-        "message": {
-            "category": [
-                ".NET",
-                "React.js"
-            ],
-            "amount": {
-                "startAmount": "0",
-                "endAmount": "10000"
-            },
-            "certificate": "boolean",
-            "isFree": "boolean",
-            "rating": [
-                1,
-                2,
-                3,
-                4,
-                5
-            ]
-        }
+        "category": [
+            "Python",
+            "C#",
+            "React.js",
+            "C#",
+            "PHP",
+            "React.js",
+            "Java",
+            "PHP",
+            "HTML&CSS"
+        ],
+        "amount": {
+            "startAmount": null,
+            "endAmount": null
+        },
+        "certificate": "boolean",
+        "isFree": "boolean",
+        "rating": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ]
     }
     categories.value = response.message.category;
     minValue.value = Number(response.message.amount.startAmount);
     maxValue.value = Number(response.message.amount.endAmount);
 
 }
-
 const pushInFiltersCategory = async (index) => {
     const value = categories.value[index];
     const idx = filters.value.category.indexOf(value);
@@ -124,10 +125,10 @@ const applyFilters = () => {
     emit("close");
 };
 
-const allClear = async () => { 
+const allClear = async () => {
     isFree.value = false;
-    
-    await nextTick(); 
+
+    await nextTick();
 
     filters.value = {
         isFree: null,
@@ -139,20 +140,20 @@ const allClear = async () => {
         hasCertificate: false
     };
     isChecked.value = false;
-    rangeAmount.value = [minValue.value, maxValue.value]; 
-    rangeRating.value = [1, 5]; 
+    rangeAmount.value = [minValue.value, maxValue.value];
+    rangeRating.value = [1, 5];
 };
 
 
 watch(isFree, (newVal) => {
     filters.value.isFree = newVal;
-    rangeAmount.value = [0, 0]; 
+    rangeAmount.value = [0, 0];
 })
 
 watch(rangeAmount, ([newMin, newMax]) => {
     if (filters.value.isFree) {
         if (rangeAmount.value[0] !== 0 || rangeAmount.value[1] !== 0) {
-            rangeAmount.value = [0, 0]; 
+            rangeAmount.value = [0, 0];
         }
         filters.value.amountStart = null;
         filters.value.amountEnd = null;
@@ -162,7 +163,7 @@ watch(rangeAmount, ([newMin, newMax]) => {
     }
 });
 
-watch(rangeRating, ([newMin,newMax]) => {
+watch(rangeRating, ([newMin, newMax]) => {
     filters.value.ratingStart = newMin;
     filters.value.ratingEnd = newMax;
 })
@@ -221,7 +222,8 @@ h3 {
     transition: transform 0.3s;
     cursor: pointer;
 }
-.buttonSelected{
+
+.buttonSelected {
     background: linear-gradient(#FFB8B9, #FF676A) !important;
     box-shadow: 0 0 20px #fff;
 }
@@ -305,13 +307,13 @@ h3 {
     transform: scale(1.1);
 }
 
-#sw1{
+#sw1 {
     margin-top: 20px;
     display: flex;
     gap: 10px;
 }
-#sw1 p{
+
+#sw1 p {
     margin: 0;
 }
-
 </style>
