@@ -13,6 +13,7 @@ import 'ant-design-vue/dist/reset.css';
 import MyCourse from './components/pages/MyCourse.vue';
 import Catalog from './components/pages/Catalog.vue';
 import AboutUs from './components/pages/AboutUs.vue';
+import MyProfile from './components/pages/MyProfile.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -50,7 +51,8 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/mycourse', component: MyCourse },
   { path: '/catalog', component: Catalog },
-  { path: '/aboutUs', component: AboutUs }
+  { path: '/aboutUs', component: AboutUs },
+  { path: '/myProfile', component: MyProfile }
 ];
 
 const router = createRouter({
