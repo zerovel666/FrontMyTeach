@@ -1,7 +1,7 @@
 <template>
     <TopBar />
     <div class="containerBody">
-        <Filter />
+        <Filter @updateWithFilter="updateWithFilter" />
         <div class="content">
             <h1>Все курсы <img src="/src/assets/Icons/arrowBottom.svg" alt=""></h1>
             <div class="cards">
@@ -45,9 +45,31 @@ const gradients = [
     'linear-gradient(130deg,#11001D 30%,#005EFF 100%)',
 ];
 
+const lastFilter = ref([]);
+
 const getGradients = (index) => {
     return gradients[index % gradients.length];
 };
+
+const updateWithFilter = async (filter) => {
+    lastFilter.value = filter.value;
+    const response = await axios.post(`${API_URL}/student/course/getByFilter`,filter.value);
+    cards.value = response.data.data
+    paginateData.value = {
+        current_page: response.data.current_page,
+        first_page_url: response.data.first_page_url,
+        from: response.data.from,
+        last_page: response.data.last_page,
+        last_page_url: response.data.last_page_url,
+        links: response.data.links,
+        next_page_url: response.data.next_page_url,
+        path: response.data.path,
+        per_page: response.data.per_page,
+        prev_page_url: response.data.prev_page_url,
+        to: response.data.to,
+        total: response.data.total
+    }
+}
 
 const getCards = async () => {
     const response = {
@@ -551,197 +573,6 @@ const updatePage = async (url) => {
         to: response.data.to,
         total: response.data.total
     }
-    // if (url = "http://myteachapp-course-1:82/api/user/course/all?page=1") {
-    //     getCards()
-    // } else {
-    //     const response = {
-    //         "current_page": 2,
-    //         "data": [
-    //             {
-    //                 "id": 10,
-    //                 "name": "Курс по React.js",
-    //                 "image_path": "http://localhost:8082/storage/logoCourse/vueLogo.png",
-    //                 "author_id": "9",
-    //                 "category_id": 1,
-    //                 "isActive": false,
-    //                 "amount": null,
-    //                 "sendCheck": false,
-    //                 "checked": false,
-    //                 "created_at": "2025-03-25T17:22:20.000000Z",
-    //                 "updated_at": "2025-03-25T17:22:20.000000Z",
-    //                 "author_name": "Leonardo Di Kaprio",
-    //                 "tags": [
-    //                     {
-    //                         "id": 28,
-    //                         "course_id": 10,
-    //                         "tag": "et",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 29,
-    //                         "course_id": 10,
-    //                         "tag": "mollitia",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 30,
-    //                         "course_id": 10,
-    //                         "tag": "dignissimos",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     }
-    //                 ],
-    //                 "rating_course": {
-    //                     "id": 10,
-    //                     "course_id": 10,
-    //                     "rating": "5",
-    //                     "created_at": "2025-03-25T17:22:20.000000Z",
-    //                     "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                 }
-    //             },
-    //             {
-    //                 "id": 11,
-    //                 "name": "Курс по C#",
-    //                 "image_path": "http://localhost:8082/storage/logoCourse/laravelLogo.png",
-    //                 "author_id": "10",
-    //                 "category_id": 12,
-    //                 "isActive": false,
-    //                 "amount": null,
-    //                 "sendCheck": false,
-    //                 "checked": false,
-    //                 "created_at": "2025-03-25T17:22:20.000000Z",
-    //                 "updated_at": "2025-03-25T17:22:20.000000Z",
-    //                 "author_name": "Lana Rouz",
-    //                 "tags": [
-    //                     {
-    //                         "id": 31,
-    //                         "course_id": 11,
-    //                         "tag": "voluptatem",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 32,
-    //                         "course_id": 11,
-    //                         "tag": "vel",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 33,
-    //                         "course_id": 11,
-    //                         "tag": "repudiandae",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     }
-    //                 ],
-    //                 "rating_course": {
-    //                     "id": 11,
-    //                     "course_id": 11,
-    //                     "rating": "2",
-    //                     "created_at": "2025-03-25T17:22:20.000000Z",
-    //                     "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                 }
-    //             },
-    //             {
-    //                 "id": 12,
-    //                 "name": "Курс по C++",
-    //                 "image_path": "http://localhost:8082/storage/logoCourse/javaLogo.webp",
-    //                 "author_id": "4",
-    //                 "category_id": 12,
-    //                 "isActive": false,
-    //                 "amount": null,
-    //                 "sendCheck": false,
-    //                 "checked": false,
-    //                 "created_at": "2025-03-25T17:22:20.000000Z",
-    //                 "updated_at": "2025-03-25T17:22:20.000000Z",
-    //                 "author_name": "Antonio Banderes",
-    //                 "tags": [
-    //                     {
-    //                         "id": 34,
-    //                         "course_id": 12,
-    //                         "tag": "unde",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 35,
-    //                         "course_id": 12,
-    //                         "tag": "nobis",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 36,
-    //                         "course_id": 12,
-    //                         "tag": "neque",
-    //                         "created_at": "2025-03-25T17:22:20.000000Z",
-    //                         "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                     }
-    //                 ],
-    //                 "rating_course": {
-    //                     "id": 12,
-    //                     "course_id": 12,
-    //                     "rating": "2",
-    //                     "created_at": "2025-03-25T17:22:20.000000Z",
-    //                     "updated_at": "2025-03-25T17:22:20.000000Z"
-    //                 }
-    //             }
-    //         ],
-    //         "first_page_url": "http://localhost:8080/api/student/course/all?page=1",
-    //         "from": 10,
-    //         "last_page": 2,
-    //         "last_page_url": "http://localhost:8080/api/student/course/all?page=2",
-    //         "links": [
-    //             {
-    //                 "url": "http://localhost:8080/api/student/course/all?page=1",
-    //                 "label": "&laquo; Previous",
-    //                 "active": false
-    //             },
-    //             {
-    //                 "url": "http://localhost:8080/api/student/course/all?page=1",
-    //                 "label": "1",
-    //                 "active": false
-    //             },
-    //             {
-    //                 "url": "http://localhost:8080/api/student/course/all?page=2",
-    //                 "label": "2",
-    //                 "active": true
-    //             },
-    //             {
-    //                 "url": "http://localhost:8080/api/student/course/all?",
-    //                 "label": "Next &raquo;",
-    //                 "active": false
-    //             }
-    //         ],
-    //         "next_page_url": "http://localhost:8080/api/student/course/all?",
-    //         "path": "http://localhost:8080/api/student/course/all",
-    //         "per_page": 9,
-    //         "prev_page_url": "http://localhost:8080/api/student/course/all?page=1",
-    //         "to": 12,
-    //         "total": 12
-    //     }
-    //     cards.value = response.data
-
-
-    //     paginateData.value = {
-    //         current_page: response.current_page,
-    //         first_page_url: response.first_page_url,
-    //         from: response.from,
-    //         last_page: response.last_page,
-    //         last_page_url: response.last_page_url,
-    //         links: response.links,
-    //         next_page_url: response.next_page_url,
-    //         path: response.path,
-    //         per_page: response.per_page,
-    //         prev_page_url: response.prev_page_url,
-    //         to: response.to,
-    //         total: response.total
-    //     }
-    // }
-
 };
 
 onMounted(getCards)

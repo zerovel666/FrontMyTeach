@@ -33,6 +33,7 @@ import SettingFilter from './SettingFilter.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 
+const emit = defineEmits(["updateWithFilter"]);
 const showSettingModal = ref(false);
 const searchInput = ref('');
 const showOption = ref(false);
@@ -45,7 +46,7 @@ const allFilterOption = ref({
 });
 
 const updateFilters = (filters) => {
-    //logic write
+    emit("updateWithFilter",filters);
 };
 
 const getOptions = async () => {

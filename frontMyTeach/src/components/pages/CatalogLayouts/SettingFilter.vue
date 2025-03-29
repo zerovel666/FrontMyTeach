@@ -67,31 +67,32 @@ const getCategories = async () => {
     // categories.value = response.data.message.category;
     // minValue.value = Number(response.data.message.amount.startAmount);
     // maxValue.value = Number(response.data.message.amount.endAmount);
+
     const response = {
-        "category": [
-            "Python",
-            "C#",
-            "React.js",
-            "C#",
-            "PHP",
-            "React.js",
-            "Java",
-            "PHP",
-            "HTML&CSS"
-        ],
-        "amount": {
-            "startAmount": null,
-            "endAmount": null
-        },
-        "certificate": "boolean",
-        "isFree": "boolean",
-        "rating": [
-            1,
-            2,
-            3,
-            4,
-            5
-        ]
+        "status": true,
+        "message": {
+            "category": [
+                "Python",
+                "C#",
+                "React.js",
+                "PHP",
+                "Java",
+                "HTML&CSS"
+            ],
+            "amount": {
+                "startAmount": 0,
+                "endAmount": 35000
+            },
+            "certificate": "boolean",
+            "isFree": "boolean",
+            "rating": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        }
     }
     categories.value = response.message.category;
     minValue.value = Number(response.message.amount.startAmount);
