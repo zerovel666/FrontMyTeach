@@ -154,6 +154,7 @@ body {
 	font-size: 22px;
 	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
 	margin: 10px;
+	color: black;
 }
 
 

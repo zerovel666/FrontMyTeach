@@ -25,7 +25,15 @@
                 <button class="buttonNav" :class="{ isSelected: isCatalog }" @click=goCatalog>Каталог</button>
                 <button class="buttonNav" :class="{ isSelected: isAboutUs }" @click="goAboutUs">О нас</button>
                 <div class="user">
-                    <img src="/src/assets/Icons/NavIcon.svg" alt="" id="navIcon">
+                    <div class="showMenu">
+                        <img src="/src/assets/Icons/NavIcon.svg" alt="" id="navIcon" @click="changeShowMenu"
+                            :style="{ transform: showMenu ? 'rotate(180deg)' : 'rotate(0deg)' }">
+                        <ul v-if="showMenu">
+                            <li @click="goMyProfile">Мой профиль</li>
+                            <li @click="goSetting">Настройки</li>
+                            <li @click="logout">Выйти из аккаунта</li>
+                        </ul>
+                    </div>
                     <img src="/src/assets/images/auth/avatars.png" alt="" id="avatar">
                 </div>
             </div>
@@ -38,10 +46,16 @@ import { API_URL } from '@/config';
 import axios from 'axios';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import VueCookies from 'vue-cookies';
 
 const route = useRoute();
 const router = useRouter();
 const isSelected = ref('');
+const showMenu = ref(false);
+const options = ref([]);
+const inputValue = ref('');
+const showOption = ref(false);
+const searchContainer = ref(null);
 
 const isMain = computed(() => route.path === "/");
 const isMyCourse = computed(() => route.path === "/mycourse");
@@ -60,13 +74,27 @@ const goCatalog = async () => {
 }
 
 const goAboutUs = async () => {
-    router.push('aboutUs')
+    router.push('/aboutUs')
 }
 
-const options = ref([]);
-const inputValue = ref('');
-const showOption = ref(false);
-const searchContainer = ref(null);
+const goMyProfile = async () => {
+    router.push('/myProfile')
+}
+const goSetting = async () => {
+    router.push('/setting')
+}
+const logout = async () => {
+    VueCookies.remove('token');
+    router.push('/login')
+}
+
+const changeShowMenu = () => {
+    if (showMenu.value == false) {
+        showMenu.value = true
+    } else {
+        showMenu.value = false
+    }
+}
 
 const filteredOptions = computed(() => {
     if (!inputValue.value) return options.value;
@@ -81,7 +109,7 @@ const selectOption = (option) => {
     showOption.value = false;
 };
 
-const extraSearch = async() => {
+const extraSearch = async () => {
     //write logic
 }
 
@@ -548,6 +576,9 @@ const handleClickOutside = (event) => {
     if (searchContainer.value && !searchContainer.value.contains(event.target)) {
         showOption.value = false;
     }
+    if (showMenu.value && !event.target.closest(".showMenu")) {
+        showMenu.value = false;
+    }
 };
 
 onMounted(() => {
@@ -625,6 +656,45 @@ onUnmounted(() => {
 .user {
     display: flex;
     gap: 10px;
+    position: relative;
+}
+
+.showMenu {
+    display: flex;
+    position: relative;
+}
+
+.showMenu img {
+    width: 100%;
+    transition: transform 0.5s;
+}
+
+.showMenu ul {
+    left: -80px;
+    width: 100%;
+    width: 200px;
+    max-height: 400px;
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    overflow-y: auto;
+    margin-top: 50px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: black;
+    z-index: 100;
+}
+
+.showMenu ul li {
+    padding: 8px;
+    color: black;
+    cursor: pointer;
+}
+
+.showMenu ul li:hover {
+    background-color: #ededed;
 }
 
 #navIcon {
