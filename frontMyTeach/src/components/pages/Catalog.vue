@@ -1,7 +1,7 @@
 <template>
     <TopBar />
     <div class="containerBody">
-        <Filter @updateWithFilter="updateWithFilter" />
+         <Filter @updateWithFilter="updateWithFilter" @searchExtra="searchExtra"/>
         <div class="content">
             <h1>Все курсы <img src="/src/assets/Icons/arrowBottom.svg" alt=""></h1>
             <div class="cards">
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <Paginate :paginateData="paginateData" @howPage="updatePage" />
+            <Paginate :paginateData="paginateData" @howPage="updatePage"/>
         </div>
     </div>
     <FooterBar />
@@ -51,8 +51,15 @@ const getGradients = (index) => {
     return gradients[index % gradients.length];
 };
 
+const searchExtra = async (id) => {
+    const response = await axios.get(`${API_URL}/student/course/${id}`)
+    cards.value = response.data.message
+    paginateData.value = []
+}
+
 const updateWithFilter = async (filter) => {
     lastFilter.value = filter.value;
+    console.log(filter.value);
     const response = await axios.post(`${API_URL}/student/course/getByFilter`,filter.value);
     cards.value = response.data.data
     paginateData.value = {

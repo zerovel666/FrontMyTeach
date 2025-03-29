@@ -21,7 +21,7 @@
             <p>Фильтры</p>
             <img src="/src/assets/Icons/Filter.svg" alt="">
         </div>
-        <button class="searchAllFitler">Искать</button>
+        <button class="searchAllFitler" @click="searchFree">Искать</button>
     </div>
     <SettingFilter :showModal="showSettingModal" @close="showSettingModal = false" @applyFilters="updateFilters" />
 
@@ -33,22 +33,65 @@ import SettingFilter from './SettingFilter.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 
-const emit = defineEmits(["updateWithFilter"]);
+const emit = defineEmits(["updateWithFilter","searchExtra"]);
 const showSettingModal = ref(false);
 const searchInput = ref('');
+const searchInputId = ref('')
 const showOption = ref(false);
 const options = ref([])
-const allFilterOption = ref({
+const filters = ref({
     isFree: null,
+    category: [],
+    ratingStart: null,
+    ratingEnd: null,
     amountStart: null,
     amountEnd: null,
-    category: null
-});
+    hasCertificate: false   
+})
 
 const updateFilters = (filters) => {
     emit("updateWithFilter",filters);
 };
 
+
+const searchAction = () => {
+    emit("searchExtra", searchInputId.value)
+}
+
+const searchFree = () => {
+    emit("updateWithFilter", filters)
+}
+
+const filteredOptions = computed(() => {
+    if (!searchInput.value) return options.value;
+    return options.value.filter(option =>
+        option.name.toLowerCase().includes(searchInput.value.toLowerCase())
+    );
+});
+
+
+const selectOption = async (option) => {
+    if (option != null) {
+        searchInput.value = option.name
+        searchInputId.value = option.id
+        showOption.value = false
+    }
+}
+
+const handleClickOutside = (event) => {
+    const searchContainer = document.querySelector(".searchContainer");
+    if (!searchContainer.contains(event.target)) {
+        showOption.value = false;
+    }
+};
+
+const changeIsFree = () => {
+    if (filters.value.isFree === null || filters.value.isFree === false){
+        filters.value.isFree = true
+    }else{
+        filters.value.isFree = null
+    }
+}
 const getOptions = async () => {
     // const response = await axios.get(`${API_URL}/student/course/all`);
     // options.value = response.data.data;
@@ -505,37 +548,6 @@ const getOptions = async () => {
     }
     options.value = response.data;
 };
-
-const filteredOptions = computed(() => {
-    if (!searchInput.value) return options.value;
-    return options.value.filter(option =>
-        option.name.toLowerCase().includes(searchInput.value.toLowerCase())
-    );
-});
-
-
-const selectOption = async (option) => {
-    if (option != null) {
-        searchInput.value = option
-        showOption.value = false
-    }
-}
-
-const handleClickOutside = (event) => {
-    const searchContainer = document.querySelector(".searchContainer");
-    if (!searchContainer.contains(event.target)) {
-        showOption.value = false;
-    }
-};
-
-const changeIsFree = () => {
-    if (allFilterOption.value.isFree === null || allFilterOption.value.isFree === false){
-        allFilterOption.value.isFree = true
-    }else{
-        allFilterOption.value.isFree = false
-    }
-}
-
 onMounted(() => {
     getOptions();
     document.addEventListener("click", handleClickOutside);
