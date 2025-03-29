@@ -8,7 +8,7 @@
                         <input class="searchInput" placeholder="Поиск..." v-model="inputValue"
                             @focus="showOption = true">
                         <button class="searchButton">
-                            <img src="/src/assets/Icons/Search.svg" alt="search">
+                            <img src="/src/assets/Icons/Search.svg" alt="search" @click="extraSearch">
                         </button>
                     </div>
                     <ul v-if="showOption" class="dropdown">
@@ -17,8 +17,6 @@
                         </li>
                     </ul>
                 </div>
-
-
             </div>
 
             <div class="r-cont">
@@ -79,8 +77,13 @@ const filteredOptions = computed(() => {
 
 const selectOption = (option) => {
     inputValue.value = option.name;
+    isSelected.value = option.id
     showOption.value = false;
 };
+
+const extraSearch = async() => {
+    //write logic
+}
 
 const getOptions = async () => {
     // const response = await axios.get(`${API_URL}/student/course/all`);
