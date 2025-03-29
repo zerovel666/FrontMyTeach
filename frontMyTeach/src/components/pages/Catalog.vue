@@ -59,7 +59,6 @@ const searchExtra = async (id) => {
 
 const updateWithFilter = async (filter) => {
     lastFilter.value = filter.value;
-    console.log(filter.value);
     const response = await axios.post(`${API_URL}/student/course/getByFilter`,filter.value);
     cards.value = response.data.data
     paginateData.value = {
