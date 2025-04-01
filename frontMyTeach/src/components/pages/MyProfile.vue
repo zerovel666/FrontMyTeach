@@ -54,7 +54,7 @@ const userInfo = inject('userInfo');
 }
 .top{
     border-radius: 20px 20px 0 0;
-    background-image: url('/src/assets/images/layouts/BgLayoutsMyProfile/standartBg.png');
+    background-image: url('/src/assets/images/profileBackground/standartBg.jpg');
     background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
