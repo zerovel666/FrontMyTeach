@@ -35,7 +35,7 @@ const getBanner = async () => {
                 "image_path": "http://localhost:8083//storage/posters/fzDm4WPCjlQGbPZuf5eyzQufhBsFVlt0W9BNcl5g.svg"
             },
             {
-                "image_path": "http://localhost:8083//storage/posters/iq2aHjIVe61IRqm2IDLKLJJ6hcGW6t7DK0nx5rvm.png"
+                "image_path": "http://localhost:8083//storage/posters/iq2aHjIVe61IRqm2IDLKLJJ6hcGW6t7DK0nx5rvm.webp"
             }
         ]
         banners.value = response;

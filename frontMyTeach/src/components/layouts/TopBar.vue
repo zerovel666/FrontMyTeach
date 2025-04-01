@@ -18,7 +18,6 @@
                     </ul>
                 </div>
             </div>
-
             <div class="r-cont">
                 <button class="buttonNav" :class="{ isSelected: isMain }" @click="goHome">Главная</button>
                 <button class="buttonNav" :class="{ isSelected: isMyCourse }" @click="goMyCourse">Мои курсы</button>
@@ -44,10 +43,11 @@
 <script setup>
 import { API_URL } from '@/config';
 import axios from 'axios';
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted,inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import VueCookies from 'vue-cookies';
 
+const userInfo = inject('userInfo');
 const route = useRoute();
 const router = useRouter();
 const isSelected = ref('');
