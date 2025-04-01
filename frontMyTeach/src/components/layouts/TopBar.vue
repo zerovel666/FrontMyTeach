@@ -33,7 +33,7 @@
                             <li @click="logout">Выйти из аккаунта</li>
                         </ul>
                     </div>
-                    <img src="/src/assets/images/auth/avatars.png" alt="" id="avatar">
+                    <img :src="userInfo.user_image.image_path" alt="" id="avatar">
                 </div>
             </div>
         </div>

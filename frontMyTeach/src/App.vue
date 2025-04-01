@@ -61,14 +61,14 @@ const getUserInfo = async () => {
 				"has_courses": 1,
 				"complete_course_count": null,
 				"complete_tasks": null,
-				"pastime": "90.816666666666",
+				"pastime": "174.15",
 				"created_at": "2025-03-31T19:07:21.000000Z",
-				"updated_at": "2025-03-31T19:19:22.000000Z"
+				"updated_at": "2025-04-01T17:37:55.000000Z"
 			},
 			"user_image": {
 				"id": 1,
 				"user_id": 1,
-				"image_path": "/public/storage/images/default_avatars.jpg",
+				"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
 				"created_at": "2025-03-31T19:05:28.000000Z",
 				"updated_at": "2025-03-31T19:05:28.000000Z"
 			}

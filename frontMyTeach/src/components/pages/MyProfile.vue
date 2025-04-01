@@ -8,21 +8,21 @@
                     <img src="/src/assets/Icons/editorIcon.svg" alt="">
                 </div>
                 <div class="avatar">
-                    <img src="/src/assets/images/auth/avatars.png" alt="">
+                    <img :src="userInfo.user_image.image_path" alt="">
                 </div>
             </div>
             <div class="bottom">
                 <div class="bg">
                     <div class="bottom-content">
                        <div class="userInfoFNE">
-                            <p class="fname">Georgy Mitchel</p>
-                            <p class="email">GMeorgy@gmail.com</p>
+                            <p class="fname">{{ userInfo.first_name}} {{ userInfo.last_name }}</p>
+                            <p class="email"> {{ userInfo.email }} </p>
                        </div>
                        <div class="learningInfo">
-                            <p class="time">Время обучения : 320 ч</p>
+                            <p class="time">Время обучения : {{ Math.round(userInfo.client_infos.pastime) }} ч</p>
                             <div class="taskInfo">
-                                <p>Курсов пройдено : 8</p>
-                                <p>Задач решено : 3024</p>
+                                <p>Курсов пройдено : {{ userInfo.client_infos.complete_course_count ?? "0" }}</p>
+                                <p>Задач решено : {{ userInfo.client_infos.complete_tasks ?? "0" }}</p>
                             </div>
                         </div>
                     </div>
@@ -35,9 +35,11 @@
 </template>
 
 <script setup>
+import { inject } from 'vue';
 import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
 
+const userInfo = inject('userInfo');
 
 </script>
 
