@@ -3,9 +3,9 @@
 <div class="containerBody">
     <div class="content">
         <div class="myProfile">
-            <div class="top">
+            <div class="top" :style="{backgroundImage: `url(${userInfo.client_infos.image_bg})`}">
                 <div class="icon">
-                    <img src="/src/assets/Icons/editorIcon.svg" alt="">
+                    <img src="/src/assets/Icons/editorIcon.svg" alt="" @click="showModal = true">
                 </div>
                 <div class="avatar">
                     <img :src="userInfo.user_image.image_path" alt="">
@@ -30,16 +30,19 @@
             </div>
         </div>
     </div>
+    <ChangeBgModal :showModal="showModal" @close="showModal = false"/>
 </div>
 <FooterBar />
 </template>
 
 <script setup>
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
+import ChangeBgModal from './ProfileLayouts/ChangeBgModal.vue';
 
 const userInfo = inject('userInfo');
+const showModal = ref(false)
 
 </script>
 
@@ -54,7 +57,6 @@ const userInfo = inject('userInfo');
 }
 .top{
     border-radius: 20px 20px 0 0;
-    background-image: url('/src/assets/images/profileBackground/standartBg.jpg');
     background-position: top;
     background-repeat: no-repeat;
     background-size: cover;

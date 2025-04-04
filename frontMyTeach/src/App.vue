@@ -47,33 +47,33 @@ const getUserInfo = async () => {
 		// const response = await axios.get(`${API_URL}/client/info`);
 		// userInfo.value = response.data;
 
-		const response = {
-			"id": 1,
+		userInfo.value = {
+			"id": 2,
 			"email": "student@gmail.com",
 			"first_name": "Antonio",
 			"last_name": "Banderes",
-			"role": "student",
-			"created_at": "2025-03-31T19:05:28.000000Z",
-			"updated_at": "2025-03-31T19:05:28.000000Z",
+			"role": "teacher",
+			"created_at": "2025-04-03T15:30:52.000000Z",
+			"updated_at": "2025-04-03T15:30:52.000000Z",
 			"client_infos": {
-				"id": 1,
-				"user_id": 1,
-				"has_courses": 1,
+				"id": 2,
+				"user_id": 2,
+				"has_courses": null,
 				"complete_course_count": null,
 				"complete_tasks": null,
-				"pastime": "174.15",
-				"created_at": "2025-03-31T19:07:21.000000Z",
-				"updated_at": "2025-04-01T17:37:55.000000Z"
+				"pastime": "0.56666666666667",
+				"image_bg": "http://localhost:8081/storage//bgProfile/Чистилище.jpg",
+				"created_at": "2025-04-03T15:30:43.000000Z",
+				"updated_at": "2025-04-04T19:23:18.000000Z"
 			},
 			"user_image": {
-				"id": 1,
-				"user_id": 1,
+				"id": 2,
+				"user_id": 2,
 				"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-				"created_at": "2025-03-31T19:05:28.000000Z",
-				"updated_at": "2025-03-31T19:05:28.000000Z"
+				"created_at": "2025-04-03T15:30:52.000000Z",
+				"updated_at": "2025-04-03T15:30:52.000000Z"
 			}
 		}
-		userInfo.value = response
 	} catch (error) {
 		console.error('Error fetching user info:', error);
 	}

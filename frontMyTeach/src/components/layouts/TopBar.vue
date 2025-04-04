@@ -33,7 +33,7 @@
                             <li @click="logout">Выйти из аккаунта</li>
                         </ul>
                     </div>
-                    <img :src="userInfo.user_image.image_path" alt="" id="avatar">
+                    <img :src="userInfo.user_image.image_path" alt="" id="avatar" @click="goMyProfile">
                 </div>
             </div>
         </div>
@@ -706,6 +706,7 @@ onUnmounted(() => {
     height: 50px;
     border-radius: 100%;
     border: 2px solid #fff;
+    cursor: pointer;
 }
 
 #logo {
