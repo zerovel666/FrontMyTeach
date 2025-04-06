@@ -110,7 +110,7 @@ const selectOption = (option) => {
 };
 
 const extraSearch = async () => {
-    //write logic
+    router.push({name: "catalog",query: {course_id:isSelected.value }})
 }
 
 const getOptions = async () => {

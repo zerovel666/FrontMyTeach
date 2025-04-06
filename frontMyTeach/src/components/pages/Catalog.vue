@@ -594,10 +594,12 @@ const updatePage = async (url) => {
 onMounted(() => {
     getCards();
     const category = route.query.category;
+    const course_id = route.query.course_id;
     if (category){
         filters.value.category.push(category)
         updateWithFilter(filters)
-
+    } else if(course_id) {
+        searchExtra(course_id);
     }
 })
 </script>
