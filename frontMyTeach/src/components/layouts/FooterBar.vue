@@ -26,7 +26,7 @@
     min-height: 350px;
     width: 100%;
     background: linear-gradient(140deg, #11001C 0%, #59008E 100%);
-    margin-top: 200px;
+    margin-top: 150px;
     border-radius: 40px 40px 0 0;
     box-shadow: 0px 10px 40px white;
     display: flex;
