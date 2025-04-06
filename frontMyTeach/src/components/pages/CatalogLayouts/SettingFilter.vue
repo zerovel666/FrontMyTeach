@@ -112,13 +112,13 @@ const pushInFiltersCategory = async (index) => {
 
 
 const filters = ref({
-    isFree: false,
+    isFree: null,
     category: [],
     ratingStart: null,
     ratingEnd: null,
     amountStart: null,
     amountEnd: null,
-    hasCertificate: false
+    hasCertificate: null
 });
 
 const applyFilters = () => {

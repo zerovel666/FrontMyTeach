@@ -36,6 +36,7 @@ import Filter from './CatalogLayouts/Filter.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import Paginate from '../layouts/Paginate.vue';
+import { useRoute } from 'vue-router';
 
 const paginateData = ref([]);
 const cards = ref({});
@@ -44,8 +45,17 @@ const gradients = [
     'linear-gradient(130deg,#11001D 30%,#00FFF2 100%)',
     'linear-gradient(130deg,#11001D 30%,#005EFF 100%)',
 ];
-
+const route = useRoute();
 const lastFilter = ref([]);
+const filters = ref({
+    isFree: null,
+    category: [],
+    ratingStart: null,
+    ratingEnd: null,
+    amountStart: null,
+    amountEnd: null,
+    hasCertificate: null   
+});
 
 const getGradients = (index) => {
     return gradients[index % gradients.length];
@@ -581,7 +591,15 @@ const updatePage = async (url) => {
     }
 };
 
-onMounted(getCards)
+onMounted(() => {
+    getCards();
+    const category = route.query.category;
+    if (category){
+        filters.value.category.push(category)
+        updateWithFilter(filters)
+
+    }
+})
 </script>
 
 <style scoped>

@@ -50,7 +50,7 @@ const routes = [
   { path: '/auth', component: Auth },
   { path: '/register', component: Register },
   { path: '/mycourse', component: MyCourse },
-  { path: '/catalog', component: Catalog },
+  { path: '/catalog', component: Catalog , name: 'catalog' },
   { path: '/aboutUs', component: AboutUs },
   { path: '/myProfile', component: MyProfile }
 ];

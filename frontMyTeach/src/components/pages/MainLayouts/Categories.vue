@@ -6,7 +6,8 @@
                 <p id="p2">PROFESSIONAL TRAINING</p>
             </div>
             <div class="categories">
-                <div v-for="(category, index) in categories" :key="index" class="category-item">
+                <div v-for="(category, index) in categories" :key="index" class="category-item"
+                    @click="extraSearchCategories(category)">
                     <p>{{ category.category }}</p>
                     <img src="/src/assets/Icons/CategoryGetIcon.svg" alt="">
                 </div>
@@ -19,9 +20,10 @@
 import { API_URL } from '@/config';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const categories = ref([]);
-
+const router = useRouter();
 const getCategories = async () => {
     try {
         // const response = await axios.get(`${API_URL}/course/category/all`);
@@ -123,6 +125,11 @@ const getCategories = async () => {
         console.error("Ошибка при загрузке категорий:", error);
     }
 };
+
+const extraSearchCategories = (category) => {
+    router.push({ name: 'catalog', query: { category: category.category } });
+};
+
 
 onMounted(getCategories);
 </script>
