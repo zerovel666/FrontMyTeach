@@ -85,7 +85,7 @@ const goSetting = async () => {
 }
 const logout = async () => {
     VueCookies.remove('token');
-    router.push('/login')
+    router.push('/auth')
 }
 
 const changeShowMenu = () => {
