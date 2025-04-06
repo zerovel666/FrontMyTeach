@@ -38,9 +38,10 @@
                             <img :src="certificate.image_path" alt="" class="bgImageCertificate">
                         </div>
                         <div class="certificate-content">
-                            <div class="downloader">
-                                <img src="/src/assets/Icons/download.svg" alt="">
+                            <div class="downloader" @click="downloadCertificate(index)">
+                                <img src="/src/assets/Icons/download.svg" alt="Download">
                             </div>
+
                             <div class="infoCertificate">
                                 <h4>Сертификат</h4>
                                 <p>{{ certificate.description }}</p>
@@ -51,7 +52,7 @@
                                         <div class="CIP">MyTeach</div>
                                         <img src="/src/assets/images/stamp.svg" alt="">
                                     </div>
-                                    <div class="date">{{certificate.date_issue}}</div>
+                                    <div class="date">{{ certificate.date_issue }}</div>
                                 </div>
                             </div>
                         </div>
@@ -74,54 +75,30 @@ import TopBar from '../layouts/TopBar.vue';
 import ChangeBgModal from './ProfileLayouts/ChangeBgModal.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
+import html2canvas from 'html2canvas';
 
 const userInfo = inject('userInfo');
 const showModal = ref(false)
 const certificates = ref([]);
 
 const getCertificate = async () => {
-    // const response = await axios.get(`${API_URL}/certificate/my/all`);
-    // certificates.value = response.data;
+    const response = await axios.get(`${API_URL}/certificate/my/all`);
+    certificates.value = response.data;
 
-    certificates.value = [
-        {
-            "id": 1,
-            "user_id": 2,
-            "description": "Вручена Antonio Banderes за прохождение курса:",
-            "image_path": "http://localhost:8081/storage/certificate/CNUYXbWXviIGUB9ob4Amcgl9sAhTaqsj9VZoefXF.jpg",
-            "course_name": "Laravel: Веб-разработка",
-            "course_image_path": "http://localhost:8082/storage/logoCourse/vueLogo.png",
-            "date_issue": "25.04.06",
-            "file_path": null,
-            "created_at": "2025-04-06T12:15:11.000000Z",
-            "updated_at": "2025-04-06T12:15:11.000000Z"
-        },
-        {
-            "id": 1,
-            "user_id": 2,
-            "description": "Вручена Antonio Banderes за прохождение курса:",
-            "image_path": "http://localhost:8081/storage/certificate/CNUYXbWXviIGUB9ob4Amcgl9sAhTaqsj9VZoefXF.jpg",
-            "course_name": "Laravel: Веб-разработка",
-            "course_image_path": "http://localhost:8082/storage/logoCourse/vueLogo.png",
-            "date_issue": "25.04.06",
-            "file_path": null,
-            "created_at": "2025-04-06T12:15:11.000000Z",
-            "updated_at": "2025-04-06T12:15:11.000000Z"
-        },
-        {
-            "id": 1,
-            "user_id": 2,
-            "description": "Вручена Antonio Banderes за прохождение курса:",
-            "image_path": "http://localhost:8081/storage/certificate/CNUYXbWXviIGUB9ob4Amcgl9sAhTaqsj9VZoefXF.jpg",
-            "course_name": "Laravel: Веб-разработка",
-            "course_image_path": "http://localhost:8082/storage/logoCourse/vueLogo.png",
-            "date_issue": "25.04.06",
-            "file_path": null,
-            "created_at": "2025-04-06T12:15:11.000000Z",
-            "updated_at": "2025-04-06T12:15:11.000000Z"
-        }
-    ]
 }
+
+const downloadCertificate = async (index) => {
+    const element = document.querySelectorAll('.certificate')[index];
+    if (!element) return;
+
+    const canvas = await html2canvas(element, { scale: 2 });
+    const image = canvas.toDataURL('image/png');
+
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = `certificate-${index + 1}.png`;
+    link.click();
+};
 
 onMounted(() => {
     getCertificate();

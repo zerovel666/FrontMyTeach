@@ -14,6 +14,7 @@
     "ant-design-vue": "^4.2.6",
     "axios": "^1.7.9",
     "frontmyteach": "file:",
+    "html2canvas": "^1.4.1",
     "vue": "^3.5.13",
     "vue-cookies": "^1.8.6",
     "vue-router": "^4.5.0",
