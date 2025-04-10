@@ -14,7 +14,7 @@
                                     alt="">{{ tag.tag }}</ul>
                         </ul>
                     </div>
-                    <button>Подробнее</button>
+                    <button @click="goToCourseInfo(card.id)">Подробнее</button>
                 </div>
                 <div class="r-cont-card">
                     <p class="rating"><img src="/src/assets/Icons/Star.svg" alt="">{{ card.rating }}</p>
@@ -33,11 +33,13 @@ import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
 import axios from 'axios';
 import { API_URL } from '@/config';
+import { useRouter } from 'vue-router';
 
 const carouselRef = ref(null);
 const isHovered = ref(false);
 const activeIndex = ref(0);
 const cards = ref([]);
+const router = useRouter()
 
 const onScroll = (event) => {
     if (!carouselRef.value || !isHovered.value) return;
@@ -52,6 +54,10 @@ const onScroll = (event) => {
     }
 
 };
+
+const goToCourseInfo = async (id) => {
+    router.push(`/course/info/${id}`);
+}
 
 const getGradient = (index) => {
     const colors = [

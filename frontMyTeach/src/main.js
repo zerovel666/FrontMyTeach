@@ -14,6 +14,7 @@ import MyCourse from './components/pages/MyCourse.vue';
 import Catalog from './components/pages/Catalog.vue';
 import AboutUs from './components/pages/AboutUs.vue';
 import MyProfile from './components/pages/MyProfile.vue';
+import CourseInfo from './components/pages/CourseInfo.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -52,7 +53,10 @@ const routes = [
   { path: '/mycourse', component: MyCourse },
   { path: '/catalog', component: Catalog , name: 'catalog' },
   { path: '/aboutUs', component: AboutUs },
-  { path: '/myProfile', component: MyProfile }
+  { path: '/myProfile', component: MyProfile },
+  { path: '/course/info/:id', component: CourseInfo },
+  { path: '/:pathMatch(.*)*', redirect: '/' } ,
+
 ];
 
 const router = createRouter({
