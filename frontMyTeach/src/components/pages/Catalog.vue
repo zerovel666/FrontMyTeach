@@ -88,488 +88,488 @@ const updateWithFilter = async (filter) => {
 }
 
 const getCards = async () => {
-    const response = {
-        "current_page": 1,
-        "data": [
-            {
-                "id": 1,
-                "name": "Курс по Django",
-                "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
-                "author_id": "9",
-                "category_id": 1,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:30.000000Z",
-                "updated_at": "2025-03-27T08:10:30.000000Z",
-                "author_name": "Leonardo Di Kaprio",
-                "tags": [
-                    {
-                        "id": 1,
-                        "course_id": 1,
-                        "tag": "quia",
-                        "created_at": "2025-03-27T08:10:30.000000Z",
-                        "updated_at": "2025-03-27T08:10:30.000000Z"
-                    },
-                    {
-                        "id": 2,
-                        "course_id": 1,
-                        "tag": "rerum",
-                        "created_at": "2025-03-27T08:10:30.000000Z",
-                        "updated_at": "2025-03-27T08:10:30.000000Z"
-                    },
-                    {
-                        "id": 3,
-                        "course_id": 1,
-                        "tag": "ducimus",
-                        "created_at": "2025-03-27T08:10:30.000000Z",
-                        "updated_at": "2025-03-27T08:10:30.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 1,
-                    "course_id": 1,
-                    "rating": "3",
-                    "created_at": "2025-03-27T08:10:30.000000Z",
-                    "updated_at": "2025-03-27T08:10:30.000000Z"
-                }
-            },
-            {
-                "id": 2,
-                "name": "Курс по Vue.js",
-                "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
-                "author_id": "9",
-                "category_id": 3,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:30.000000Z",
-                "updated_at": "2025-03-27T08:10:30.000000Z",
-                "author_name": "Leonardo Di Kaprio",
-                "tags": [
-                    {
-                        "id": 4,
-                        "course_id": 2,
-                        "tag": "iste",
-                        "created_at": "2025-03-27T08:10:30.000000Z",
-                        "updated_at": "2025-03-27T08:10:30.000000Z"
-                    },
-                    {
-                        "id": 5,
-                        "course_id": 2,
-                        "tag": "voluptatem",
-                        "created_at": "2025-03-27T08:10:30.000000Z",
-                        "updated_at": "2025-03-27T08:10:30.000000Z"
-                    },
-                    {
-                        "id": 6,
-                        "course_id": 2,
-                        "tag": "maiores",
-                        "created_at": "2025-03-27T08:10:30.000000Z",
-                        "updated_at": "2025-03-27T08:10:30.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 2,
-                    "course_id": 2,
-                    "rating": "2",
-                    "created_at": "2025-03-27T08:10:30.000000Z",
-                    "updated_at": "2025-03-27T08:10:30.000000Z"
-                }
-            },
-            {
-                "id": 3,
-                "name": "Курс по HTML&CSS",
-                "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
-                "author_id": "9",
-                "category_id": 1,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:30.000000Z",
-                "updated_at": "2025-03-27T08:10:30.000000Z",
-                "author_name": "Leonardo Di Kaprio",
-                "tags": [
-                    {
-                        "id": 7,
-                        "course_id": 3,
-                        "tag": "quibusdam",
-                        "created_at": "2025-03-27T08:10:31.000000Z",
-                        "updated_at": "2025-03-27T08:10:31.000000Z"
-                    },
-                    {
-                        "id": 8,
-                        "course_id": 3,
-                        "tag": "perspiciatis",
-                        "created_at": "2025-03-27T08:10:31.000000Z",
-                        "updated_at": "2025-03-27T08:10:31.000000Z"
-                    },
-                    {
-                        "id": 9,
-                        "course_id": 3,
-                        "tag": "provident",
-                        "created_at": "2025-03-27T08:10:31.000000Z",
-                        "updated_at": "2025-03-27T08:10:31.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 3,
-                    "course_id": 3,
-                    "rating": "2",
-                    "created_at": "2025-03-27T08:10:31.000000Z",
-                    "updated_at": "2025-03-27T08:10:31.000000Z"
-                }
-            },
-            {
-                "id": 4,
-                "name": "Курс по Python",
-                "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
-                "author_id": "10",
-                "category_id": 1,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:36.000000Z",
-                "updated_at": "2025-03-27T08:10:36.000000Z",
-                "author_name": "Lana Rouz",
-                "tags": [
-                    {
-                        "id": 10,
-                        "course_id": 4,
-                        "tag": "placeat",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    },
-                    {
-                        "id": 11,
-                        "course_id": 4,
-                        "tag": "a",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    },
-                    {
-                        "id": 12,
-                        "course_id": 4,
-                        "tag": "quia",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 4,
-                    "course_id": 4,
-                    "rating": "4",
-                    "created_at": "2025-03-27T08:10:36.000000Z",
-                    "updated_at": "2025-03-27T08:10:36.000000Z"
-                }
-            },
-            {
-                "id": 5,
-                "name": "Курс по HTML&CSS",
-                "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
-                "author_id": "9",
-                "category_id": 4,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:36.000000Z",
-                "updated_at": "2025-03-27T08:10:36.000000Z",
-                "author_name": "Leonardo Di Kaprio",
-                "tags": [
-                    {
-                        "id": 13,
-                        "course_id": 5,
-                        "tag": "velit",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    },
-                    {
-                        "id": 14,
-                        "course_id": 5,
-                        "tag": "quam",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    },
-                    {
-                        "id": 15,
-                        "course_id": 5,
-                        "tag": "sed",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 5,
-                    "course_id": 5,
-                    "rating": "4",
-                    "created_at": "2025-03-27T08:10:36.000000Z",
-                    "updated_at": "2025-03-27T08:10:36.000000Z"
-                }
-            },
-            {
-                "id": 6,
-                "name": "Курс по Laravel",
-                "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
-                "author_id": "10",
-                "category_id": 1,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:36.000000Z",
-                "updated_at": "2025-03-27T08:10:36.000000Z",
-                "author_name": "Lana Rouz",
-                "tags": [
-                    {
-                        "id": 16,
-                        "course_id": 6,
-                        "tag": "doloribus",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    },
-                    {
-                        "id": 17,
-                        "course_id": 6,
-                        "tag": "ipsam",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    },
-                    {
-                        "id": 18,
-                        "course_id": 6,
-                        "tag": "dolorem",
-                        "created_at": "2025-03-27T08:10:36.000000Z",
-                        "updated_at": "2025-03-27T08:10:36.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 6,
-                    "course_id": 6,
-                    "rating": "4",
-                    "created_at": "2025-03-27T08:10:36.000000Z",
-                    "updated_at": "2025-03-27T08:10:36.000000Z"
-                }
-            },
-            {
-                "id": 7,
-                "name": "Курс по SpringBoot",
-                "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
-                "author_id": "4",
-                "category_id": 5,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:40.000000Z",
-                "updated_at": "2025-03-27T08:10:40.000000Z",
-                "author_name": "Antonio Banderes",
-                "tags": [
-                    {
-                        "id": 19,
-                        "course_id": 7,
-                        "tag": "non",
-                        "created_at": "2025-03-27T08:10:40.000000Z",
-                        "updated_at": "2025-03-27T08:10:40.000000Z"
-                    },
-                    {
-                        "id": 20,
-                        "course_id": 7,
-                        "tag": "qui",
-                        "created_at": "2025-03-27T08:10:40.000000Z",
-                        "updated_at": "2025-03-27T08:10:40.000000Z"
-                    },
-                    {
-                        "id": 21,
-                        "course_id": 7,
-                        "tag": "dolor",
-                        "created_at": "2025-03-27T08:10:40.000000Z",
-                        "updated_at": "2025-03-27T08:10:40.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 7,
-                    "course_id": 7,
-                    "rating": "5",
-                    "created_at": "2025-03-27T08:10:40.000000Z",
-                    "updated_at": "2025-03-27T08:10:40.000000Z"
-                }
-            },
-            {
-                "id": 8,
-                "name": "Курс по JS",
-                "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
-                "author_id": "10",
-                "category_id": 3,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:40.000000Z",
-                "updated_at": "2025-03-27T08:10:40.000000Z",
-                "author_name": "Lana Rouz",
-                "tags": [
-                    {
-                        "id": 22,
-                        "course_id": 8,
-                        "tag": "quam",
-                        "created_at": "2025-03-27T08:10:41.000000Z",
-                        "updated_at": "2025-03-27T08:10:41.000000Z"
-                    },
-                    {
-                        "id": 23,
-                        "course_id": 8,
-                        "tag": "nisi",
-                        "created_at": "2025-03-27T08:10:41.000000Z",
-                        "updated_at": "2025-03-27T08:10:41.000000Z"
-                    },
-                    {
-                        "id": 24,
-                        "course_id": 8,
-                        "tag": "quo",
-                        "created_at": "2025-03-27T08:10:41.000000Z",
-                        "updated_at": "2025-03-27T08:10:41.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 8,
-                    "course_id": 8,
-                    "rating": "3",
-                    "created_at": "2025-03-27T08:10:41.000000Z",
-                    "updated_at": "2025-03-27T08:10:41.000000Z"
-                }
-            },
-            {
-                "id": 9,
-                "name": "Курс по SpringBoot",
-                "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
-                "author_id": "9",
-                "category_id": 7,
-                "is_active": true,
-                "amount": null,
-                "send_check": false,
-                "checked": true,
-                "has_certificate": false,
-                "certificate_id": null,
-                "created_at": "2025-03-27T08:10:40.000000Z",
-                "updated_at": "2025-03-27T08:10:40.000000Z",
-                "author_name": "Leonardo Di Kaprio",
-                "tags": [
-                    {
-                        "id": 25,
-                        "course_id": 9,
-                        "tag": "facilis",
-                        "created_at": "2025-03-27T08:10:41.000000Z",
-                        "updated_at": "2025-03-27T08:10:41.000000Z"
-                    },
-                    {
-                        "id": 26,
-                        "course_id": 9,
-                        "tag": "maiores",
-                        "created_at": "2025-03-27T08:10:41.000000Z",
-                        "updated_at": "2025-03-27T08:10:41.000000Z"
-                    },
-                    {
-                        "id": 27,
-                        "course_id": 9,
-                        "tag": "architecto",
-                        "created_at": "2025-03-27T08:10:41.000000Z",
-                        "updated_at": "2025-03-27T08:10:41.000000Z"
-                    }
-                ],
-                "rating_course": {
-                    "id": 9,
-                    "course_id": 9,
-                    "rating": "3",
-                    "created_at": "2025-03-27T08:10:41.000000Z",
-                    "updated_at": "2025-03-27T08:10:41.000000Z"
-                }
-            }
-        ],
-        "first_page_url": "http://localhost:8080/api/student/course/all?page=1",
-        "from": 1,
-        "last_page": 2,
-        "last_page_url": "http://localhost:8080/api/student/course/all?page=2",
-        "links": [
-            {
-                "url": "http://localhost:8080/api/student/course/all?",
-                "label": "&laquo; Previous",
-                "active": false
-            },
-            {
-                "url": "http://localhost:8080/api/student/course/all?page=1",
-                "label": "1",
-                "active": true
-            },
-            {
-                "url": "http://localhost:8080/api/student/course/all?page=2",
-                "label": "2",
-                "active": false
-            },
-            {
-                "url": "http://localhost:8080/api/student/course/all?page=2",
-                "label": "Next &raquo;",
-                "active": false
-            }
-        ],
-        "next_page_url": "http://localhost:8080/api/student/course/all?page=2",
-        "path": "http://localhost:8080/api/student/course/all",
-        "per_page": 9,
-        "prev_page_url": null,
-        "to": 9,
-        "total": 15
-    }
-    cards.value = response.data
-    paginateData.value = {
-        current_page: response.current_page,
-        first_page_url: response.first_page_url,
-        from: response.from,
-        last_page: response.last_page,
-        last_page_url: response.last_page_url,
-        links: response.links,
-        next_page_url: response.next_page_url,
-        path: response.path,
-        per_page: response.per_page,
-        prev_page_url: response.prev_page_url,
-        to: response.to,
-        total: response.total
-    }
-    // const response = await axios.get(`${API_URL}/student/course/all`);
-    // cards.value = response.data.data
-    // paginateData.value = {
-    //     current_page: response.data.current_page,
-    //     first_page_url: response.data.first_page_url,
-    //     from: response.data.from,
-    //     last_page: response.data.last_page,
-    //     last_page_url: response.data.last_page_url,
-    //     links: response.data.links,
-    //     next_page_url: response.data.next_page_url,
-    //     path: response.data.path,
-    //     per_page: response.data.per_page,
-    //     prev_page_url: response.data.prev_page_url,
-    //     to: response.data.to,
-    //     total: response.data.total
+    // const response = {
+    //     "current_page": 1,
+    //     "data": [
+    //         {
+    //             "id": 1,
+    //             "name": "Курс по Django",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
+    //             "author_id": "9",
+    //             "category_id": 1,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:30.000000Z",
+    //             "updated_at": "2025-03-27T08:10:30.000000Z",
+    //             "author_name": "Leonardo Di Kaprio",
+    //             "tags": [
+    //                 {
+    //                     "id": 1,
+    //                     "course_id": 1,
+    //                     "tag": "quia",
+    //                     "created_at": "2025-03-27T08:10:30.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 2,
+    //                     "course_id": 1,
+    //                     "tag": "rerum",
+    //                     "created_at": "2025-03-27T08:10:30.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 3,
+    //                     "course_id": 1,
+    //                     "tag": "ducimus",
+    //                     "created_at": "2025-03-27T08:10:30.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 1,
+    //                 "course_id": 1,
+    //                 "rating": "3",
+    //                 "created_at": "2025-03-27T08:10:30.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:30.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 2,
+    //             "name": "Курс по Vue.js",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
+    //             "author_id": "9",
+    //             "category_id": 3,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:30.000000Z",
+    //             "updated_at": "2025-03-27T08:10:30.000000Z",
+    //             "author_name": "Leonardo Di Kaprio",
+    //             "tags": [
+    //                 {
+    //                     "id": 4,
+    //                     "course_id": 2,
+    //                     "tag": "iste",
+    //                     "created_at": "2025-03-27T08:10:30.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 5,
+    //                     "course_id": 2,
+    //                     "tag": "voluptatem",
+    //                     "created_at": "2025-03-27T08:10:30.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 6,
+    //                     "course_id": 2,
+    //                     "tag": "maiores",
+    //                     "created_at": "2025-03-27T08:10:30.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 2,
+    //                 "course_id": 2,
+    //                 "rating": "2",
+    //                 "created_at": "2025-03-27T08:10:30.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:30.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 3,
+    //             "name": "Курс по HTML&CSS",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
+    //             "author_id": "9",
+    //             "category_id": 1,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:30.000000Z",
+    //             "updated_at": "2025-03-27T08:10:30.000000Z",
+    //             "author_name": "Leonardo Di Kaprio",
+    //             "tags": [
+    //                 {
+    //                     "id": 7,
+    //                     "course_id": 3,
+    //                     "tag": "quibusdam",
+    //                     "created_at": "2025-03-27T08:10:31.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:31.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 8,
+    //                     "course_id": 3,
+    //                     "tag": "perspiciatis",
+    //                     "created_at": "2025-03-27T08:10:31.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:31.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 9,
+    //                     "course_id": 3,
+    //                     "tag": "provident",
+    //                     "created_at": "2025-03-27T08:10:31.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:31.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 3,
+    //                 "course_id": 3,
+    //                 "rating": "2",
+    //                 "created_at": "2025-03-27T08:10:31.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:31.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 4,
+    //             "name": "Курс по Python",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
+    //             "author_id": "10",
+    //             "category_id": 1,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:36.000000Z",
+    //             "updated_at": "2025-03-27T08:10:36.000000Z",
+    //             "author_name": "Lana Rouz",
+    //             "tags": [
+    //                 {
+    //                     "id": 10,
+    //                     "course_id": 4,
+    //                     "tag": "placeat",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 11,
+    //                     "course_id": 4,
+    //                     "tag": "a",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 12,
+    //                     "course_id": 4,
+    //                     "tag": "quia",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 4,
+    //                 "course_id": 4,
+    //                 "rating": "4",
+    //                 "created_at": "2025-03-27T08:10:36.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:36.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 5,
+    //             "name": "Курс по HTML&CSS",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
+    //             "author_id": "9",
+    //             "category_id": 4,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:36.000000Z",
+    //             "updated_at": "2025-03-27T08:10:36.000000Z",
+    //             "author_name": "Leonardo Di Kaprio",
+    //             "tags": [
+    //                 {
+    //                     "id": 13,
+    //                     "course_id": 5,
+    //                     "tag": "velit",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 14,
+    //                     "course_id": 5,
+    //                     "tag": "quam",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 15,
+    //                     "course_id": 5,
+    //                     "tag": "sed",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 5,
+    //                 "course_id": 5,
+    //                 "rating": "4",
+    //                 "created_at": "2025-03-27T08:10:36.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:36.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 6,
+    //             "name": "Курс по Laravel",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
+    //             "author_id": "10",
+    //             "category_id": 1,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:36.000000Z",
+    //             "updated_at": "2025-03-27T08:10:36.000000Z",
+    //             "author_name": "Lana Rouz",
+    //             "tags": [
+    //                 {
+    //                     "id": 16,
+    //                     "course_id": 6,
+    //                     "tag": "doloribus",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 17,
+    //                     "course_id": 6,
+    //                     "tag": "ipsam",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 18,
+    //                     "course_id": 6,
+    //                     "tag": "dolorem",
+    //                     "created_at": "2025-03-27T08:10:36.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:36.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 6,
+    //                 "course_id": 6,
+    //                 "rating": "4",
+    //                 "created_at": "2025-03-27T08:10:36.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:36.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 7,
+    //             "name": "Курс по SpringBoot",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
+    //             "author_id": "4",
+    //             "category_id": 5,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:40.000000Z",
+    //             "updated_at": "2025-03-27T08:10:40.000000Z",
+    //             "author_name": "Antonio Banderes",
+    //             "tags": [
+    //                 {
+    //                     "id": 19,
+    //                     "course_id": 7,
+    //                     "tag": "non",
+    //                     "created_at": "2025-03-27T08:10:40.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:40.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 20,
+    //                     "course_id": 7,
+    //                     "tag": "qui",
+    //                     "created_at": "2025-03-27T08:10:40.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:40.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 21,
+    //                     "course_id": 7,
+    //                     "tag": "dolor",
+    //                     "created_at": "2025-03-27T08:10:40.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:40.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 7,
+    //                 "course_id": 7,
+    //                 "rating": "5",
+    //                 "created_at": "2025-03-27T08:10:40.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:40.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 8,
+    //             "name": "Курс по JS",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
+    //             "author_id": "10",
+    //             "category_id": 3,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:40.000000Z",
+    //             "updated_at": "2025-03-27T08:10:40.000000Z",
+    //             "author_name": "Lana Rouz",
+    //             "tags": [
+    //                 {
+    //                     "id": 22,
+    //                     "course_id": 8,
+    //                     "tag": "quam",
+    //                     "created_at": "2025-03-27T08:10:41.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:41.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 23,
+    //                     "course_id": 8,
+    //                     "tag": "nisi",
+    //                     "created_at": "2025-03-27T08:10:41.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:41.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 24,
+    //                     "course_id": 8,
+    //                     "tag": "quo",
+    //                     "created_at": "2025-03-27T08:10:41.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:41.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 8,
+    //                 "course_id": 8,
+    //                 "rating": "3",
+    //                 "created_at": "2025-03-27T08:10:41.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:41.000000Z"
+    //             }
+    //         },
+    //         {
+    //             "id": 9,
+    //             "name": "Курс по SpringBoot",
+    //             "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
+    //             "author_id": "9",
+    //             "category_id": 7,
+    //             "is_active": true,
+    //             "amount": null,
+    //             "send_check": false,
+    //             "checked": true,
+    //             "has_certificate": false,
+    //             "certificate_id": null,
+    //             "created_at": "2025-03-27T08:10:40.000000Z",
+    //             "updated_at": "2025-03-27T08:10:40.000000Z",
+    //             "author_name": "Leonardo Di Kaprio",
+    //             "tags": [
+    //                 {
+    //                     "id": 25,
+    //                     "course_id": 9,
+    //                     "tag": "facilis",
+    //                     "created_at": "2025-03-27T08:10:41.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:41.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 26,
+    //                     "course_id": 9,
+    //                     "tag": "maiores",
+    //                     "created_at": "2025-03-27T08:10:41.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:41.000000Z"
+    //                 },
+    //                 {
+    //                     "id": 27,
+    //                     "course_id": 9,
+    //                     "tag": "architecto",
+    //                     "created_at": "2025-03-27T08:10:41.000000Z",
+    //                     "updated_at": "2025-03-27T08:10:41.000000Z"
+    //                 }
+    //             ],
+    //             "rating_course": {
+    //                 "id": 9,
+    //                 "course_id": 9,
+    //                 "rating": "3",
+    //                 "created_at": "2025-03-27T08:10:41.000000Z",
+    //                 "updated_at": "2025-03-27T08:10:41.000000Z"
+    //             }
+    //         }
+    //     ],
+    //     "first_page_url": "http://localhost:8080/api/student/course/all?page=1",
+    //     "from": 1,
+    //     "last_page": 2,
+    //     "last_page_url": "http://localhost:8080/api/student/course/all?page=2",
+    //     "links": [
+    //         {
+    //             "url": "http://localhost:8080/api/student/course/all?",
+    //             "label": "&laquo; Previous",
+    //             "active": false
+    //         },
+    //         {
+    //             "url": "http://localhost:8080/api/student/course/all?page=1",
+    //             "label": "1",
+    //             "active": true
+    //         },
+    //         {
+    //             "url": "http://localhost:8080/api/student/course/all?page=2",
+    //             "label": "2",
+    //             "active": false
+    //         },
+    //         {
+    //             "url": "http://localhost:8080/api/student/course/all?page=2",
+    //             "label": "Next &raquo;",
+    //             "active": false
+    //         }
+    //     ],
+    //     "next_page_url": "http://localhost:8080/api/student/course/all?page=2",
+    //     "path": "http://localhost:8080/api/student/course/all",
+    //     "per_page": 9,
+    //     "prev_page_url": null,
+    //     "to": 9,
+    //     "total": 15
     // }
+    // cards.value = response.data
+    // paginateData.value = {
+    //     current_page: response.current_page,
+    //     first_page_url: response.first_page_url,
+    //     from: response.from,
+    //     last_page: response.last_page,
+    //     last_page_url: response.last_page_url,
+    //     links: response.links,
+    //     next_page_url: response.next_page_url,
+    //     path: response.path,
+    //     per_page: response.per_page,
+    //     prev_page_url: response.prev_page_url,
+    //     to: response.to,
+    //     total: response.total
+    // }
+    const response = await axios.get(`${API_URL}/student/course/all`);
+    cards.value = response.data.data
+    paginateData.value = {
+        current_page: response.data.current_page,
+        first_page_url: response.data.first_page_url,
+        from: response.data.from,
+        last_page: response.data.last_page,
+        last_page_url: response.data.last_page_url,
+        links: response.data.links,
+        next_page_url: response.data.next_page_url,
+        path: response.data.path,
+        per_page: response.data.per_page,
+        prev_page_url: response.data.prev_page_url,
+        to: response.data.to,
+        total: response.data.total
+    }
 }
 
 const updatePage = async (url) => {

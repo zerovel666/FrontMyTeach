@@ -26,101 +26,101 @@ const categories = ref([]);
 const router = useRouter();
 const getCategories = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/category/all`);
-        // categories.value = response.data;
-        const response = [
-            {
-                "id": 1,
-                "category": "Python",
-                "created_at": "2025-03-27T08:10:30.000000Z",
-                "updated_at": "2025-03-27T08:10:30.000000Z"
-            },
-            {
-                "id": 2,
-                "category": "PHP",
-                "created_at": "2025-03-27T08:10:30.000000Z",
-                "updated_at": "2025-03-27T08:10:30.000000Z"
-            },
-            {
-                "id": 3,
-                "category": "C#",
-                "created_at": "2025-03-27T08:10:30.000000Z",
-                "updated_at": "2025-03-27T08:10:30.000000Z"
-            },
-            {
-                "id": 4,
-                "category": "React.js",
-                "created_at": "2025-03-27T08:10:36.000000Z",
-                "updated_at": "2025-03-27T08:10:36.000000Z"
-            },
-            {
-                "id": 5,
-                "category": "C#",
-                "created_at": "2025-03-27T08:10:36.000000Z",
-                "updated_at": "2025-03-27T08:10:36.000000Z"
-            },
-            {
-                "id": 6,
-                "category": "Django",
-                "created_at": "2025-03-27T08:10:36.000000Z",
-                "updated_at": "2025-03-27T08:10:36.000000Z"
-            },
-            {
-                "id": 7,
-                "category": "PHP",
-                "created_at": "2025-03-27T08:10:40.000000Z",
-                "updated_at": "2025-03-27T08:10:40.000000Z"
-            },
-            {
-                "id": 8,
-                "category": "React.js",
-                "created_at": "2025-03-27T08:10:40.000000Z",
-                "updated_at": "2025-03-27T08:10:40.000000Z"
-            },
-            {
-                "id": 9,
-                "category": "HTML&CSS",
-                "created_at": "2025-03-27T08:10:40.000000Z",
-                "updated_at": "2025-03-27T08:10:40.000000Z"
-            },
-            {
-                "id": 10,
-                "category": "Java",
-                "created_at": "2025-03-27T08:10:45.000000Z",
-                "updated_at": "2025-03-27T08:10:45.000000Z"
-            },
-            {
-                "id": 11,
-                "category": "PHP",
-                "created_at": "2025-03-27T08:10:45.000000Z",
-                "updated_at": "2025-03-27T08:10:45.000000Z"
-            },
-            {
-                "id": 12,
-                "category": "C#",
-                "created_at": "2025-03-27T08:10:45.000000Z",
-                "updated_at": "2025-03-27T08:10:45.000000Z"
-            },
-            {
-                "id": 13,
-                "category": "Vue.js",
-                "created_at": "2025-03-27T08:10:49.000000Z",
-                "updated_at": "2025-03-27T08:10:49.000000Z"
-            },
-            {
-                "id": 14,
-                "category": "Java",
-                "created_at": "2025-03-27T08:10:49.000000Z",
-                "updated_at": "2025-03-27T08:10:49.000000Z"
-            },
-            {
-                "id": 15,
-                "category": "HTML&CSS",
-                "created_at": "2025-03-27T08:10:49.000000Z",
-                "updated_at": "2025-03-27T08:10:49.000000Z"
-            }
-        ]
-        categories.value = response;
+        const response = await axios.get(`${API_URL}/course/category/all`);
+        categories.value = response.data;
+        // const response = [
+        //     {
+        //         "id": 1,
+        //         "category": "Python",
+        //         "created_at": "2025-03-27T08:10:30.000000Z",
+        //         "updated_at": "2025-03-27T08:10:30.000000Z"
+        //     },
+        //     {
+        //         "id": 2,
+        //         "category": "PHP",
+        //         "created_at": "2025-03-27T08:10:30.000000Z",
+        //         "updated_at": "2025-03-27T08:10:30.000000Z"
+        //     },
+        //     {
+        //         "id": 3,
+        //         "category": "C#",
+        //         "created_at": "2025-03-27T08:10:30.000000Z",
+        //         "updated_at": "2025-03-27T08:10:30.000000Z"
+        //     },
+        //     {
+        //         "id": 4,
+        //         "category": "React.js",
+        //         "created_at": "2025-03-27T08:10:36.000000Z",
+        //         "updated_at": "2025-03-27T08:10:36.000000Z"
+        //     },
+        //     {
+        //         "id": 5,
+        //         "category": "C#",
+        //         "created_at": "2025-03-27T08:10:36.000000Z",
+        //         "updated_at": "2025-03-27T08:10:36.000000Z"
+        //     },
+        //     {
+        //         "id": 6,
+        //         "category": "Django",
+        //         "created_at": "2025-03-27T08:10:36.000000Z",
+        //         "updated_at": "2025-03-27T08:10:36.000000Z"
+        //     },
+        //     {
+        //         "id": 7,
+        //         "category": "PHP",
+        //         "created_at": "2025-03-27T08:10:40.000000Z",
+        //         "updated_at": "2025-03-27T08:10:40.000000Z"
+        //     },
+        //     {
+        //         "id": 8,
+        //         "category": "React.js",
+        //         "created_at": "2025-03-27T08:10:40.000000Z",
+        //         "updated_at": "2025-03-27T08:10:40.000000Z"
+        //     },
+        //     {
+        //         "id": 9,
+        //         "category": "HTML&CSS",
+        //         "created_at": "2025-03-27T08:10:40.000000Z",
+        //         "updated_at": "2025-03-27T08:10:40.000000Z"
+        //     },
+        //     {
+        //         "id": 10,
+        //         "category": "Java",
+        //         "created_at": "2025-03-27T08:10:45.000000Z",
+        //         "updated_at": "2025-03-27T08:10:45.000000Z"
+        //     },
+        //     {
+        //         "id": 11,
+        //         "category": "PHP",
+        //         "created_at": "2025-03-27T08:10:45.000000Z",
+        //         "updated_at": "2025-03-27T08:10:45.000000Z"
+        //     },
+        //     {
+        //         "id": 12,
+        //         "category": "C#",
+        //         "created_at": "2025-03-27T08:10:45.000000Z",
+        //         "updated_at": "2025-03-27T08:10:45.000000Z"
+        //     },
+        //     {
+        //         "id": 13,
+        //         "category": "Vue.js",
+        //         "created_at": "2025-03-27T08:10:49.000000Z",
+        //         "updated_at": "2025-03-27T08:10:49.000000Z"
+        //     },
+        //     {
+        //         "id": 14,
+        //         "category": "Java",
+        //         "created_at": "2025-03-27T08:10:49.000000Z",
+        //         "updated_at": "2025-03-27T08:10:49.000000Z"
+        //     },
+        //     {
+        //         "id": 15,
+        //         "category": "HTML&CSS",
+        //         "created_at": "2025-03-27T08:10:49.000000Z",
+        //         "updated_at": "2025-03-27T08:10:49.000000Z"
+        //     }
+        // ]
+        // categories.value = response;
     } catch (error) {
         console.error("Ошибка при загрузке категорий:", error);
     }

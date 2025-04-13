@@ -37,13 +37,15 @@ const selectedImage = ref(null);
 const notificationRef = ref(null);
 
 const getImages = async () => {
-    images.value = [
-        { id: 1, image_path: "http://localhost:8081/storage//bgProfile/Чистилище.jpg", name: "Чистилище" },
-        { id: 2, image_path: "http://localhost:8081/storage//bgProfile/Таинство.jpg", name: "Таинство" },
-        { id: 3, image_path: "http://localhost:8081/storage//bgProfile/Иллюстрация.jpg", name: "Иллюстрация" },
-        { id: 4, image_path: "http://localhost:8081/storage//bgProfile/Абстракция.jpg", name: "Абстракция" },
-        { id: 5, image_path: "http://localhost:8081/storage//bgProfile/Капли.jpg", name: "Капли" }
-    ];
+    const response = await axios.get(`${API_URL}/client/bg/all`);
+    images.value = response.data;
+    // images.value = [
+    //     { id: 1, image_path: "http://localhost:8081/storage//bgProfile/Чистилище.jpg", name: "Чистилище" },
+    //     { id: 2, image_path: "http://localhost:8081/storage//bgProfile/Таинство.jpg", name: "Таинство" },
+    //     { id: 3, image_path: "http://localhost:8081/storage//bgProfile/Иллюстрация.jpg", name: "Иллюстрация" },
+    //     { id: 4, image_path: "http://localhost:8081/storage//bgProfile/Абстракция.jpg", name: "Абстракция" },
+    //     { id: 5, image_path: "http://localhost:8081/storage//bgProfile/Капли.jpg", name: "Капли" }
+    // ];
 };
 
 const selectImage = (image) => {

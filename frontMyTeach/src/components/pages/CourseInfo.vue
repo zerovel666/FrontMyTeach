@@ -536,8 +536,6 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 30px;
-    position: fixed;
-    right: 30%;
 }
 
 .authorInfo {

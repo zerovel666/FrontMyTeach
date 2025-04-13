@@ -2,7 +2,7 @@
     <TopBar />
     <div class="containerBody">
         <div class="content">
-            <div class="myProfile">
+            <div class="myProfile" v-if="userInfo">
                 <div class="top" :style="{ backgroundImage: `url(${userInfo.client_infos.image_bg})` }">
                     <div class="icon">
                         <img src="/src/assets/Icons/editorIcon.svg" alt="" @click="showModal = true">

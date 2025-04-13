@@ -63,40 +63,40 @@ const rangeAmount = ref([0, 1000000]);
 const rangeRating = ref([1, 5])
 
 const getCategories = async () => {
-    // const response = await axios.get(`${API_URL}/student/filters`);
-    // categories.value = response.data.message.category;
-    // minValue.value = Number(response.data.message.amount.startAmount);
-    // maxValue.value = Number(response.data.message.amount.endAmount);
+    const response = await axios.get(`${API_URL}/student/filters`);
+    categories.value = response.data.message.category;
+    minValue.value = Number(response.data.message.amount.startAmount);
+    maxValue.value = Number(response.data.message.amount.endAmount);
 
-    const response = {
-        "status": true,
-        "message": {
-            "category": [
-                "Python",
-                "C#",
-                "React.js",
-                "PHP",
-                "Java",
-                "HTML&CSS"
-            ],
-            "amount": {
-                "startAmount": 0,
-                "endAmount": 35000
-            },
-            "certificate": "boolean",
-            "isFree": "boolean",
-            "rating": [
-                1,
-                2,
-                3,
-                4,
-                5
-            ]
-        }
-    }
-    categories.value = response.message.category;
-    minValue.value = Number(response.message.amount.startAmount);
-    maxValue.value = Number(response.message.amount.endAmount);
+    // const response = {
+    //     "status": true,
+    //     "message": {
+    //         "category": [
+    //             "Python",
+    //             "C#",
+    //             "React.js",
+    //             "PHP",
+    //             "Java",
+    //             "HTML&CSS"
+    //         ],
+    //         "amount": {
+    //             "startAmount": 0,
+    //             "endAmount": 35000
+    //         },
+    //         "certificate": "boolean",
+    //         "isFree": "boolean",
+    //         "rating": [
+    //             1,
+    //             2,
+    //             3,
+    //             4,
+    //             5
+    //         ]
+    //     }
+    // }
+    // categories.value = response.message.category;
+    // minValue.value = Number(response.message.amount.startAmount);
+    // maxValue.value = Number(response.message.amount.endAmount);
 
 }
 const pushInFiltersCategory = async (index) => {
