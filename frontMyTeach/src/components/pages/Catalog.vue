@@ -1,35 +1,47 @@
 <template>
     <TopBar />
     <div class="containerBody">
-         <Filter @updateWithFilter="updateWithFilter" @searchExtra="searchExtra"/>
+        <Filter @updateWithFilter="updateWithFilter" @searchExtra="searchExtra" />
         <div class="content">
-            <h1>Все курсы <img src="/src/assets/Icons/arrowBottom.svg" alt=""></h1>
+            <h1>Все курсы <img src="/src/assets/Icons/arrowBottom.svg" alt="" /></h1>
             <div class="cards">
-                <div class="card" v-for="(card, index) in cards" :key="index"
+                <div class="card" v-for="(card, index) in cards" :key="index" v-if="cards.length > 0"
                     :style="{ background: getGradients(index) }">
                     <div class="lInfo">
-                        <h4>{{ card.name }}</h4>
+                        <h4>{{ card.name ? card.name : card.course_name }}</h4>
                         <ul>
-                            <li v-for="(tag, index) in card.tags" :key="index">{{ tag.tag }}</li>
+                            <li v-for="(tag, i) in card.tags" :key="i">{{ tag.tag ? tag.tag : '—' }}</li>
                         </ul>
                         <button>Подробнее</button>
                     </div>
                     <div class="rInfo">
-                        <p class="rating">{{ card.rating_course.rating }} <img src="/src/assets/Icons/Star.svg" alt="">
+                        <p class="rating">
+                            {{
+                                card.rating_course && card.rating_course.rating
+                                    ? card.rating_course.rating
+                                    : card.rating
+                                        ? card.rating
+                            : '—'
+                            }}
+                            <img src="/src/assets/Icons/Star.svg" alt="" />
                         </p>
-                        <img :src="card.image_path" alt="">
-                        <p class="author">{{ card.author_name }} <img src="/src/assets/Icons/Tap.svg" alt=""></p>
+                        <img :src="card.image_path ? card.image_path : '/src/assets/images/fallback.jpg'" alt="" />
+                        <p class="author">
+                            {{ card.author_name ? card.author_name : 'Неизвестный автор' }}
+                            <img src="/src/assets/Icons/Tap.svg" alt="" />
+                        </p>
                     </div>
                 </div>
             </div>
-            <Paginate :paginateData="paginateData" @howPage="updatePage"/>
+            <Paginate :paginateData="paginateData" @howPage="updatePage" />
         </div>
     </div>
     <FooterBar />
 </template>
 
+
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
 import Filter from './CatalogLayouts/Filter.vue';
@@ -39,14 +51,14 @@ import Paginate from '../layouts/Paginate.vue';
 import { useRoute } from 'vue-router';
 
 const paginateData = ref([]);
-const cards = ref({});
+const cards = ref([]);
 const gradients = [
     'linear-gradient(130deg,#11001D 30%,#B200FF 100%)',
     'linear-gradient(130deg,#11001D 30%,#00FFF2 100%)',
     'linear-gradient(130deg,#11001D 30%,#005EFF 100%)',
 ];
 const route = useRoute();
-const lastFilter = ref([]);
+const lastFilter = ref({});
 const filters = ref({
     isFree: null,
     category: [],
@@ -54,22 +66,33 @@ const filters = ref({
     ratingEnd: null,
     amountStart: null,
     amountEnd: null,
-    hasCertificate: null   
+    hasCertificate: null
 });
+const extraSeacrhCourse_id = ref(null);
 
 const getGradients = (index) => {
     return gradients[index % gradients.length];
 };
 
+watch(() => route.query.course_id,
+    (newVal, oldVal) => {
+        if (newVal) {
+            searchExtra(newVal)
+        }
+    },
+)
+
 const searchExtra = async (id) => {
-    const response = await axios.get(`${API_URL}/student/course/${id}`)
-    cards.value = response.data.message
+    const response = await axios.get(`${API_URL}/student/course/${id}`);
+    console.log(1);
+    cards.value = response.data
+
     paginateData.value = []
 }
 
 const updateWithFilter = async (filter) => {
     lastFilter.value = filter.value;
-    const response = await axios.post(`${API_URL}/student/course/getByFilter`,filter.value);
+    const response = await axios.post(`${API_URL}/student/course/getByFilter`, filter.value);
     cards.value = response.data.data
     paginateData.value = {
         current_page: response.data.current_page,
@@ -595,10 +618,11 @@ onMounted(() => {
     getCards();
     const category = route.query.category;
     const course_id = route.query.course_id;
-    if (category){
+    if (category) {
         filters.value.category.push(category)
         updateWithFilter(filters)
-    } else if(course_id) {
+    } else if (course_id) {
+        extraSeacrhCourse_id.value = course_id
         searchExtra(course_id);
     }
 })

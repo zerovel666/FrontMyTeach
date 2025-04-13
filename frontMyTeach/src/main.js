@@ -15,6 +15,7 @@ import Catalog from './components/pages/Catalog.vue';
 import AboutUs from './components/pages/AboutUs.vue';
 import MyProfile from './components/pages/MyProfile.vue';
 import CourseInfo from './components/pages/CourseInfo.vue';
+import { notification } from 'ant-design-vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -63,6 +64,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
+
 
 const app = createApp(App);
 app.config.globalProperties.$loading = loading;

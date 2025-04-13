@@ -93,8 +93,8 @@ const changeIsFree = () => {
     }
 }
 const getOptions = async () => {
-    const response = await axios.get(`${API_URL}/student/course/all`);
-    options.value = response.data.data;
+    const response = await axios.get(`${API_URL}/student/course/list`);
+    options.value = response.data;
     // const response = {
     //     "current_page": 1,
     //     "data": [
@@ -622,9 +622,12 @@ onUnmounted(() => {
     width: 100%;
     background-color: white;
     margin-top: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     color: black;
     padding: 10px 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 99999;
 }
 
 .dropdown li {

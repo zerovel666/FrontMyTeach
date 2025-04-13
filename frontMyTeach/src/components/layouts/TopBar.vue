@@ -1,6 +1,7 @@
 <template>
+    <Notification ref="notificationRef" />
     <div class="conteiner">
-        <div class="content" v-if="userInfo">
+        <div class="content">
             <div class="l-cont">
                 <img src="/src/assets/Icons/logo.svg" alt="" id="logo" @click="goHome">
                 <div class="searchContainer" ref="searchContainer">
@@ -20,7 +21,8 @@
             </div>
             <div class="r-cont">
                 <button class="buttonNav" :class="{ isSelected: isMain }" @click="goHome">Главная</button>
-                <button class="buttonNav" :class="{ isSelected: isMyCourse }" @click="goMyCourse">Мои курсы</button>
+                <button class="buttonNav" :class="{ isSelected: isMyCourse, notAuth: !$cookies.get('token') }"
+                    @click="goMyCourse">Мои курсы</button>
                 <button class="buttonNav" :class="{ isSelected: isCatalog }" @click=goCatalog>Каталог</button>
                 <button class="buttonNav" :class="{ isSelected: isAboutUs }" @click="goAboutUs">О нас</button>
                 <div class="user">
@@ -28,12 +30,18 @@
                         <img src="/src/assets/Icons/NavIcon.svg" alt="" id="navIcon" @click="changeShowMenu"
                             :style="{ transform: showMenu ? 'rotate(180deg)' : 'rotate(0deg)' }">
                         <ul v-if="showMenu">
-                            <li @click="goMyProfile">Мой профиль</li>
-                            <li @click="goSetting">Настройки</li>
-                            <li @click="logout">Выйти из аккаунта</li>
+                            <div v-if="VueCookies.get('token')">
+                                <li @click="goMyProfile">Мой профиль</li>
+                                <li @click="goSetting">Настройки</li>
+                                <li @click="logout">Выйти из аккаунта</li>
+                            </div>
+                            <div v-else>
+                                <li @click="goAuth">Войти в аккаунт</li>
+                            </div>
                         </ul>
                     </div>
-                    <img :src="userInfo.user_image.image_path" alt="" id="avatar" @click="goMyProfile">
+                    <img :src="userInfo?.user_image?.image_path ? userInfo.user_image.image_path : '/src/assets/images/auth/noAuthAvatars.jpg'"
+                        alt="" id="avatar" @click="goMyProfile" />
                 </div>
             </div>
         </div>
@@ -43,9 +51,10 @@
 <script setup>
 import { API_URL } from '@/config';
 import axios from 'axios';
-import { ref, computed, onMounted, onUnmounted,inject } from 'vue';
+import { ref, computed, onMounted, onUnmounted, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import VueCookies from 'vue-cookies';
+import Notification from '../Notification.vue';
 
 const userInfo = inject('userInfo');
 const route = useRoute();
@@ -56,7 +65,7 @@ const options = ref([]);
 const inputValue = ref('');
 const showOption = ref(false);
 const searchContainer = ref(null);
-
+const notificationRef = ref(null);
 const isMain = computed(() => route.path === "/");
 const isMyCourse = computed(() => route.path === "/mycourse");
 const isCatalog = computed(() => route.path === "/catalog");
@@ -66,7 +75,11 @@ const goHome = async () => {
     router.push('/');
 }
 const goMyCourse = async () => {
-    router.push('/mycourse')
+    if (VueCookies.get('token')) {
+        router.push('/mycourse')
+        return
+    }
+    notificationRef.value.showNotification('Для доступа к этой странице необходимо войти в аккаунт')
 }
 
 const goCatalog = async () => {
@@ -85,6 +98,10 @@ const goSetting = async () => {
 }
 const logout = async () => {
     VueCookies.remove('token');
+    router.push('/auth')
+}
+
+const goAuth = async () => {
     router.push('/auth')
 }
 
@@ -110,11 +127,11 @@ const selectOption = (option) => {
 };
 
 const extraSearch = async () => {
-    router.push({name: "catalog",query: {course_id:isSelected.value }})
+    router.push({ name: "catalog", query: { course_id: isSelected.value } })
 }
 
 const getOptions = async () => {
-    const response = await axios.get(`${API_URL}/student/course/all`);
+    const response = await axios.get(`${API_URL}/student/course/list`);
     options.value = response.data.data;
 
     // const response = {
@@ -651,6 +668,17 @@ onUnmounted(() => {
 .isSelected {
     background-color: #6800A5;
     box-shadow: inset 0px 0px 7px rgb(255, 255, 255), 0px 0px 10px rgb(255, 255, 255);
+}
+
+.notAuth {
+    background-color: #5A217C;
+    box-shadow: inset 0px 0px 7px rgb(255, 255, 255);
+    color: #ccc;
+    opacity: 0.5;
+}
+
+.notAuth:hover {
+    transform: scale(1);
 }
 
 .user {

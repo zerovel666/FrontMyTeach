@@ -9,6 +9,7 @@
 					<input type="text" placeholder="Email" v-model="data.email">
 					<input type="password" placeholder="Password" v-model="data.password">
 					<button type="submit">Auth</button>
+					<p id="guest" @click="goMain">Войти как гость</p>
 				</form>
 				<router-link to="/register">Don't have account?</router-link>
 			</div>
@@ -36,6 +37,10 @@ const data = ref({
 	email: '',
 	password: ''
 });
+
+const goMain = () => {
+	router.push('/');
+};
 
 const auth = async () => {
 	try {
@@ -84,7 +89,7 @@ onMounted(() => {
 
 #logo {
 	position: absolute;
-	top: -90%;
+	top: -80%;
 	left: 35%;
 	width: 100px;
 }
@@ -170,7 +175,7 @@ body {
 	text-decoration: none;
 	color: white;
 	font-size: 14px;
-	margin-top: 10%;
+	margin-top: 5%;
 	font-family: 'Anonymous Pro', monospace;
 }
 
@@ -188,5 +193,10 @@ body {
 .fade-enter-to,
 .fade-leave-from {
 	opacity: 1;
+}
+#guest{
+	margin-top: 5px;
+	font-size: 14px;
+	cursor: pointer;
 }
 </style>
