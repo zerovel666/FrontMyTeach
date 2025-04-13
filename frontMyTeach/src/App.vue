@@ -61,9 +61,9 @@ const logTimeSpent = async () => {
 const getUserInfo = async () => {
 	if (VueCookies.get('token')) {
 		try {
-			const response = await axios.get(`${API_URL}/client/user`);
+			const response = await axios.get(`${API_URL}/client/info`);
 			userInfo.value = response.data;
-			
+			VueCookies.set('role', userInfo.value.roles[0].slug);	
 			// userInfo.value = {
 			// 	"id": 2,
 			// 	"email": "student@gmail.com",

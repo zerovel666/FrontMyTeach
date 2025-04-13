@@ -31,9 +31,19 @@
                             :style="{ transform: showMenu ? 'rotate(180deg)' : 'rotate(0deg)' }">
                         <ul v-if="showMenu">
                             <div v-if="VueCookies.get('token')">
-                                <li @click="goMyProfile">Мой профиль</li>
-                                <li @click="goSetting">Настройки</li>
-                                <li @click="logout">Выйти из аккаунта</li>
+                                <div v-if="VueCookies.get('role') === 'student'">
+                                    <li @click="goMyProfile">Мой профиль</li>
+                                    <li @click="goSetting">Настройки</li>
+                                    <li @click="goBibleCourse">Библеотека курсов</li>
+                                    <li @click="logout">Выйти из аккаунта</li>
+                                </div>
+                                <div v-else-if="VueCookies.get('role') === 'director'">
+                                    <li @click="goMyProfile">Мой профиль</li>
+                                    <li @click="goSubscription">Подписки</li>
+                                    <li @click="goMyStudents">Учащиеся</li>
+                                    <li @click="goSetting">Настройки</li>
+                                    <li @click="logout">Выйти из аккаунта</li>
+                                </div>
                             </div>
                             <div v-else>
                                 <li @click="goAuth">Войти в аккаунт</li>

@@ -52,6 +52,9 @@ const auth = async () => {
 		const token = response.data.token;
 
 		VueCookies.set('token', encodeURIComponent(token), '7d');
+		if (response.data.role){
+			VueCookies.set('role', encodeURIComponent(response.data.role), '7d');
+		}
 		decodeURIComponent(VueCookies.get('token'));
 		router.push('/');
 	} catch (err) {
