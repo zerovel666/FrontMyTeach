@@ -16,6 +16,7 @@ import AboutUs from './components/pages/AboutUs.vue';
 import MyProfile from './components/pages/MyProfile.vue';
 import CourseInfo from './components/pages/CourseInfo.vue';
 import { notification } from 'ant-design-vue';
+import BibleOrganization from './components/pages/BibleOrganization.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -56,6 +57,7 @@ const routes = [
   { path: '/aboutUs', component: AboutUs },
   { path: '/myProfile', component: MyProfile },
   { path: '/course/info/:id', component: CourseInfo },
+  { path: '/bible/:organization_id', component: BibleOrganization },
   { path: '/:pathMatch(.*)*', redirect: '/' } ,
 
 ];

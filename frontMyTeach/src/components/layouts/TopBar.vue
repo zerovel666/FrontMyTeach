@@ -115,6 +115,20 @@ const goAuth = async () => {
     router.push('/auth')
 }
 
+const goMyStudents = async () => {
+    router.push('/myStudents')
+}
+
+const goSubscription = async () => {
+    router.push('/subscription')
+}
+
+const goBibleCourse = async () => {
+    if (userInfo?.value?.organization_id) {
+        router.push(`/bible/${userInfo.value.organization_id}`)
+    }
+}
+
 const changeShowMenu = () => {
     if (showMenu.value == false) {
         showMenu.value = true

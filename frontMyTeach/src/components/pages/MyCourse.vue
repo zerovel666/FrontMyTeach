@@ -54,75 +54,7 @@ import { API_URL } from '@/config';
 const cards = ref([]);
 const getCards = async () => {
     const response = await axios.get(`${API_URL}/student/course/allMe`);
-    cards.value = response.data.message;
-    // const response = {
-    //     "status": true,
-    //     "message": [
-    //         {
-    //             "id": 1,
-    //             "user_id": 23,
-    //             "course_id": 1,
-    //             "isCompleted": false,
-    //             "percentCompleted": 0,
-    //             "created_at": null,
-    //             "updated_at": null,
-    //             "course": {
-    //                 "id": 1,
-    //                 "name": "Курс по Django",
-    //                 "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
-    //                 "author_id": "9",
-    //                 "category_id": 1,
-    //                 "is_active": true,
-    //                 "amount": null,
-    //                 "send_check": false,
-    //                 "checked": true,
-    //                 "has_certificate": false,
-    //                 "certificate_id": null,
-    //                 "created_at": "2025-03-27T08:10:30.000000Z",
-    //                 "updated_at": "2025-03-27T08:10:30.000000Z",
-    //                 "tags": [
-    //                     {
-    //                         "id": 1,
-    //                         "course_id": 1,
-    //                         "tag": "quia",
-    //                         "created_at": "2025-03-27T08:10:30.000000Z",
-    //                         "updated_at": "2025-03-27T08:10:30.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 2,
-    //                         "course_id": 1,
-    //                         "tag": "rerum",
-    //                         "created_at": "2025-03-27T08:10:30.000000Z",
-    //                         "updated_at": "2025-03-27T08:10:30.000000Z"
-    //                     },
-    //                     {
-    //                         "id": 3,
-    //                         "course_id": 1,
-    //                         "tag": "ducimus",
-    //                         "created_at": "2025-03-27T08:10:30.000000Z",
-    //                         "updated_at": "2025-03-27T08:10:30.000000Z"
-    //                     }
-    //                 ],
-    //                 "rating": {
-    //                     "id": 1,
-    //                     "course_id": 1,
-    //                     "rating": "3",
-    //                     "created_at": "2025-03-27T08:10:30.000000Z",
-    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
-    //                 },
-    //                 "author_name": "Leonardo Di Kaprio",
-    //                 "rating_course": {
-    //                     "id": 1,
-    //                     "course_id": 1,
-    //                     "rating": "3",
-    //                     "created_at": "2025-03-27T08:10:30.000000Z",
-    //                     "updated_at": "2025-03-27T08:10:30.000000Z"
-    //                 }
-    //             }
-    //         }
-    //     ]
-    // }
-    cards.value = response.message
+    cards.value = response.data;
 }
 
 const gradients = [
@@ -165,7 +97,6 @@ onMounted(getCards);
 
 .cardBgImg {
     padding: 30px 60px;
-
 }
 
 .cardInfo {
@@ -276,7 +207,8 @@ onMounted(getCards);
     display: flex;
     align-items: center;
 }
-.no-content{
+
+.no-content {
     text-align: center;
     margin-top: 150px;
 }
