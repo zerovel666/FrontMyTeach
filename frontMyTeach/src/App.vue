@@ -22,6 +22,19 @@ const loading = instance.appContext.config.globalProperties.$loading;
 const userInfo = ref(null);
 const notificationRef = ref(null);
 
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.config.url.startsWith(API_URL) && error.response?.status === 401) {
+      VueCookies.remove('token');
+      VueCookies.remove('role');
+      notificationRef.value.showNotification('Сессия истекла. Пожалуйста войдите снова');
+      router.push('/auth');
+    }
+    return Promise.reject(error);
+  }
+);
+
 let startTime = 0;
 
 watch(
@@ -35,7 +48,7 @@ watch(
 	() => route.path,
 	(path) => {
 		const token = VueCookies.get('token');
-		const publicPages = ['/', '/auth', '/register', '/aboutUs','/catalog'];
+		const publicPages = ['/', '/auth', '/register', '/aboutUs', '/catalog'];
 		const authRequired = !publicPages.includes(path);
 
 		if (authRequired && !token) {
@@ -61,41 +74,83 @@ const logTimeSpent = async () => {
 const getUserInfo = async () => {
 	if (VueCookies.get('token')) {
 		try {
-			const response = await axios.get(`${API_URL}/client/info`);
-			userInfo.value = response.data;
-			VueCookies.set('role', userInfo.value.roles[0].slug);	
-			// userInfo.value = {
-			// 	"id": 2,
-			// 	"email": "student@gmail.com",
-			// 	"first_name": "Antonio",
-			// 	"last_name": "Banderes",
-			// 	"role": "teacher",
-			// 	"created_at": "2025-04-03T15:30:52.000000Z",
-			// 	"updated_at": "2025-04-03T15:30:52.000000Z",
-			// 	"client_infos": {
-			// 		"id": 2,
-			// 		"user_id": 2,
-			// 		"has_courses": null,
-			// 		"complete_course_count": null,
-			// 		"complete_tasks": null,
-			// 		"pastime": "0.56666666666667",
-			// 		"image_bg": "http://localhost:8081/storage//bgProfile/Чистилище.jpg",
-			// 		"created_at": "2025-04-03T15:30:43.000000Z",
-			// 		"updated_at": "2025-04-04T19:23:18.000000Z"
-			// 	},
-			// 	"user_image": {
-			// 		"id": 2,
-			// 		"user_id": 2,
-			// 		"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-			// 		"created_at": "2025-04-03T15:30:52.000000Z",
-			// 		"updated_at": "2025-04-03T15:30:52.000000Z"
-			// 	}
-			// }
+			// const response = await axios.get(`${API_URL}/client/info`);
+			// userInfo.value = response.data;
+			userInfo.value = {
+				"id": 4,
+				"email": "director@gmail.com",
+				"first_name": "Edison",
+				"last_name": "Rice",
+				"iin": "475204701005",
+				"organization_id": 1,
+				"group_id": 1,
+				"is_active": true,
+				"created_at": "2025-04-15T18:33:19.000000Z",
+				"updated_at": "2025-04-15T18:33:19.000000Z",
+				"roles": [
+					{
+						"id": 4,
+						"name": "Директор",
+						"slug": "director",
+						"created_at": "2025-04-15T18:33:17.000000Z",
+						"updated_at": "2025-04-15T18:33:17.000000Z",
+						"pivot": {
+							"user_id": 4,
+							"role_id": 4
+						}
+					}
+				],
+				"client_infos": {
+					"id": 4,
+					"user_id": 4,
+					"has_courses": 0,
+					"complete_course_count": 0,
+					"complete_tasks": 0,
+					"pastime": "0",
+					"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
+					"created_at": "2025-04-15T18:33:19.000000Z",
+					"updated_at": "2025-04-15T18:33:19.000000Z"
+				},
+				"user_image": {
+					"id": 4,
+					"user_id": 4,
+					"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+					"created_at": "2025-04-15T18:33:19.000000Z",
+					"updated_at": "2025-04-15T18:33:19.000000Z"
+				}
+			}
+			VueCookies.set('role', userInfo.value.roles[0].slug);
 		} catch (error) {
-			console.error('Error fetching user info:', error);
+			// Логирование ошибок
+			console.log('Ошибка при запросе user info:', error);
+
+			// Проверяем, если это ошибка HTTP запроса (например, 401)
+			if (error.response) {
+				console.log('Ошибка HTTP:', error.response.status);
+				console.log('Ответ от сервера:', error.response.data);
+			} else if (error.request) {
+				// Ошибка, если запрос был отправлен, но не получили ответ
+				console.log('Ошибка запроса, ответа нет:', error.request);
+			} else {
+				// Другие ошибки
+				console.log('Ошибка в настройке запроса:', error.message);
+			}
+
+			// Обработка 401 ошибки (неавторизованный доступ)
+			if (error.response && error.response.status === 401) {
+				VueCookies.remove('token');
+				VueCookies.remove('role');
+				notificationRef.value.showNotification('Пожалуйста войдите в систему для этой страницы');
+				setTimeout(() => {
+					if (route.path !== '/auth') {
+						router.push('/auth');
+					}
+				}, 300);
+			}
 		}
 	}
 };
+
 
 provide('userInfo', userInfo);
 

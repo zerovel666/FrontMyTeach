@@ -34,7 +34,7 @@ defineExpose({
   right: 20px;
   padding: 15px;
   border-radius: 5px;
-  z-index: 100;
+  z-index: 100000;
   color: white;
   background-color: #af00b8;
 }

@@ -17,6 +17,8 @@ import MyProfile from './components/pages/MyProfile.vue';
 import CourseInfo from './components/pages/CourseInfo.vue';
 import { notification } from 'ant-design-vue';
 import BibleOrganization from './components/pages/BibleOrganization.vue';
+import { colProps } from 'ant-design-vue/es/grid/Col';
+import OrganizationManual from './components/pages/OrganizationManual.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -53,12 +55,13 @@ const routes = [
   { path: '/auth', component: Auth },
   { path: '/register', component: Register },
   { path: '/mycourse', component: MyCourse },
-  { path: '/catalog', component: Catalog , name: 'catalog' },
+  { path: '/catalog', component: Catalog, name: 'catalog' },
   { path: '/aboutUs', component: AboutUs },
   { path: '/myProfile', component: MyProfile },
   { path: '/course/info/:id', component: CourseInfo },
   { path: '/bible/:organization_id', component: BibleOrganization },
-  { path: '/:pathMatch(.*)*', redirect: '/' } ,
+  { path: '/organization', component: OrganizationManual },
+  { path: '/:pathMatch(.*)*', redirect: '/' },
 
 ];
 
