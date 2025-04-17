@@ -4,6 +4,8 @@
         <div class="content">
             <div class="companyInfoCont">
                 <div class="bgImage">
+                        
+                        <div><img src="/src/assets/Icons/editorIcon.svg" @click="openOrganizationModal" alt="" id="editorIcon"></div>
                     <div class="companyInfo">
                         <h1>{{ tree.name }}</h1>
                         <h2>БИН: {{ tree.bin }}</h2>
@@ -19,15 +21,15 @@
             <!-- Subscription Block -->
             <div class="info-block" v-if="tree.subscription">
                 <div class="block-header" @click="toggleBlock('subscription')">
-                    <h3>Подписка</h3>
+                    <h3>Подписки</h3>
                     <span class="toggle-icon">{{ activeBlocks.subscription ? '−' : '+' }}</span>
                 </div>
                 <transition name="slide">
                     <div class="block-content" v-show="activeBlocks.subscription">
-                        <div class="subscription-card">
+                        <div class="subscription-card" v-for="(subscription, index) in tree.subscription">
                             <div class="sub-info">
-                                <h4>{{ tree.subscription[0].name }}</h4>
-                                <p>{{ tree.subscription[0].price }} / {{ formatInterval(tree.subscription[0].interval)
+                                <h4>{{ subscription.name }}</h4>
+                                <p>{{ subscription.price }} / {{ formatInterval(tree.subscription[0].interval)
                                 }}</p>
                             </div>
                             <div class="sub-stats">
@@ -70,7 +72,8 @@
                                         <button class="icon-btn" @click="openEditGroupModal(group)" v-if="group.id">
                                             <i class="icon-edit"></i>
                                         </button>
-                                        <button class="icon-btn danger" @click="confirmDeleteGroup(group)" v-if="group.id">
+                                        <button class="icon-btn danger" @click="confirmDeleteGroup(group)"
+                                            v-if="group.id">
                                             <i class="icon-delete"></i>
                                         </button>
                                     </div>
@@ -142,6 +145,8 @@
     <ConfirmationModal v-if="showConfirmModal" :message="confirmMessage" @confirm="handleConfirm"
         @cancel="closeConfirmModal" />
 
+    <OrganizationEditModal v-if="showOrganizationModal" :organization="organizationData" @save="handleSaveOrganization"
+        @close="closeOrganizationEditModal" />
     <FooterBar />
 </template>
 
@@ -154,6 +159,7 @@ import FooterBar from '../layouts/FooterBar.vue';
 import ConfirmationModal from './OrganizationManualLayouts/ConfirmationModal.vue';
 import GroupModal from './OrganizationManualLayouts/GroupModal.vue';
 import UserModal from './OrganizationManualLayouts/UserModal.vue';
+import OrganizationEditModal from './OrganizationManualLayouts/OrganizationEditModal.vue';
 
 
 const tree = ref({});
@@ -169,6 +175,8 @@ const currentGroup = ref(null);
 const currentGroupData = ref(null);
 const confirmMessage = ref('');
 const confirmAction = ref(null);
+const organizationData = ref({});
+const showOrganizationModal = ref(false);
 
 const getTree = async () => {
     const response = await axios.get(`${API_URL}/organization/myAll`);
@@ -194,6 +202,23 @@ const openEditUserModal = (user, group) => {
     currentGroup.value = group;
     showUserModal.value = true;
 };
+
+const openOrganizationModal = () => {
+    organizationData.value = {
+        id: tree.value.id,
+        name: tree.value.name,
+        email: tree.value.email,
+        bin: tree.value.bin,
+        phone: tree.value.phone,
+        address: tree.value.address
+    }
+    showOrganizationModal.value = true;
+};
+const closeOrganizationEditModal = () => {
+    showOrganizationModal.value = false;
+    organizationData.value = {};
+};
+
 
 const openAddUserModal = (group) => {
     currentGroup.value = group;
@@ -222,11 +247,11 @@ const handleSaveUser = async (updatedUser) => {
 
 const handleAddUser = async (newUser) => {
     try {
-        if (newUser.role === "Студент"){
+        if (newUser.role === "Студент") {
             newUser.role = 'student';
-        }else if(newUser.role === "Директор"){
+        } else if (newUser.role === "Директор") {
             newUser.role = "director";
-        }else if(newUser.role === "Преподаватель"){
+        } else if (newUser.role === "Преподаватель") {
             newUser.role = "teacher"
         }
         await axios.post(`${API_URL}/users/director/createUser`, {
@@ -237,6 +262,16 @@ const handleAddUser = async (newUser) => {
         closeAddUserModal();
     } catch (error) {
         console.error('Error adding user:', error);
+    }
+};
+
+const handleSaveOrganization = async (updatedData) => {
+    try {
+        await axios.put(`${API_URL}/organization/update/${updatedData.id}`, updatedData);
+        await getTree(); // Обновляем данные после сохранения
+        closeOrganizationEditModal();
+    } catch (error) {
+        console.error('Error updating organization:', error);
     }
 };
 
@@ -343,7 +378,6 @@ onMounted(() => {
 .containerBody {
     color: white;
     padding: 20px;
-    background-color: #121212;
     min-height: 100vh;
 }
 
@@ -379,14 +413,30 @@ onMounted(() => {
     background: url('/src/assets/images/layouts/BgProfile.svg') no-repeat center;
     background-size: cover;
     transform: scale(1.2) rotate(180deg);
-    opacity: 0.15;
+    opacity: 0.45;
     z-index: -1;
+}
+
+#editorIcon {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    width: 40px;
+    height: 40px;
+}
+
+#editorIcon:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
 }
 
 .companyInfo {
     text-align: center;
     width: 100%;
     max-width: 800px;
+    position: relative;
 }
 
 .companyInfo h1 {
