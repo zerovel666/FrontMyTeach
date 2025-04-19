@@ -4,8 +4,9 @@
         <div class="content">
             <div class="companyInfoCont">
                 <div class="bgImage">
-                        
-                        <div><img src="/src/assets/Icons/editorIcon.svg" @click="openOrganizationModal" alt="" id="editorIcon"></div>
+
+                    <div><img src="/src/assets/Icons/editorIcon.svg" @click="openOrganizationModal" alt=""
+                            id="editorIcon"></div>
                     <div class="companyInfo">
                         <h1>{{ tree.name }}</h1>
                         <h2>БИН: {{ tree.bin }}</h2>
@@ -30,7 +31,7 @@
                             <div class="sub-info">
                                 <h4>{{ subscription.name }}</h4>
                                 <p>{{ subscription.price }} / {{ formatInterval(tree.subscription[0].interval)
-                                }}</p>
+                                    }}</p>
                             </div>
                             <div class="sub-stats">
                                 <div class="stat-item">
@@ -58,7 +59,7 @@
                     <div class="block-content" v-show="activeBlocks.groups">
                         <div class="group-actions">
                             <button class="action-btn primary" @click="openAddGroupModal">
-                                <i class="icon-add"></i> Добавить группу
+                                Добавить группу
                             </button>
                         </div>
                         <div class="group-cards">
@@ -67,14 +68,19 @@
                                     <h4>{{ group.name }}</h4>
                                     <div class="group-actions">
                                         <button class="icon-btn" @click="toggleGroup(group.id)">
-                                            <i class="icon-arrow" :class="{ 'rotate': activeGroups[group.id] }"></i>
+                                            <i class="icon-arrow">
+                                                <img :src="activeGroups[group.id] ? '/src/assets/Icons/closeEye.svg' : '/src/assets/Icons/openEye.svg'"
+                                                    alt="">
+                                            </i>
                                         </button>
                                         <button class="icon-btn" @click="openEditGroupModal(group)" v-if="group.id">
-                                            <i class="icon-edit"></i>
-                                        </button>
+                                            <i class="icon-edit"><img src="/src/assets/Icons/pencilEditor.svg" alt=""
+                                                    class="editorButtonImg"></i>
+                                        </button>   
                                         <button class="icon-btn danger" @click="confirmDeleteGroup(group)"
                                             v-if="group.id">
-                                            <i class="icon-delete"></i>
+                                            <i class="icon-delete"><img src="/src/assets/Icons/deleteIcon.svg" alt=""
+                                                class="editorButtonImg"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -82,7 +88,7 @@
                                     <div class="group-content" v-show="activeGroups[group.id]">
                                         <div class="user-actions">
                                             <button class="action-btn primary" @click="openAddUserModal(group)">
-                                                <i class="icon-add"></i> Добавить пользователя
+                                                Добавить пользователя
                                             </button>
                                         </div>
                                         <div class="users-list">
@@ -107,11 +113,13 @@
                                                 </div>
                                                 <div class="user-actions">
                                                     <button class="icon-btn" @click="openEditUserModal(user, group)">
-                                                        <i class="icon-edit"></i>
+                                                        <i class="icon-edit"><img src="/src/assets/Icons/pencilEditor.svg" alt=""
+                                                            class="editorButtonImg"></i>
                                                     </button>
                                                     <button class="icon-btn danger"
                                                         @click="confirmDeleteUser(user, group)">
-                                                        <i class="icon-delete"></i>
+                                                        <i class="icon-delete"><img src="/src/assets/Icons/deleteIcon.svg" alt=""
+                                                            class="editorButtonImg"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -761,6 +769,11 @@ onMounted(() => {
 .icon-edit,
 .icon-delete {
     font-size: 1rem;
+}
+
+.editorButtonImg {
+    width: 18px;
+    height: 18px;
 }
 
 .icon-arrow {
