@@ -76,7 +76,7 @@
                                         <button class="icon-btn" @click="openEditGroupModal(group)" v-if="group.id">
                                             <i class="icon-edit"><img src="/src/assets/Icons/pencilEditor.svg" alt=""
                                                     class="editorButtonImg"></i>
-                                        </button>   
+                                        </button>
                                         <button class="icon-btn danger" @click="confirmDeleteGroup(group)"
                                             v-if="group.id">
                                             <i class="icon-delete"><img src="/src/assets/Icons/deleteIcon.svg" alt=""
@@ -637,6 +637,7 @@ onMounted(() => {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
+    margin-bottom: 15px;
 }
 
 .action-btn.primary {
@@ -731,9 +732,9 @@ onMounted(() => {
 }
 
 .user-actions {
+    margin-top: 15px;
     display: flex;
     gap: 8px;
-    margin-left: 15px;
     flex-shrink: 0;
 }
 
