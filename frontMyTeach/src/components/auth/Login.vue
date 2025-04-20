@@ -1,46 +1,41 @@
 <template>
-	<Notification ref="notificationRef" />
-	<div class="container">
-		<PreLoad :show-logo="showLogo" />
-		<transition name="fade">
-			<div v-if="!showLogo" class="loginCont">
-				<img src="/src/assets/Icons/logo.svg" alt="" id="logo">
-				<form @submit.prevent="auth" action="" class="loginForm">
-					<input type="text" placeholder="Email" v-model="data.email">
-					<input type="password" placeholder="Password" v-model="data.password">
-					<button type="submit">Auth</button>
-					<p id="guest" @click="goMain">Войти как гость</p>
-				</form>
-				<router-link to="/register">Don't have account?</router-link>
-			</div>
-		</transition>
+	<div class="auth-container">
+		<img src="@/assets/images/auth/BGauth.svg" alt="" class="auth-bg">
+		<div class="auth-box">
+			<img src="/src/assets/Icons/logo.svg" alt="Logo" class="logo">
+			<h2>Вход в систему</h2>
+
+			<form @submit.prevent="auth">
+				<div class="input-group">
+					<input type="email" v-model="data.email" placeholder="Email" required>
+				</div>
+				<div class="input-group">
+					<input type="password" v-model="data.password" placeholder="Пароль" required>
+				</div>
+				<button type="submit">Войти</button>
+			</form>
+			<p id="register" @click="register">Регистрация</p>
+		</div>
+		<Notification ref="notificationRef" />
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import PreLoad from '@/components/auth/PreLoad.vue';
-import Notification from '@/components/Notification.vue';
+import { ref } from 'vue';
 import axios from 'axios';
-import { API_URL } from '@/config';
-import VueCookies from 'vue-cookies';
 import { useRouter } from 'vue-router';
-import { onUnmounted } from 'vue';
+import VueCookies from 'vue-cookies';
+import Notification from '@/components/Notification.vue';
+import { API_URL } from '@/config';
 
-
-const showLogo = ref(true);
-const notificationRef = ref(null);
 const router = useRouter();
+const notificationRef = ref(null);
 
 const data = ref({
 	type: 'MyTAuth',
 	email: '',
 	password: ''
 });
-
-const goMain = () => {
-	router.push('/');
-};
 
 const auth = async () => {
 	try {
@@ -52,7 +47,7 @@ const auth = async () => {
 		const token = response.data.token;
 
 		VueCookies.set('token', encodeURIComponent(token), '7d');
-		if (response.data.role){
+		if (response.data.role) {
 			VueCookies.set('role', encodeURIComponent(response.data.role), '7d');
 		}
 		decodeURIComponent(VueCookies.get('token'));
@@ -63,143 +58,91 @@ const auth = async () => {
 	}
 };
 
-axios.interceptors.request.use(
-	(config) => {
-		const token = VueCookies.get('token');
-		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;
-		}
-		return config;
-	},
-	(error) => Promise.reject(error)
-);
-
-onMounted(() => {
-	setTimeout(() => {
-		showLogo.value = false;
-	}, 500);
-});
-
-onMounted(() => {
-  document.body.style.backgroundImage = 'none';
-});
-
+const register = async () => {
+	router.push('/register');
+}
 </script>
 
-
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400&display=swap');
-
-#logo {
-	position: absolute;
-	top: -80%;
-	left: 35%;
-	width: 100px;
-}
-body {
-  background-image: none !important;
-}
-.container {
+.auth-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 97vh;
+}
+
+.auth-bg {
+	position: absolute;
+	width: 100%;
+	object-fit: cover;
+	opacity: 0.3;
+}
+
+.auth-box {
 	position: relative;
-}
-
-.loginCont {
-	width: 300px;
-	transition: opacity 1s ease-in-out;
-	position: absolute;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-}
-
-.loginForm {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
-.loginForm input {
-	width: 240px;
-	height: 30px;
-	margin: 10px;
-	border-radius: 15px;
-	display: flex;
-	align-items: center;
-	padding-left: 10px;
-	font-size: 20px;
-	transition: all 0.25s ease-in-out !important;
-	color: black;
-	outline: none;
-	padding: 15px;
-}
-
-.loginForm input:-webkit-autofill {
-	box-shadow: 0 0 0 1000px white inset !important;
-	transition: background-color 5000s ease-in-out 0s;
-}
-
-.loginForm input:hover {
-	box-shadow: 0px 0px 1000px #f200ff, 0 0 0 1000px white inset !important;
-	transform: scale(1.05);
-}
-
-.loginForm button:hover {
-	box-shadow: 0px 0px 1000px #f200ff,
-		inset 0px 4px 4px rgba(0, 0, 0, 0.5);
-	transform: scale(1.05);
-	cursor: pointer;
-}
-
-.loginForm button {
-	width: 140px;
-	height: 30px;
-	border-radius: 15px;
-	font-size: 22px;
-	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
-	margin: 10px;
-	color: black;
-}
-
-
-
-.loginForm button {
-	transition: all 0.25s ease-in-out;
-}
-
-.loginCont a {
-	display: flex;
-	justify-content: center;
+	z-index: 2;
+	width: 320px;
+	padding: 30px;
+	background: rgba(30, 30, 30, 0.8);
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(177, 71, 136, 0.3);
 	text-align: center;
-	text-decoration: none;
+}
+
+.logo {
+	width: 100px;
+	margin-bottom: 20px;
+}
+
+h2 {
+	color: #fff;
+	margin-bottom: 25px;
+	font-size: 1.5rem;
+}
+
+.input-group {
+	margin-bottom: 15px;
+}
+
+input {
+	width: 100%;
+	padding: 12px 15px;
+	background: rgba(50, 50, 50, 0.5);
+	border: 1px solid #444;
+	border-radius: 6px;
+	color: #fff;
+	font-size: 14px;
+}
+
+input:focus {
+	outline: none;
+	border-color: #B14788;
+}
+
+button {
+	width: 100%;
+	padding: 12px;
+	background: linear-gradient(to right, #B14788, #8100CC);
 	color: white;
-	font-size: 14px;
-	margin-top: 5%;
-	font-family: 'Anonymous Pro', monospace;
-}
-
-
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 1s ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
-
-.fade-enter-to,
-.fade-leave-from {
-	opacity: 1;
-}
-#guest{
-	margin-top: 5px;
-	font-size: 14px;
+	border: none;
+	border-radius: 6px;
+	font-weight: 600;
 	cursor: pointer;
+	margin-top: 10px;
+	transition: opacity 0.3s;
+}
+
+button:hover {
+	opacity: 0.9;
+}
+#register{
+	margin: 0;
+	cursor: pointer;
+	margin-top:20px ;
 }
 </style>

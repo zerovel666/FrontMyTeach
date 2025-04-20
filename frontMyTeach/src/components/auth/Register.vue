@@ -1,236 +1,375 @@
 <template>
-	<Notification ref="notificationRef" />
-
-	<div class="container">
-		<PreLoad :show-logo="showLogo" />
-		<transition name="fade">
-			<div v-if="!showLogo" class="registerCont">
-				<img src="/src/assets/Icons/Logo.svg" alt="" id="logo">
-				<form @submit.prevent="register" class="registerForm">
-					<input type="text" v-model="data.email" placeholder="Email">
-					<input type="password" v-model="data.password" placeholder="Password">
-					<input type="password" v-model="data.accessPassword" placeholder="Access Password">
-					<input type="text" v-model="data.first_name" placeholder="First Name">
-					<input type="text" v-model="data.last_name" placeholder="Last Name">
-					<div class="checkboxRole">
-						<div class="checkbox">
-							<p>Student</p>
-							<input type="checkbox" v-model="studentCheckBox">
-						</div>
-						<div class="checkbox">
-							<p>Teacher</p>
-							<input type="checkbox" v-model="teacherCheckBox">
-						</div>
-					</div>
-					<button type="submit">Register</button>
-				</form>
-
-				<router-link to="/auth">Redirect auth</router-link>
-
+	<div class="register-container">
+		<img src="@/assets/images/auth/BGauth.svg" alt="" class="register-bg">
+		<div class="register-box">
+			<div class="logo-cont">
+				<img src="/src/assets/Icons/arrowLeft.svg" alt="" class="back-page" @click="backLogin">
+				<img src="/src/assets/Icons/logo.svg" alt="Logo" class="logo">
 			</div>
-		</transition>
+			<h2>Регистрация организации</h2>
+
+			<div class="steps">
+				<div :class="['step', { 'active': currentStep === 1 }]">1. Организация</div>
+				<div :class="['step', { 'active': currentStep === 2 }]">2. Директор</div>
+			</div>
+
+			<form v-if="currentStep === 1" @submit.prevent="nextStep">
+				<div class="input-group">
+					<label>Название организации <span class="required">*</span></label>
+					<input v-model="formData.organization.name" required>
+				</div>
+				<div class="input-group">
+					<label>БИН <span class="required">*</span></label>
+					<input v-model="formData.organization.bin" type="text" @keydown="validateNumberInput($event)"
+						@paste="preventPasteNonNumbers" maxlength="9" required>
+					<span v-if="binError" class="error-message">{{ binError }}</span>
+				</div>
+				<div class="input-group">
+					<label>Адрес <span class="required">*</span></label>
+					<input v-model="formData.organization.address" required>
+				</div>
+				<div class="input-group">
+					<label>Телефон <span class="required">*</span></label>
+					<input v-model="formData.organization.phone" type="tel" required>
+				</div>
+				<div class="input-group">
+					<label>Email организации <span class="required">*</span></label>
+					<input v-model="formData.organization.email" type="email" required>
+				</div>
+				<button type="submit" :disabled="!isStep1Valid">Далее</button>
+			</form>
+
+			<form v-if="currentStep === 2" @submit.prevent="register">
+				<div class="input-group">
+					<label>Email директора <span class="required">*</span></label>
+					<input v-model="formData.user.email" type="email" required>
+				</div>
+				<div class="input-group">
+					<label>Пароль <span class="required">*</span></label>
+					<div class="password-input">
+						<input v-model="formData.user.password" :type="showPassword ? 'text' : 'password'" required>
+						<button type="button" class="toggle-password" @click="showPassword = !showPassword">
+							{{ showPassword ? 'Скрыть' : 'Показать' }}
+						</button>
+					</div>
+				</div>
+				<div class="input-row">
+					<div class="input-group">
+						<label>Имя <span class="required">*</span></label>
+						<input v-model="formData.user.first_name" required>
+					</div>
+					<div class="input-group">
+						<label>Фамилия <span class="required">*</span></label>
+						<input v-model="formData.user.last_name" required>
+					</div>
+				</div>
+				<div class="input-group">
+					<label>ИИН <span class="required">*</span></label>
+					<input v-model="formData.user.iin" type="text" @keydown="validateNumberInput($event)"
+						@paste="preventPasteNonNumbers" maxlength="12" required>
+					<span v-if="iinError" class="error-message">{{ iinError }}</span>
+					<span v-if="iinError" class="error-message">{{ iinError }}</span>
+				</div>
+				<div class="buttons">
+					<button type="button" class="back" @click="prevStep">Назад</button>
+					<button type="submit" :disabled="!isStep2Valid">Зарегистрироваться</button>
+				</div>
+			</form>
+		</div>
+		<Notification ref="notificationRef" />
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+import Notification from '@/components/Notification.vue';
 import { API_URL } from '@/config';
 
 const router = useRouter();
-import PreLoad from '@/components/auth/PreLoad.vue';
-import Notification from '../Notification.vue';
-
-const showLogo = ref(true);
-const studentCheckBox = ref(false)
-const teacherCheckBox = ref(false)
-
 const notificationRef = ref(null);
-const data = ref({
-	email: '',
-	password: '',
-	accessPassword: '',
-	first_name: '',
-	last_name: '',
-	image_path: null,
-	role: '',
+const currentStep = ref(1);
+const showPassword = ref(false);
+const binError = ref('');
+const iinError = ref('');
+
+const formData = ref({
+	organization: {
+		name: '',
+		bin: '',
+		address: '',
+		phone: '',
+		email: ''
+	},
+	user: {
+		email: '',
+		password: '',
+		first_name: '',
+		last_name: '',
+		iin: ''
+	},
 	type: 'MyTAuth'
 });
 
+const backLogin = async () => {
+	router.push('/auth');
+}
 
-const register = async () => {
-	const requiredFields = ['email', 'password', 'accessPassword', 'first_name', 'last_name'];
-	for (const field of requiredFields) {
-		if (!data.value[field]?.trim()) {
-			notificationRef.value.showNotification(`Поле ${field.replace('_', ' ')} обязательно для заполнения`, 'error');
-			return;
-		}
+const validateNumberInput = (event) => {
+	const allowedKeys = [
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'
+	];
+
+	if (event.ctrlKey && ['a', 'c', 'x', 'v'].includes(event.key.toLowerCase())) {
+		return true;
 	}
 
-	if (data.value.password !== data.value.accessPassword) {
-		notificationRef.value.showNotification('Пароли не совпадают', 'error');
-		return;
-	}
-
-	data.value.role = studentCheckBox.value ? 'student' : teacherCheckBox.value ? 'teacher' : '';
-	if (!data.value.role) {
-		notificationRef.value.showNotification('Выберите роль', 'error');
-		return;
-	}
-
-	try {
-		await axios.post(API_URL + '/auth/register', data.value);
-		notificationRef.value.showNotification('Регистрация успешна!', 'success');
-		router.push('/auth');
-	} catch (err) {
-		notificationRef.value.showNotification('Ошибка регистрации. Проверьте данные.', 'error');
-		console.error('Register error:', err);
+	if (!allowedKeys.includes(event.key)) {
+		event.preventDefault();
+		return false;
 	}
 };
 
-watch(studentCheckBox, (val) => {
-	if (val) teacherCheckBox.value = false;
+const preventPasteNonNumbers = (event) => {
+	const pasteData = event.clipboardData?.getData('text/plain');
+	if (pasteData && !/^\d+$/.test(pasteData)) {
+		event.preventDefault();
+		notificationRef.value.showNotification('Можно вставлять только цифры');
+	}
+};
+const isStep1Valid = computed(() => {
+	return (
+		formData.value.organization.name &&
+		formData.value.organization.bin.length === 9 &&
+		formData.value.organization.address &&
+		formData.value.organization.phone &&
+		formData.value.organization.email &&
+		!binError.value
+	);
 });
 
-watch(teacherCheckBox, (val) => {
-	if (val) studentCheckBox.value = false;
+const isStep2Valid = computed(() => {
+	return (
+		formData.value.user.email &&
+		formData.value.user.password &&
+		formData.value.user.first_name &&
+		formData.value.user.last_name &&
+		formData.value.user.iin.length === 12 &&
+		!iinError.value
+	);
 });
 
-onMounted(() => {
-	setTimeout(() => {
-		showLogo.value = false;
-	}, 500);
-	document.body.style.backgroundImage = 'none';
-});
+const nextStep = () => {
+	if (isStep1Valid.value) {
+		currentStep.value = 2;
+	} else {
+		notificationRef.value.showNotification('Пожалуйста, заполните все поля правильно');
+	}
+};
+
+const prevStep = () => {
+	currentStep.value = 1;
+};
+
+const register = async () => {
+	try {
+		if (!isStep2Valid.value) {
+			notificationRef.value.showNotification('Пожалуйста, заполните все поля правильно');
+			return;
+		}
+
+		const response = await axios.post(API_URL + '/auth/register', formData.value);
+
+		if (response.status === 200) {
+			notificationRef.value.showNotification('Регистрация успешна! Переброс на авторизацию');
+			setTimeout(() => {
+				router.push('/auth');
+			}, 2000);
+		}
+	} catch (err) {
+		notificationRef.value.showNotification('Ошибка регистрации: ' + (err.response?.data?.message || err.message));
+		console.error('Registration error:', err);
+	}
+};
 </script>
 
 <style scoped>
-.registerCont a {
-	display: flex;
-	justify-content: center;
-	text-align: center;
-	text-decoration: none;
-	color: white;
-	font-size: 14px;
-	margin-top: 5%;
-
-	font-family: 'Anonymous Pro', monospace;
-}
-
-#errorPassword {
-	color: red;
-	font-size: 14px;
-}
-
-#logo {
-	position: absolute;
-	top: -20%;
-	left: 35%;
-	width: 100px;
-}
-
-.container {
+.register-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 97vh;
+	font-family: Arial, sans-serif;
+}
+
+.register-bg {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0.3;
+}
+
+.register-box {
 	position: relative;
-}
-
-.checkboxRole {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	accent-color: #af00b8;
-}
-
-.registerCont {
-	width: 300px;
-	transition: opacity 1s ease-in-out;
-	position: absolute;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-}
-
-.registerForm {
+	z-index: 2;
+	width: 420px;
+	padding: 30px;
+	background: rgba(30, 30, 30, 0.9);
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(177, 71, 136, 0.3);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
 }
-.registerForm input:-webkit-autofill[type="text"],[type="password"] {
-	box-shadow: 0 0 0 1000px white inset !important;
-	transition: background-color 5000s ease-in-out 0s;
+.back-page{
+	position: absolute;
+	left: 5%;
+	cursor: pointer;
+}
+.logo-cont{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+
+}
+.logo {
+	width: 80px;
+	margin-bottom: 15px;
+}
+h2 {
+	color: #fff;
+	margin-bottom: 20px;
+	font-size: 1.5rem;
+	text-align: center;
 }
 
-.registerForm input[type="text"]:hover, 
-.registerForm input[type="password"]:hover {
-  box-shadow: 0px 0px 1000px #f200ff, 0 0 0 1000px white inset !important;
-  transform: scale(1.05);
+.steps {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 25px;
+	gap: 15px;
 }
 
-.registerForm button:hover {
-	box-shadow: 0px 0px 1000px #f200ff,
-		inset 0px 4px 4px rgba(0, 0, 0, 0.5);
-	transform: scale(1.05);
+.step {
+	color: #666;
+	font-weight: 500;
+	padding-bottom: 5px;
+	border-bottom: 2px solid transparent;
+}
+
+.step.active {
+	color: #fff;
+	border-bottom: 2px solid #B14788;
+}
+
+.input-group {
+	margin-bottom: 15px;
+}
+
+.input-row {
+	display: flex;
+	gap: 15px;
+}
+
+.input-row .input-group {
+	flex: 1;
+}
+
+label {
+	display: block;
+	color: #aaa;
+	margin-bottom: 5px;
+	font-size: 0.9rem;
+}
+
+.required {
+	color: #B14788;
+}
+
+input {
+	width: 100%;
+	padding: 12px 15px;
+	background: rgba(50, 50, 50, 0.7);
+	border: 1px solid #444;
+	border-radius: 6px;
+	color: #fff;
+	font-size: 14px;
+}
+
+input:focus {
+	outline: none;
+	border-color: #B14788;
+	background: rgba(70, 70, 70, 0.7);
+}
+
+button {
+	padding: 12px;
+	background: linear-gradient(to right, #B14788, #8100CC);
+	color: white;
+	border: none;
+	border-radius: 6px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: opacity 0.3s;
+	width: 100%;
+	margin-top: 10px;
+}
+
+button:hover {
+	opacity: 0.9;
+}
+
+button:disabled {
+	background: #444;
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+.buttons {
+	display: flex;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.back {
+	background: #333 !important;
+}
+
+.password-input {
+	position: relative;
+}
+
+.toggle-password {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: transparent;
+	border: none;
+	color: #B14788;
+	font-size: 0.8rem;
+	padding: 0;
+	margin: 0;
+	width: auto;
 	cursor: pointer;
 }
 
-.registerForm button {
-	transition: all 0.25s ease-in-out;
+.toggle-password:hover {
+	text-decoration: underline;
 }
 
-.registerForm input[type="text"],
-[type="password"] {
-	width: 240px;
-	height: 30px;
-	margin: 10px;
-	border-radius: 15px;
-	display: flex;
-	align-items: center;
-	padding-left: 10px;
-	font-size: 24px;
-}
-
-.registerForm input[type="checkbox"] {
-	border-radius: 15px;
-	display: flex;
-	align-items: center;
-	font-size: 24px;
-	height: 20px;
-	width: 20px;
-	margin: 10px;
-}
-
-.registerForm button {
-	width: 140px;
-	height: 30px;
-	border-radius: 15px;
-	font-size: 22px;
-	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
-	margin: 10px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 1s ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
-
-.checkbox {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.fade-enter-to,
-.fade-leave-from {
-	opacity: 1;
+.error-message {
+	color: #ff6b6b;
+	font-size: 0.8rem;
+	margin-top: 5px;
+	display: block;
 }
 </style>

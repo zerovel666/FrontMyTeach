@@ -74,57 +74,55 @@ const logTimeSpent = async () => {
 const getUserInfo = async () => {
 	if (VueCookies.get('token')) {
 		try {
-			// const response = await axios.get(`${API_URL}/client/info`);
-			// userInfo.value = response.data;
-			userInfo.value = {
-				"id": 4,
-				"email": "director@gmail.com",
-				"first_name": "Edison",
-				"last_name": "Rice",
-				"iin": "475204701005",
-				"organization_id": 1,
-				"group_id": 1,
-				"is_active": true,
-				"created_at": "2025-04-15T18:33:19.000000Z",
-				"updated_at": "2025-04-15T18:33:19.000000Z",
-				"roles": [
-					{
-						"id": 4,
-						"name": "Директор",
-						"slug": "director",
-						"created_at": "2025-04-15T18:33:17.000000Z",
-						"updated_at": "2025-04-15T18:33:17.000000Z",
-						"pivot": {
-							"user_id": 4,
-							"role_id": 4
-						}
-					}
-				],
-				"client_infos": {
-					"id": 4,
-					"user_id": 4,
-					"has_courses": 0,
-					"complete_course_count": 0,
-					"complete_tasks": 0,
-					"pastime": "0",
-					"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
-					"created_at": "2025-04-15T18:33:19.000000Z",
-					"updated_at": "2025-04-15T18:33:19.000000Z"
-				},
-				"user_image": {
-					"id": 4,
-					"user_id": 4,
-					"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-					"created_at": "2025-04-15T18:33:19.000000Z",
-					"updated_at": "2025-04-15T18:33:19.000000Z"
-				}
-			}
+			const response = await axios.get(`${API_URL}/client/info`);
+			userInfo.value = response.data;
+			// userInfo.value = {
+			// 	"id": 4,
+			// 	"email": "director@gmail.com",
+			// 	"first_name": "Edison",
+			// 	"last_name": "Rice",
+			// 	"iin": "475204701005",
+			// 	"organization_id": 1,
+			// 	"group_id": 1,
+			// 	"is_active": true,
+			// 	"created_at": "2025-04-15T18:33:19.000000Z",
+			// 	"updated_at": "2025-04-15T18:33:19.000000Z",
+			// 	"roles": [
+			// 		{
+			// 			"id": 4,
+			// 			"name": "Директор",
+			// 			"slug": "director",
+			// 			"created_at": "2025-04-15T18:33:17.000000Z",
+			// 			"updated_at": "2025-04-15T18:33:17.000000Z",
+			// 			"pivot": {
+			// 				"user_id": 4,
+			// 				"role_id": 4
+			// 			}
+			// 		}
+			// 	],
+			// 	"client_infos": {
+			// 		"id": 4,
+			// 		"user_id": 4,
+			// 		"has_courses": 0,
+			// 		"complete_course_count": 0,
+			// 		"complete_tasks": 0,
+			// 		"pastime": "0",
+			// 		"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
+			// 		"created_at": "2025-04-15T18:33:19.000000Z",
+			// 		"updated_at": "2025-04-15T18:33:19.000000Z"
+			// 	},
+			// 	"user_image": {
+			// 		"id": 4,
+			// 		"user_id": 4,
+			// 		"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+			// 		"created_at": "2025-04-15T18:33:19.000000Z",
+			// 		"updated_at": "2025-04-15T18:33:19.000000Z"
+			// 	}
+			// }
 			VueCookies.set('role', userInfo.value.roles[0].slug);
 		} catch (error) {
-			// Логирование ошибок
 			console.log('Ошибка при запросе user info:', error);
 
-			// Проверяем, если это ошибка HTTP запроса (например, 401)
 			if (error.response) {
 				console.log('Ошибка HTTP:', error.response.status);
 				console.log('Ответ от сервера:', error.response.data);
