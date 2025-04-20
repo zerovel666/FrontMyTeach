@@ -30,21 +30,25 @@
                         <div class="subscription-card" v-for="(subscription, index) in tree.subscription">
                             <div class="sub-info">
                                 <h4>{{ subscription.name }}</h4>
-                                <p>{{ subscription.price }} / {{ formatInterval(tree.subscription[0].interval)
-                                    }}</p>
+                                <p>{{ subscription.price }} / {{ formatInterval(subscription.interval) }}</p>
                             </div>
                             <div class="sub-stats">
                                 <div class="stat-item">
-                                    <span class="stat-value">{{ tree.subscription[0].count_users }}</span>
-                                    <span class="stat-label">из {{ tree.subscription[0].max_users }}
+                                    <span class="stat-value">{{ subscription.count_users }}</span>
+                                    <span class="stat-label">из {{ subscription.max_users }}
                                         пользователей</span>
                                 </div>
-                                <div class="stat-item" v-if="tree.subscription[0].max_courses">
-                                    <span class="stat-value">{{ tree.courses?.length || 0 }}</span>
-                                    <span class="stat-label">из {{ tree.subscription[0].max_courses }} курсов</span>
+                                <div class="stat-item" v-if="subscription.max_courses">
+                                    <span class="stat-value">{{ courses?.length || 0 }}</span>
+                                    <span class="stat-label">из {{ subscription.max_courses }} курсов</span>
                                 </div>
                             </div>
+
+                            <div class="overlay" @click="goSubscription(subscription.id)">
+                                <span>Подробнее</span>
+                            </div>
                         </div>
+
                     </div>
                 </transition>
             </div>
@@ -80,7 +84,7 @@
                                         <button class="icon-btn danger" @click="confirmDeleteGroup(group)"
                                             v-if="group.id">
                                             <i class="icon-delete"><img src="/src/assets/Icons/deleteIcon.svg" alt=""
-                                                class="editorButtonImg"></i>
+                                                    class="editorButtonImg"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -113,13 +117,15 @@
                                                 </div>
                                                 <div class="user-actions">
                                                     <button class="icon-btn" @click="openEditUserModal(user, group)">
-                                                        <i class="icon-edit"><img src="/src/assets/Icons/pencilEditor.svg" alt=""
-                                                            class="editorButtonImg"></i>
+                                                        <i class="icon-edit"><img
+                                                                src="/src/assets/Icons/pencilEditor.svg" alt=""
+                                                                class="editorButtonImg"></i>
                                                     </button>
                                                     <button class="icon-btn danger"
                                                         @click="confirmDeleteUser(user, group)">
-                                                        <i class="icon-delete"><img src="/src/assets/Icons/deleteIcon.svg" alt=""
-                                                            class="editorButtonImg"></i>
+                                                        <i class="icon-delete"><img
+                                                                src="/src/assets/Icons/deleteIcon.svg" alt=""
+                                                                class="editorButtonImg"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -168,6 +174,7 @@ import ConfirmationModal from './OrganizationManualLayouts/ConfirmationModal.vue
 import GroupModal from './OrganizationManualLayouts/GroupModal.vue';
 import UserModal from './OrganizationManualLayouts/UserModal.vue';
 import OrganizationEditModal from './OrganizationManualLayouts/OrganizationEditModal.vue';
+import { useRouter } from 'vue-router';
 
 
 const tree = ref({});
@@ -185,6 +192,7 @@ const confirmMessage = ref('');
 const confirmAction = ref(null);
 const organizationData = ref({});
 const showOrganizationModal = ref(false);
+const router = useRouter();
 
 const getTree = async () => {
     const response = await axios.get(`${API_URL}/organization/myAll`);
@@ -377,6 +385,10 @@ const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
 };
 
+const goSubscription = (id) => {
+    router.push(`/subscription/${id}`)
+}
+
 onMounted(() => {
     getTree();
 });
@@ -548,6 +560,43 @@ onMounted(() => {
     padding: 20px;
     border: 1px solid #5A217C;
 }
+
+.subscription-card {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(90, 33, 124, 0.3) 0%, rgba(104, 0, 165, 0.3) 100%);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #5A217C;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.subscription-card .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 15, 15, 0.6);
+    color: white;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.subscription-card:hover .overlay {
+    opacity: 1;
+    pointer-events: all;
+}
+
 
 .sub-info h4 {
     font-size: 1.2rem;
