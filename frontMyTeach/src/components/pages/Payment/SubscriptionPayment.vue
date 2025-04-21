@@ -86,25 +86,6 @@ const getPaidInfo = async () => {
         const response = await axios.get(`${API_URL}/subscription/showPay/${route.params.uuid}`);
         paidInfo.value = response.data;
         paid.value.amount = response.data.objectPending.amount
-        // const response = {
-        //     "objectPending": {
-        //         "id": 7,
-        //         "subscription_id": 1,
-        //         "organization_id": 1,
-        //         "user_id": 4,
-        //         "amount": "5206.00",
-        //         "currency": "KZT",
-        //         "uuid": "35dc6357-4969-47e8-8501-2842420db980",
-        //         "status": "pending",
-        //         "message_by_status": "sending",
-        //         "active": true,
-        //         "created_at": "2025-04-21T15:42:46.000000Z",
-        //         "updated_at": "2025-04-21T15:42:46.000000Z"
-        //     },
-        //     "urlPaid": "http://localhost:8080/api/subscription/paid/35dc6357-4969-47e8-8501-2842420db980"
-        // }
-        // paidInfo.value = response;
-        // paid.value.amount = response.objectPending.amount;
     } catch (error) {
         console.error('Error fetching payment info:', error);
     }

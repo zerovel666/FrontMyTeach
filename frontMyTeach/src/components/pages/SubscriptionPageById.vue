@@ -68,44 +68,8 @@ const openPay = async () => {
 };
 
 const getSubscriptionById = async (id) => {
-    // const response = await axios.get(`${API_URL}/subscription/getById/${id}`)
-    // subscription.value = response.data
-    subscription.value = {
-        "id": 2,
-        "name": "Премиум подписка",
-        "price": "5295",
-        "currency": "KZT",
-        "interval": "месяц",
-        "courses": [
-            {
-                "id": 1,
-                "name": "Курс по PHP",
-                "has_certificate": false
-            },
-            {
-                "id": 2,
-                "name": "Курс по Java",
-                "has_certificate": false
-            },
-            {
-                "id": 3,
-                "name": "Курс по C++",
-                "has_certificate": false
-            },
-            {
-                "id": 5,
-                "name": "Курс по PHP",
-                "has_certificate": false
-            },
-            {
-                "id": 4,
-                "name": "Курс по JS",
-                "has_certificate": true
-            }
-        ],
-        "max_users": 28,
-        "max_course": 2
-    }
+    const response = await axios.get(`${API_URL}/subscription/getById/${id}`)
+    subscription.value = response.data
 }
 
 onMounted(() => {
