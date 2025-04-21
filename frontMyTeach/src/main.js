@@ -21,6 +21,7 @@ import { colProps } from 'ant-design-vue/es/grid/Col';
 import OrganizationManual from './components/pages/OrganizationManual.vue';
 import Subscription from './components/pages/Subscription.vue';
 import SubscriptionPageById from './components/pages/SubscriptionPageById.vue';
+import SubscriptionPayment from './components/pages/Payment/SubscriptionPayment.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -64,7 +65,8 @@ const routes = [
   { path: '/bible/:organization_id', component: BibleOrganization },
   { path: '/organization', component: OrganizationManual },
   { path: '/subscription', component: Subscription },
-  { path: '/subscription/:subscription_id', component: SubscriptionPageById  },
+  { path: '/subscription/:subscription_id', component: SubscriptionPageById },
+  { path: '/subscription/pending/:uuid', component: SubscriptionPayment },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 
 ];

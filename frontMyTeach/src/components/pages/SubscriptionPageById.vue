@@ -43,7 +43,7 @@
                 </div>
             </div>
             
-            <button class="subscribe-button">
+            <button class="subscribe-button" @click="openPay">
                 Оформить подписку
             </button>
         </div>
@@ -61,6 +61,11 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const subscription = ref([]);
+
+const openPay = async () => {
+    const response = await axios.get(`${API_URL}/subscription/getUrlForPay/${route.params.subscription_id}`);
+    window.open(`http://localhost:5173/subscription/pending/${response.data.uuid}`);
+};
 
 const getSubscriptionById = async (id) => {
     // const response = await axios.get(`${API_URL}/subscription/getById/${id}`)
