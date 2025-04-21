@@ -160,20 +160,10 @@ const handlePayment = async () => {
             `${API_URL}/subscription/paid/${route.params.uuid}`,
             payload
         );
-
-
-        if (response.status === 200) {
-            notificationRef.value.showNotification('Оплата прошла успешно, в случае неполадок обратитесь в тех.поддержку :)');
-        } else {
-            notificationRef.value.showNotification('Произошла ошибка при обработке платежа');
-        }
+        notificationRef.value.showNotification('Оплата прошла успешно, в случае неполадок обратитесь в тех.поддержку :)');
     } catch (error) {
-        console.error('Payment error:', error);
-        if (error.response?.status === 500) {
-            notificationRef.value.showNotification('Ошибка в одном из указанных вами параметров');
-        } else {
-            notificationRef.value.showNotification('Произошла ошибка при выполнении платежа');
-        }
+        console.log(error);
+        notificationRef.value.showNotification(error.response.data.error);
     }
 };
 
