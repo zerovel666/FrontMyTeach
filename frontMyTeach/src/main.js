@@ -19,6 +19,8 @@ import { notification } from 'ant-design-vue';
 import BibleOrganization from './components/pages/BibleOrganization.vue';
 import { colProps } from 'ant-design-vue/es/grid/Col';
 import OrganizationManual from './components/pages/OrganizationManual.vue';
+import Subscription from './components/pages/Subscription.vue';
+import SubscriptionPageById from './components/pages/SubscriptionPageById.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -61,6 +63,8 @@ const routes = [
   { path: '/course/info/:id', component: CourseInfo },
   { path: '/bible/:organization_id', component: BibleOrganization },
   { path: '/organization', component: OrganizationManual },
+  { path: '/subscription', component: Subscription },
+  { path: '/subscription/:subscription_id', component: SubscriptionPageById  },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 
 ];
