@@ -48,7 +48,6 @@
                                 <span>Подробнее</span>
                             </div>
                         </div>
-
                     </div>
                 </transition>
             </div>
@@ -535,6 +534,9 @@ onMounted(() => {
 
 .block-content {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .slide-enter-active,
