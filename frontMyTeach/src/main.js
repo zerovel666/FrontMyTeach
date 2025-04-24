@@ -22,6 +22,7 @@ import OrganizationManual from './components/pages/OrganizationManual.vue';
 import Subscription from './components/pages/Subscription.vue';
 import SubscriptionPageById from './components/pages/SubscriptionPageById.vue';
 import SubscriptionPayment from './components/pages/Payment/SubscriptionPayment.vue';
+import TeachingBible from './components/pages/TeachingBible.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -67,6 +68,7 @@ const routes = [
   { path: '/subscription', component: Subscription },
   { path: '/subscription/:subscription_id', component: SubscriptionPageById },
   { path: '/subscription/pending/:uuid', component: SubscriptionPayment },
+  { path: '/teaching', component: TeachingBible },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 
 ];

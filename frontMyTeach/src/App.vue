@@ -23,16 +23,16 @@ const userInfo = ref(null);
 const notificationRef = ref(null);
 
 axios.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.config.url.startsWith(API_URL) && error.response?.status === 401) {
-      VueCookies.remove('token');
-      VueCookies.remove('role');
-      notificationRef.value.showNotification('Сессия истекла. Пожалуйста войдите снова');
-      router.push('/auth');
-    }
-    return Promise.reject(error);
-  }
+	response => response,
+	error => {
+		if (error.config.url.startsWith(API_URL) && error.response?.status === 401) {
+			VueCookies.remove('token');
+			VueCookies.remove('role');
+			notificationRef.value.showNotification('Сессия истекла. Пожалуйста войдите снова');
+			router.push('/auth');
+		}
+		return Promise.reject(error);
+	}
 );
 
 let startTime = 0;
@@ -77,46 +77,46 @@ const getUserInfo = async () => {
 			// const response = await axios.get(`${API_URL}/client/info`);
 			// userInfo.value = response.data;
 			userInfo.value = {
-				"id": 4,
-				"email": "director@gmail.com",
-				"first_name": "Edison",
-				"last_name": "Rice",
-				"iin": "475204701005",
+				"id": 1,
+				"email": "teacher@gmail.com",
+				"first_name": "Jovany",
+				"last_name": "Marvin",
+				"iin": "943826053129",
 				"organization_id": 1,
 				"group_id": 1,
 				"is_active": true,
-				"created_at": "2025-04-15T18:33:19.000000Z",
-				"updated_at": "2025-04-15T18:33:19.000000Z",
+				"created_at": "2025-04-17T07:05:23.000000Z",
+				"updated_at": "2025-04-17T07:05:23.000000Z",
 				"roles": [
 					{
-						"id": 4,
-						"name": "Директор",
-						"slug": "director",
-						"created_at": "2025-04-15T18:33:17.000000Z",
-						"updated_at": "2025-04-15T18:33:17.000000Z",
+						"id": 3,
+						"name": "Преподаватель",
+						"slug": "teacher",
+						"created_at": "2025-04-17T07:05:22.000000Z",
+						"updated_at": "2025-04-17T07:05:22.000000Z",
 						"pivot": {
-							"user_id": 4,
-							"role_id": 4
+							"user_id": 1,
+							"role_id": 3
 						}
 					}
 				],
 				"client_infos": {
-					"id": 4,
-					"user_id": 4,
+					"id": 1,
+					"user_id": 1,
 					"has_courses": 0,
 					"complete_course_count": 0,
 					"complete_tasks": 0,
 					"pastime": "0",
 					"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
-					"created_at": "2025-04-15T18:33:19.000000Z",
-					"updated_at": "2025-04-15T18:33:19.000000Z"
+					"created_at": "2025-04-17T07:05:23.000000Z",
+					"updated_at": "2025-04-17T07:05:23.000000Z"
 				},
 				"user_image": {
-					"id": 4,
-					"user_id": 4,
+					"id": 1,
+					"user_id": 1,
 					"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-					"created_at": "2025-04-15T18:33:19.000000Z",
-					"updated_at": "2025-04-15T18:33:19.000000Z"
+					"created_at": "2025-04-17T07:05:23.000000Z",
+					"updated_at": "2025-04-17T07:05:23.000000Z"
 				}
 			}
 			VueCookies.set('role', userInfo.value.roles[0].slug);

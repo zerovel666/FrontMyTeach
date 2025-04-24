@@ -44,6 +44,13 @@
                                     <li @click="goSetting">Настройки</li>
                                     <li @click="logout">Выйти из аккаунта</li>
                                 </div>
+                                <div v-else-if="VueCookies.get('role') === 'teacher'">
+                                    <li @click="goMyProfile">Мой профиль</li>
+                                    <li @click="goSetting">Настройки</li>
+                                    <li @click="goTeaching">Преподавание</li>
+                                    <li @click="goBibleCourse">Библеотека курсов</li>
+                                    <li @click="logout">Выйти из аккаунта</li>
+                                </div>
                             </div>
                             <div v-else>
                                 <li @click="goAuth">Войти в аккаунт</li>
@@ -106,6 +113,11 @@ const goMyProfile = async () => {
 const goSetting = async () => {
     router.push('/setting')
 }
+
+const goTeaching = async () => {
+    router.push('/teaching')
+}
+
 const logout = async () => {
     VueCookies.remove('token');
     router.push('/auth')
