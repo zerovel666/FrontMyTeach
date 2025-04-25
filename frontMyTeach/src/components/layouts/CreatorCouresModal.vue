@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <h2>Создание нового курса</h2>
                 <button class="close-btn" @click="$emit('close')">
-                    <i class="fas fa-times"></i>
+                    &times;
                 </button>
             </div>
 
@@ -14,7 +14,6 @@
                         <label for="image">Обложка курса</label>
                         <div class="image-upload">
                             <label for="image-input" class="upload-area">
-                                <i class="fas fa-cloud-upload-alt" v-if="!previewImage"></i>
                                 <span v-if="!previewImage">Загрузить изображение</span>
                                 <img v-else :src="previewImage" class="image-preview">
                             </label>
@@ -44,7 +43,7 @@
                             Отмена
                         </button>
                         <button type="submit" class="submit-btn">
-                            <i class="fas fa-plus"></i> Создать курс
+                            Создать курс
                         </button>
                     </div>
                 </form>
@@ -74,7 +73,6 @@ const formData = ref({
     category_id: ''
 });
 
-// Получение категорий
 const getCategories = async () => {
     try {
         const response = await axios.get(`${API_URL}/course/category/all`);
@@ -84,13 +82,11 @@ const getCategories = async () => {
     }
 };
 
-// Обработка загрузки изображения
 const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
         formData.value.image_path = file;
 
-        // Создание превью изображения
         const reader = new FileReader();
         reader.onload = (e) => {
             previewImage.value = e.target.result;
@@ -99,7 +95,6 @@ const handleImageUpload = (event) => {
     }
 };
 
-// Отправка формы
 const submitForm = async () => {
     try {
         const formDataToSend = new FormData();
@@ -121,7 +116,6 @@ const submitForm = async () => {
     }
 };
 
-// Сброс формы
 const resetForm = () => {
     formData.value = {
         image_path: null,
@@ -134,7 +128,6 @@ const resetForm = () => {
     }
 };
 
-// Загружаем категории при монтировании
 getCategories();
 </script>
 
@@ -248,15 +241,14 @@ getCategories();
     overflow: hidden;
 }
 
-.upload-area i,
 .upload-area span {
-  position: relative;
-  z-index: 2; 
+    position: relative;
+    z-index: 2;
 }
 
 .upload-area:hover {
-  border-color: #6800A5;
-  color: #E0E0E0;
+    border-color: #6800A5;
+    color: #E0E0E0;
 }
 
 .image-preview {
@@ -308,7 +300,4 @@ getCategories();
     background-color: #5A217C;
 }
 
-.submit-btn i {
-    font-size: 0.8rem;
-}
 </style>

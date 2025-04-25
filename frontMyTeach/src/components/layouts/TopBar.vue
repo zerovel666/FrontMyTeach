@@ -106,6 +106,7 @@ const goToCreateCourse = async () => {
 
 const handleCourseCreated = (newCourse) => {
     notificationRef.value.showNotification('Курс успешно создан!');
+    router.push(`/main/course/editor/${newCourse.data.id}`)
 }
 
 const goHome = async () => {
