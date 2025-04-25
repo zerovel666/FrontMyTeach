@@ -47,6 +47,7 @@
                                 <div v-else-if="VueCookies.get('role') === 'teacher'">
                                     <li @click="goMyProfile">Мой профиль</li>
                                     <li @click="goSetting">Настройки</li>
+                                    <li @click="goToCreateCourse">Создать курс</li>
                                     <li @click="goTeaching">Преподавание</li>
                                     <li @click="goBibleCourse">Библеотека курсов</li>
                                     <li @click="logout">Выйти из аккаунта</li>
@@ -63,6 +64,10 @@
             </div>
         </div>
     </div>
+
+    <CreatorCouresModal :showModal="showModal" @close="showModal = false"
+        @created="handleCourseCreated" />
+
 </template>
 
 <script setup>
@@ -72,6 +77,7 @@ import { ref, computed, onMounted, onUnmounted, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import VueCookies from 'vue-cookies';
 import Notification from '../Notification.vue';
+import CreatorCouresModal from './CreatorCouresModal.vue';
 
 const userInfo = inject('userInfo');
 const route = useRoute();
@@ -87,10 +93,25 @@ const isMain = computed(() => route.path === "/");
 const isMyCourse = computed(() => route.path === "/mycourse");
 const isCatalog = computed(() => route.path === "/catalog");
 const isAboutUs = computed(() => route.path === "/aboutUs");
+const showModal = ref(false);
+
+const goToCreateCourse = async () => {
+    try {
+        showModal.value = true;
+    } catch (error) {
+        notificationRef.value.showNotification('Ошибка при подготовке создания курса');
+        console.error(error);
+    }
+}
+
+const handleCourseCreated = (newCourse) => {
+    notificationRef.value.showNotification('Курс успешно создан!');
+}
 
 const goHome = async () => {
     router.push('/');
 }
+
 const goMyCourse = async () => {
     if (VueCookies.get('token')) {
         router.push('/mycourse')
