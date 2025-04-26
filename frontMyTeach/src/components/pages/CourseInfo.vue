@@ -86,8 +86,362 @@ const route = useRoute();
 const courseInfo = ref([]);
 
 const getCourseInfo = async () => {
-    const response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
-    courseInfo.value = response.data[0];
+    // const response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
+    // courseInfo.value = response.data[0];
+
+    courseInfo.value = {
+        "category_id": 1,
+        "category_name": "Python",
+        "course_id": 4,
+        "course_name": "Курс по JS",
+        "course_amount": null,
+        "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
+        "author_id": "1",
+        "author_name": "Jovany Marvin",
+        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+        "rating": "5",
+        "tags": [
+            {
+                "id": 10,
+                "course_id": 4,
+                "tag": "et",
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z"
+            },
+            {
+                "id": 11,
+                "course_id": 4,
+                "tag": "eius",
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z"
+            },
+            {
+                "id": 12,
+                "course_id": 4,
+                "tag": "soluta",
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z"
+            }
+        ],
+        "preview": "Magnam dolor qui dolores dolorem sunt aut magni nemo odit nihil ab ut minima in eos ut asperiores rem aliquam ab ut sequi dolorum perferendis.",
+        "description": [
+            {
+                "id": 4,
+                "queue": 1,
+                "str_value": "Aut qui voluptatem itaque doloremque atque vitae et vitae sed quibusdam dolores et cupiditate.",
+                "preview_id": 4,
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z"
+            }
+        ],
+        "modules": [
+            {
+                "id": 16,
+                "queue": 1,
+                "str_value": "Commodi ipsum veritatis unde aut dolore quia facilis enim.",
+                "course_id": 4,
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z",
+                "tasks": [
+                    {
+                        "id": 76,
+                        "name": "atque",
+                        "order_id": 1,
+                        "type": "task",
+                        "module_id": 16,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 77,
+                        "name": "consequuntur",
+                        "order_id": 2,
+                        "type": "task",
+                        "module_id": 16,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 78,
+                        "name": "nisi",
+                        "order_id": 3,
+                        "type": "task",
+                        "module_id": 16,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 79,
+                        "name": "consectetur",
+                        "order_id": 4,
+                        "type": "task",
+                        "module_id": 16,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 80,
+                        "name": "sed",
+                        "order_id": 5,
+                        "type": "task",
+                        "module_id": 16,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 17,
+                "queue": 2,
+                "str_value": "Aut molestias tenetur reiciendis nihil qui eum accusamus et ut labore voluptates.",
+                "course_id": 4,
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z",
+                "tasks": [
+                    {
+                        "id": 81,
+                        "name": "consequatur",
+                        "order_id": 6,
+                        "type": "task",
+                        "module_id": 17,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 82,
+                        "name": "nostrum",
+                        "order_id": 7,
+                        "type": "task",
+                        "module_id": 17,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 83,
+                        "name": "minima",
+                        "order_id": 8,
+                        "type": "task",
+                        "module_id": 17,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 84,
+                        "name": "magni",
+                        "order_id": 9,
+                        "type": "task",
+                        "module_id": 17,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 85,
+                        "name": "eveniet",
+                        "order_id": 10,
+                        "type": "task",
+                        "module_id": 17,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 18,
+                "queue": 3,
+                "str_value": "Consequatur ut magnam accusamus commodi rerum eligendi et nihil.",
+                "course_id": 4,
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z",
+                "tasks": [
+                    {
+                        "id": 86,
+                        "name": "voluptatem",
+                        "order_id": 11,
+                        "type": "task",
+                        "module_id": 18,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 87,
+                        "name": "quasi",
+                        "order_id": 12,
+                        "type": "task",
+                        "module_id": 18,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 88,
+                        "name": "accusamus",
+                        "order_id": 13,
+                        "type": "task",
+                        "module_id": 18,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 89,
+                        "name": "omnis",
+                        "order_id": 14,
+                        "type": "task",
+                        "module_id": 18,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 90,
+                        "name": "illo",
+                        "order_id": 15,
+                        "type": "task",
+                        "module_id": 18,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 19,
+                "queue": 4,
+                "str_value": "Laboriosam quia vero non optio autem ad.",
+                "course_id": 4,
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z",
+                "tasks": [
+                    {
+                        "id": 91,
+                        "name": "nisi",
+                        "order_id": 16,
+                        "type": "task",
+                        "module_id": 19,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 92,
+                        "name": "error",
+                        "order_id": 17,
+                        "type": "task",
+                        "module_id": 19,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 93,
+                        "name": "dignissimos",
+                        "order_id": 18,
+                        "type": "task",
+                        "module_id": 19,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 94,
+                        "name": "reiciendis",
+                        "order_id": 19,
+                        "type": "task",
+                        "module_id": 19,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 95,
+                        "name": "officiis",
+                        "order_id": 20,
+                        "type": "task",
+                        "module_id": 19,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 20,
+                "queue": 5,
+                "str_value": "Tenetur omnis velit cum doloremque dolore ab iusto.",
+                "course_id": 4,
+                "created_at": "2025-04-25T19:58:35.000000Z",
+                "updated_at": "2025-04-25T19:58:35.000000Z",
+                "tasks": [
+                    {
+                        "id": 96,
+                        "name": "iusto",
+                        "order_id": 21,
+                        "type": "task",
+                        "module_id": 20,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 97,
+                        "name": "ut",
+                        "order_id": 22,
+                        "type": "task",
+                        "module_id": 20,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 98,
+                        "name": "ut",
+                        "order_id": 23,
+                        "type": "task",
+                        "module_id": 20,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 99,
+                        "name": "perspiciatis",
+                        "order_id": 24,
+                        "type": "task",
+                        "module_id": 20,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    },
+                    {
+                        "id": 100,
+                        "name": "qui",
+                        "order_id": 25,
+                        "type": "task",
+                        "module_id": 20,
+                        "course_id": 4,
+                        "created_at": "2025-04-25T19:58:35.000000Z",
+                        "updated_at": "2025-04-25T19:58:35.000000Z"
+                    }
+                ]
+            }
+        ],
+        "task_count": 25,
+        "has_course_count": 0,
+        "likes": 0,
+        "hasCertificate": false,
+        "created_at": "25-04-2025"
+    }
 }
 
 onMounted(() => {
