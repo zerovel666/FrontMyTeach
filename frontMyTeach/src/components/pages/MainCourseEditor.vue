@@ -7,13 +7,13 @@
                     <h1>{{ courseInfo.name }}</h1>
                     <p>{{ courseInfo.previews }}</p>
                     <p>Количество задач: {{ courseInfo.task_count }}</p>
-                    <p>Учащихся: {{ courseInfo.has_course_count }}</p>
+                    <p>Учащихся: {{ courseInfo.has_course_count ?? "-" }}</p>
                     <h2>Тэги</h2>
                     <ul class="tags">
                         <li v-for="(tag, index) in courseInfo.tags" :key="index">{{ tag.tag }}</li>
                     </ul>
                     <div class="courseMainAction">
-                        <button>
+                        <button @click="showCardCourseModal = true">
                             Редактировать
                         </button>
                         <button @click="showConfrimModal = true">
@@ -79,8 +79,14 @@
             </div>
         </div>
     </div>
-    <ConfirmCourseModal :visible="showConfrimModal" title="Удаление курса" message="Вы точно хотите удалить этот курс?"
-        @confirm="handleConfirm" @cancel="handleCancel" />
+    <ConfirmCourseModal :showModal="showConfrimModal" title="Удаление курса"
+        message="Вы точно хотите удалить этот курс?" @confirm="handleConfirmDeleteCourse"
+        @cancel="showConfrimModal = false" />
+    <CardCourseModal :showModal="showCardCourseModal" :cardBody="cardBody" @confirm="handleConfirmEditCardCourse"
+        @cancel="showCardCourseModal = false" />
+
+    <Notification ref="notificationRef" />
+
     <FooterBar />
 </template>
 
@@ -91,381 +97,55 @@ import TopBar from '../layouts/TopBar.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import { useRoute } from 'vue-router';
-import ConfirmCourseModal from './CourseEditorLayouts/ConfrimCourseModal.vue';
+import ConfirmCourseModal from './CourseEditorLayouts/ConfirmCourseModal.vue';
+import CardCourseModal from './CourseEditorLayouts/CardCourseModal.vue';
+import Notification from '../Notification.vue';
 
 const courseInfo = ref([]);
 const showConfrimModal = ref(false)
+const showCardCourseModal = ref(false)
+const cardBody = ref({});
 const route = useRoute();
+const notificationRef = ref(null);
+
 
 const getCourseInfo = async () => {
-    // const response = await axios.get(`${API_URL}/course/${route.params.id}`);
-    // courseInfo.value = response.data;
+    const response = await axios.get(`${API_URL}/course/${route.params.id}`);
+    courseInfo.value = response.data;
 
-    courseInfo.value = {
-        "id": 5,
-        "name": "Курс по Python",
-        "image_path": "http://localhost:8082//storage/logoCourse/vueLogo.png",
-        "is_active": true,
-        "category": {
-            "id": 2,
-            "category": "SpringBoot",
-            "created_at": "2025-04-25T07:49:29.000000Z",
-            "updated_at": "2025-04-25T07:49:29.000000Z"
-        },
-        "has_certificate": false,
-        "author_name": "Jovany Marvin",
-        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-        "status": "Отклонен",
-        "preview": {
-            "id": 5,
-            "title": "Architecto fuga repellendus ut eos recusandae voluptas porro cupiditate necessitatibus voluptatum aperiam ipsam unde et neque maiores aliquam."
-        },
-        "descriptions": [
-            {
-                "id": 5,
-                "queue": 1,
-                "str_value": "Blanditiis temporibus et quis unde recusandae quis et vel eos voluptates voluptas hic reiciendis enim.",
-                "preview_id": 5,
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z"
-            }
-        ],
-        "task_count": 25,
-        "tags": [
-            {
-                "id": 13,
-                "course_id": 5,
-                "tag": "nam",
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z"
-            },
-            {
-                "id": 14,
-                "course_id": 5,
-                "tag": "sint",
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z"
-            },
-            {
-                "id": 15,
-                "course_id": 5,
-                "tag": "aspernatur",
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z"
-            }
-        ],
-        "modules": [
-            {
-                "id": 21,
-                "queue": 1,
-                "str_value": "Ipsa rerum non corporis enim aut quasi illum repellendus sunt iure et laudantium voluptas libero.",
-                "course_id": 5,
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z",
-                "tasks": [
-                    {
-                        "id": 101,
-                        "name": "et",
-                        "order_id": 1,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 102,
-                        "name": "expedita",
-                        "order_id": 2,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 103,
-                        "name": "libero",
-                        "order_id": 3,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 104,
-                        "name": "ut",
-                        "order_id": 4,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 105,
-                        "name": "quod",
-                        "order_id": 5,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 22,
-                "queue": 2,
-                "str_value": "Et expedita sed ut amet provident aut cumque.",
-                "course_id": 5,
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z",
-                "tasks": [
-                    {
-                        "id": 106,
-                        "name": "porro",
-                        "order_id": 6,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 107,
-                        "name": "inventore",
-                        "order_id": 7,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 108,
-                        "name": "velit",
-                        "order_id": 8,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 109,
-                        "name": "quia",
-                        "order_id": 9,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 110,
-                        "name": "aut",
-                        "order_id": 10,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 23,
-                "queue": 3,
-                "str_value": "Provident molestias quaerat sit reiciendis et voluptates doloremque nihil aut velit.",
-                "course_id": 5,
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z",
-                "tasks": [
-                    {
-                        "id": 111,
-                        "name": "ab",
-                        "order_id": 11,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 112,
-                        "name": "magni",
-                        "order_id": 12,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 113,
-                        "name": "tempora",
-                        "order_id": 13,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 114,
-                        "name": "tempora",
-                        "order_id": 14,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 115,
-                        "name": "et",
-                        "order_id": 15,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 24,
-                "queue": 4,
-                "str_value": "Pariatur quia et sint esse ipsa quam.",
-                "course_id": 5,
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z",
-                "tasks": [
-                    {
-                        "id": 116,
-                        "name": "amet",
-                        "order_id": 16,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 117,
-                        "name": "est",
-                        "order_id": 17,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 118,
-                        "name": "maxime",
-                        "order_id": 18,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 119,
-                        "name": "ipsum",
-                        "order_id": 19,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 120,
-                        "name": "eum",
-                        "order_id": 20,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 25,
-                "queue": 5,
-                "str_value": "Voluptate eos dolorem dolorem hic consequatur occaecati voluptas laudantium impedit suscipit nemo eum iusto.",
-                "course_id": 5,
-                "created_at": "2025-04-25T07:49:30.000000Z",
-                "updated_at": "2025-04-25T07:49:30.000000Z",
-                "tasks": [
-                    {
-                        "id": 121,
-                        "name": "ut",
-                        "order_id": 21,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 122,
-                        "name": "non",
-                        "order_id": 22,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 123,
-                        "name": "optio",
-                        "order_id": 23,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 124,
-                        "name": "quidem",
-                        "order_id": 24,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    },
-                    {
-                        "id": 125,
-                        "name": "et",
-                        "order_id": 25,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-25T07:49:30.000000Z",
-                        "updated_at": "2025-04-25T07:49:30.000000Z"
-                    }
-                ]
-            }
-        ]
+
+    cardBody.value = {
+        name: courseInfo.value.name,
+        image_path: courseInfo.value.image_path,
+        category: courseInfo.value.category,
+        tags: courseInfo.value.tags
+    };
+
+    console.log(cardBody.value);
+}
+
+function handleConfirmDeleteCourse() {
+    showConfrimModal.value = false
+}
+
+async function handleConfirmEditCardCourse(newValue) {
+    console.log(newValue);
+
+    try {
+        const { image_path, ...dataToSend } = newValue; 
+        const response = await axios.post(`${API_URL}/course/card/${route.params.id}`, dataToSend);
+        
+        showCardCourseModal.value = false;
+        courseInfo.value = response.data;
+        notificationRef.value.showNotification('Успешно обновлено');
+        console.log('Успешно обновлено:', response.data);
+        
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка ${error.message}`);
+        console.error('Ошибка при обновлении:', error);
     }
 }
 
-function handleConfirm() {
-    showConfrimModal.value = false
-}
-
-function handleCancel() {
-    showConfrimModal.value = false
-}
 
 onMounted(() => {
     getCourseInfo();

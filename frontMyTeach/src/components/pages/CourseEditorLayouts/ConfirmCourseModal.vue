@@ -1,5 +1,5 @@
 <template>
-    <div v-if="visible" class="modal-layout">
+    <div v-if="showModal" class="modal-layout">
         <div class="modal-content">
             <h2 class="modal-title">{{ title }}</h2>
             <p class="modal-message">{{ message }}</p>
@@ -15,7 +15,7 @@
 import { defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
-    visible: {
+    showModal: {
         type: Boolean,
         default: false,
     },
