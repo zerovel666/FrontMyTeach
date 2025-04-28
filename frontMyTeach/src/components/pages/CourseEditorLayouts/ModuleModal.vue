@@ -1,23 +1,39 @@
 <template>
     <div class="modal-overlay">
         <div class="modal-content">
-            <h3>Подтверждение</h3>
-            <p>{{ message }}</p>
+            <h2>{{ isEditing ? 'Редактировать модуль' : 'Добавить модуль' }}</h2>
+
+            <div class="form-group">
+                <label>Название модуля:</label>
+                <input v-model="localModule.str_value" type="text">
+            </div>
 
             <div class="modal-actions">
-                <button @click="$emit('confirm')" class="confirm-btn">Да</button>
-                <button @click="$emit('cancel')" class="cancel-btn">Нет</button>
+                <button @click="$emit('save', localModule)" class="save-btn">Сохранить</button>
+                <button @click="$emit('close')" class="cancel-btn">Отмена</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-defineProps({
-    message: String
+import { ref, watch } from 'vue';
+
+const props = defineProps({
+    module: Object,
+    isEditing: Boolean
 });
 
-defineEmits(['confirm', 'cancel']);
+const emit = defineEmits(['save', 'close']);
+
+const localModule = ref({
+    str_value: '',
+    ...props.module
+});
+
+watch(() => props.module, (newVal) => {
+    localModule.value = { ...newVal };
+});
 </script>
 
 <style scoped>
@@ -56,6 +72,8 @@ defineEmits(['confirm', 'cancel']);
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    color: black;
+    outline: none;
 }
 
 .modal-actions {
@@ -65,12 +83,13 @@ defineEmits(['confirm', 'cancel']);
     margin-top: 20px;
 }
 
-.modal-actions button{
+.modal-actions button {
+    background-color: #59008E;
+    color: white;
     border-radius: 10px;
     background-color: #59008E;
     border: none;
     padding: 5px 20px;
     cursor: pointer;
 }
-
 </style>
