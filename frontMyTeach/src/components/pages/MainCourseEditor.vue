@@ -1,123 +1,177 @@
 <template>
     <TopBar />
     <div class="containerBody">
-        <div class="content" v-if="courseInfo.id">
-            <div class="top-card-info">
-                <div class="l-info">
-                    <h1>{{ courseInfo.name }}</h1>
-                    <p>{{ courseInfo.previews }}</p>
-                    <p>Количество задач: {{ courseInfo.task_count }}</p>
-                    <p>Учащихся: {{ courseInfo.has_course_count ?? "-" }}</p>
-                    <h2>Тэги</h2>
-                    <ul class="tags">
-                        <li v-for="(tag, index) in courseInfo.tags" :key="index">{{ tag.tag }}</li>
-                    </ul>
-                    <div class="courseMainAction">
-                        <button @click="showCardCourseModal = true">
+        <div class="course-editor" v-if="courseInfo.id">
+            <div class="course-header">
+                <div class="course-meta">
+                    <h1 class="course-title">{{ courseInfo.name }}</h1>
+                    <p class="course-description">{{ courseInfo.previews }}</p>
+                    <div class="course-stats">
+                        <span> {{ courseInfo.task_count }} задач</span>
+                        <span> {{ courseInfo.has_course_count || "0" }} - учащихся</span>
+                    </div>
+
+                    <div class="tags-section">
+                        <h3 class="section-title">Тэги</h3>
+                        <div class="tags-grid">
+                            <span v-for="(tag, index) in courseInfo.tags" :key="index" class="tag-badge">
+                                {{ tag.tag }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn primary" @click="showCardCourseModal = true">
                             Редактировать
                         </button>
-                        <button @click="showConfrimModal = true">
+                        <button class="btn danger" @click="showConfrimModal = true">
                             Удалить курс
                         </button>
                     </div>
                 </div>
-                <div class="r-info">
-                    <img :src="courseInfo.image_path" alt="" id="courseImage">
+
+                <div class="course-visual">
+                    <img :src="courseInfo.image_path" :alt="courseInfo.name" class="course-preview">
                 </div>
             </div>
-            <div class="obj-info">
-                <div class="l-obj-info">
-                    <h2>О курсе</h2>
-                    <p v-for="(description, index) in courseInfo.descriptions ?? []" :key="index">
-                        {{ description.str_value ?? '-' }}
-                    </p>
-                    <div class="modul-cont">
-                        <div class="module-header">
+
+            <div class="course-content-grid">
+                <div class="course-structure">
+                    <section class="about-section">
+                        <h2 class="section-header">О курсе</h2>
+                        <div class="description-block">
+                            <p v-for="(description, index) in courseInfo.descriptions || []" :key="index">
+                                {{ description.str_value || '-' }}
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="modules-section">
+                        <div class="section-header with-button">
                             <h2>Программа обучения</h2>
-                            <button @click="showModuleModal = true" class="add-btn">
-                                + Добавить модуль
+                            <button class="btn primary small" @click="showModuleModal = true">
+                                Добавить модуль
                             </button>
                         </div>
 
-                        <div class="line"></div>
+                        <div class="divider"></div>
 
-                        <div v-for="(module, index) in courseInfo.modules ?? []" :key="index" class="module-item">
-                            <div class="module-title">
-                                <h4>Модуль {{ index + 1 }}: {{ module.str_value ?? '-' }}</h4>
+                        <div v-for="(module, index) in courseInfo.modules || []" :key="module.id" class="module-card">
+                            <div class="line"></div>
+                            <div class="module-header">
+                                <h3 class="module-title">
+                                    Модуль {{ index + 1 }}: {{ module.str_value || '-' }}
+                                </h3>
                                 <div class="module-actions">
-                                    <button @click="editModule(module)" class="edit-btn">Редактировать</button>
-                                    <button @click="confirmDeleteModule(module)" class="delete-btn">Удалить</button>
+                                    <button class="btn-icon" @click="editModule(module)" title="Редактировать"><img
+                                            src="/src/assets/Icons/editorPencilWhite.svg" alt="">
+                                    </button>
+                                    <button class="btn-icon danger" @click="confirmDeleteModule(module)"
+                                        title="Удалить"><img src="/src/assets/Icons/deleteIconWhite.svg" alt="">
+                                    </button>
                                 </div>
                             </div>
 
-                            <ol>
-                                <li v-for="(task, taskIndex) in module.tasks ?? []" :key="taskIndex" class="task-item">
-                                    <span>{{ task.type === 'task' ? 'Задача' : 'Лекция' }}: {{ task.name ?? '-'
-                                        }}</span>
+                            <ol class="task-list">
+                                <li v-for="task in module.tasks || []" :key="task.id" class="task-item">
+                                    <span class="task-type">{{ task.type === 'task' ? 'Задача' : 'Лекция' }}:</span>
+                                    <span class="task-name">{{ task.name || '-' }}</span>
                                     <div class="task-actions">
-                                        <button @click="editTask(module, task)" class="small-btn"><img src="/src/assets/Icons/editorPencilWhite.svg" alt="" class="iconEdition"></button>
-                                        <button @click="deleteTask(module, task)" class="small-btn"><img src="/src/assets/Icons/deleteIconWhite.svg" alt="" class="iconEdition"></button>
+                                        <button class="btn-icon small" @click="editTask(module, task)"
+                                            title="Редактировать"> <img src="/src/assets/Icons/editorPencilWhite.svg"
+                                                alt="">
+                                        </button>
+                                        <button class="btn-icon small danger" @click="deleteTask(module, task)"
+                                            title="Удалить"><img src="/src/assets/Icons/deleteIconWhite.svg" alt="">
+                                        </button>
                                     </div>
                                 </li>
                             </ol>
 
-                            <button @click="showAddTaskModal(module)" class="add-task-btn">
-                                + Добавить задачу
+                            <button class="btn secondary add-task-btn" @click="showAddTaskModal(module)">
+                                Добавить задачу
                             </button>
 
-                            <div class="line"></div>
+                            <div class="divider"></div>
                         </div>
+                    </section>
                 </div>
-            </div>
-            <div class="r-obj-info">
-                <div class="authorInfo">
-                    <div class="bg">
-                        <img :src="courseInfo.author_image_path" alt="">
-                        <div class="text">
-                            <h3>Автор</h3>
-                            <p id="author_name">{{ courseInfo.author_name }}</p>
+
+                <div class="course-sidebar">
+                    <div class="author-card">
+                        <div class="author-banner">
+                            <img :src="courseInfo.author_image_path" :alt="courseInfo.author_name"
+                                class="author-avatar">
+                            <div class="author-info">
+                                <h3 class="author-role">Автор</h3>
+                                <p class="author-name">{{ courseInfo.author_name }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="buy-cont">
-                    <h2>Цена:
-                        <input v-if="editingPrice" v-model="editedPrice" type="number" class="price-input">
-                        <span v-else>{{ courseInfo.amount ? courseInfo.amount + 'KZT' : '-'
-                        }}</span>
-                        <button @click="togglePriceEditing" class="small-btn">
-                            {{ editingPrice ? 'Сохранить' : 'Изменить' }}
+
+                    <div class="purchase-card">
+                        <div class="price-section">
+                            <h3>Цена:</h3>
+                            <div class="price-control">
+                                <input v-if="editingPrice" v-model="editedPrice" type="number" class="price-input">
+                                <span v-else class="price-value">
+                                    {{ courseInfo.amount ? courseInfo.amount + ' ₸' : 'Бесплатно' }}
+                                </span>
+                                <button class="btn small" @click="togglePriceEditing">
+                                    {{ editingPrice ? 'Сохранить' : 'Изменить' }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="certificate-section">
+                            <span>Выдача сертификата:</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" v-model="courseInfo.hasCertificate" @change="updateCertificate">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-label">{{ courseInfo.hasCertificate ? 'Да' : 'Нет' }}</span>
+                        </div>
+
+                        <button class="btn primary purchase-btn" @click="buy()">
+                            Приобрести курс
                         </button>
-                    </h2>
 
-                    <div class="certificate-toggle">
-                        <span>Выдача сертификата: {{ courseInfo.hasCertificate ? 'Да' : 'Нет' }}</span>
-                        <label class="switch">
-                            <input type="checkbox" v-model="courseInfo.hasCertificate" @change="updateCertificate">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-
-                    <button class="btn-buy" @click="buy()">Приобрести</button>
-                    <div class="fastInfoCourse">
-                        <div class="line"></div>
-                        <p>Учащихся: {{ courseInfo.has_course_count ?? '-' }}</p>
-                        <p>Количество задач: {{ courseInfo.task_count ?? '-' }}</p>
-                        <p>Категория: {{ courseInfo.category?.category ?? '-' }}</p>
-                        <p>Курс: {{ courseInfo.name ?? '-' }}</p>
-                        <p>Примерное время прохождения: {{
-                            courseInfo.task_count && courseInfo.modules?.length
-                                ? Math.round(courseInfo.task_count * courseInfo.modules.length * 20 / 60) + 'ч'
-                                : '-'
-                        }}</p>
-                        <p>Количество модулей: {{ courseInfo.modules?.length ?? '-' }}</p>
-                        <p>Выдача сертификат: {{ courseInfo.has_certificate ? "Да" : "Нет" }}</p>
-
+                        <div class="course-facts">
+                            <div class="fact-item">
+                                <span class="fact-label">Учащихся:</span>
+                                <span class="fact-value">{{ courseInfo.has_course_count || '-' }}</span>
+                            </div>
+                            <div class="fact-item">
+                                <span class="fact-label">Задач:</span>
+                                <span class="fact-value">{{ courseInfo.task_count || '-' }}</span>
+                            </div>
+                            <div class="fact-item">
+                                <span class="fact-label">Категория:</span>
+                                <span class="fact-value">{{ courseInfo.category?.category || '-' }}</span>
+                            </div>
+                            <div class="fact-item">
+                                <span class="fact-label">Время прохождения:</span>
+                                <span class="fact-value">
+                                    {{ courseInfo.task_count && courseInfo.modules?.length
+                                        ? Math.round(courseInfo.task_count * courseInfo.modules.length * 20 / 60) + ' ч'
+                                        : '-' }}
+                                </span>
+                            </div>
+                            <div class="fact-item">
+                                <span class="fact-label">Модулей:</span>
+                                <span class="fact-value">{{ courseInfo.modules?.length || '-' }}</span>
+                            </div>
+                            <div class="fact-item">
+                                <span class="fact-label">Сертификат:</span>
+                                <span class="fact-value">{{ courseInfo.has_certificate ? "Да" : "Нет" }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
+
     <ConfirmCourseModal v-if="showConfrimModal" message="Вы уверены, что хотите удалить этот курс?"
         @confirm="handleConfirmDeleteCourse" @cancel="showConfrimModal = false" />
 
@@ -134,7 +188,6 @@
         @confirm="handleDeleteModule" @cancel="showConfirmDelete = false" />
 
     <Notification ref="notificationRef" />
-
     <FooterBar />
 </template>
 
@@ -168,365 +221,351 @@ const currentModuleId = ref(null);
 const isEditingModule = ref(false);
 
 const getCourseInfo = async () => {
-    const response = await axios.get(`${API_URL}/course/${route.params.id}`);
-    courseInfo.value = response.data;
-
-    // courseInfo.value = {
-    //     "id": 8,
-    //     "name": "Курс по JS",
-    //     "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
-    //     "is_active": true,
-    //     "category": {
-    //         "id": 1,
-    //         "category": "Django",
-    //         "created_at": "2025-04-26T14:55:31.000000Z",
-    //         "updated_at": "2025-04-26T14:55:31.000000Z"
-    //     },
-    //     "has_certificate": false,
-    //     "author_name": "Jovany Marvin",
-    //     "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-    //     "status": "Отклонен",
-    //     "preview": {
-    //         "id": 8,
-    //         "title": "Eos accusantium eius aut quos animi iusto beatae omnis ut magnam quo eum fuga."
-    //     },
-    //     "descriptions": [
-    //         {
-    //             "id": 8,
-    //             "queue": 1,
-    //             "str_value": "Voluptatem aut eaque impedit dignissimos deleniti tenetur et.",
-    //             "preview_id": 8,
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z"
-    //         }
-    //     ],
-    //     "task_count": 25,
-    //     "tags": [
-    //         {
-    //             "id": 22,
-    //             "course_id": 8,
-    //             "tag": "eos",
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z"
-    //         },
-    //         {
-    //             "id": 23,
-    //             "course_id": 8,
-    //             "tag": "illo",
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z"
-    //         },
-    //         {
-    //             "id": 24,
-    //             "course_id": 8,
-    //             "tag": "numquam",
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z"
-    //         }
-    //     ],
-    //     "modules": [
-    //         {
-    //             "id": 36,
-    //             "queue": 1,
-    //             "str_value": "Minima voluptatem in excepturi in excepturi assumenda et quod mollitia consequatur iste molestiae vel.",
-    //             "course_id": 8,
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z",
-    //             "tasks": [
-    //                 {
-    //                     "id": 176,
-    //                     "name": "harum",
-    //                     "order_id": 1,
-    //                     "type": "task",
-    //                     "module_id": 36,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 177,
-    //                     "name": "dolore",
-    //                     "order_id": 2,
-    //                     "type": "task",
-    //                     "module_id": 36,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 178,
-    //                     "name": "debitis",
-    //                     "order_id": 3,
-    //                     "type": "task",
-    //                     "module_id": 36,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 179,
-    //                     "name": "quas",
-    //                     "order_id": 4,
-    //                     "type": "task",
-    //                     "module_id": 36,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 180,
-    //                     "name": "rerum",
-    //                     "order_id": 5,
-    //                     "type": "task",
-    //                     "module_id": 36,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "id": 37,
-    //             "queue": 2,
-    //             "str_value": "Voluptatum voluptate dolorem optio sed vero dolor mollitia laboriosam quos in.",
-    //             "course_id": 8,
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z",
-    //             "tasks": [
-    //                 {
-    //                     "id": 181,
-    //                     "name": "sapiente",
-    //                     "order_id": 6,
-    //                     "type": "task",
-    //                     "module_id": 37,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 182,
-    //                     "name": "eos",
-    //                     "order_id": 7,
-    //                     "type": "task",
-    //                     "module_id": 37,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 183,
-    //                     "name": "rerum",
-    //                     "order_id": 8,
-    //                     "type": "task",
-    //                     "module_id": 37,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 184,
-    //                     "name": "ut",
-    //                     "order_id": 9,
-    //                     "type": "task",
-    //                     "module_id": 37,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 185,
-    //                     "name": "officiis",
-    //                     "order_id": 10,
-    //                     "type": "task",
-    //                     "module_id": 37,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "id": 38,
-    //             "queue": 3,
-    //             "str_value": "Aspernatur impedit sit non consequatur consequatur quia placeat praesentium hic.",
-    //             "course_id": 8,
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z",
-    //             "tasks": [
-    //                 {
-    //                     "id": 186,
-    //                     "name": "ea",
-    //                     "order_id": 11,
-    //                     "type": "task",
-    //                     "module_id": 38,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 187,
-    //                     "name": "est",
-    //                     "order_id": 12,
-    //                     "type": "task",
-    //                     "module_id": 38,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 188,
-    //                     "name": "nobis",
-    //                     "order_id": 13,
-    //                     "type": "task",
-    //                     "module_id": 38,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 189,
-    //                     "name": "dolores",
-    //                     "order_id": 14,
-    //                     "type": "task",
-    //                     "module_id": 38,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 190,
-    //                     "name": "distinctio",
-    //                     "order_id": 15,
-    //                     "type": "task",
-    //                     "module_id": 38,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "id": 39,
-    //             "queue": 4,
-    //             "str_value": "Ut voluptatem aut aperiam deleniti vitae ducimus pariatur velit.",
-    //             "course_id": 8,
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z",
-    //             "tasks": [
-    //                 {
-    //                     "id": 191,
-    //                     "name": "quisquam",
-    //                     "order_id": 16,
-    //                     "type": "task",
-    //                     "module_id": 39,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 192,
-    //                     "name": "et",
-    //                     "order_id": 17,
-    //                     "type": "task",
-    //                     "module_id": 39,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 193,
-    //                     "name": "in",
-    //                     "order_id": 18,
-    //                     "type": "task",
-    //                     "module_id": 39,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 194,
-    //                     "name": "pariatur",
-    //                     "order_id": 19,
-    //                     "type": "task",
-    //                     "module_id": 39,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 195,
-    //                     "name": "vitae",
-    //                     "order_id": 20,
-    //                     "type": "task",
-    //                     "module_id": 39,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             "id": 40,
-    //             "queue": 5,
-    //             "str_value": "Nulla dolor id aspernatur modi sunt voluptatem qui nemo quae vel delectus iure commodi.",
-    //             "course_id": 8,
-    //             "created_at": "2025-04-26T14:55:32.000000Z",
-    //             "updated_at": "2025-04-26T14:55:32.000000Z",
-    //             "tasks": [
-    //                 {
-    //                     "id": 196,
-    //                     "name": "et",
-    //                     "order_id": 21,
-    //                     "type": "task",
-    //                     "module_id": 40,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 197,
-    //                     "name": "qui",
-    //                     "order_id": 22,
-    //                     "type": "task",
-    //                     "module_id": 40,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 198,
-    //                     "name": "porro",
-    //                     "order_id": 23,
-    //                     "type": "task",
-    //                     "module_id": 40,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 199,
-    //                     "name": "blanditiis",
-    //                     "order_id": 24,
-    //                     "type": "task",
-    //                     "module_id": 40,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 },
-    //                 {
-    //                     "id": 200,
-    //                     "name": "sunt",
-    //                     "order_id": 25,
-    //                     "type": "task",
-    //                     "module_id": 40,
-    //                     "course_id": 8,
-    //                     "created_at": "2025-04-26T14:55:32.000000Z",
-    //                     "updated_at": "2025-04-26T14:55:32.000000Z"
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
+    // const response = await axios.get(`${API_URL}/course/${route.params.id}`);
+    // courseInfo.value = response.data;
+    courseInfo.value = {
+        "id": 5,
+        "name": "Курс по .NET",
+        "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
+        "is_active": true,
+        "amount": null,
+        "category": {
+            "id": 9,
+            "category": "HTML&CSS",
+            "created_at": "2025-04-26T14:55:31.000000Z",
+            "updated_at": "2025-04-26T14:55:31.000000Z"
+        },
+        "has_certificate": false,
+        "author_name": "Jovany Marvin",
+        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+        "status": "Отклонен",
+        "preview": {
+            "id": 5,
+            "title": "Voluptas at cumque at iusto debitis qui dicta at soluta sit alias sunt reiciendis omnis quia sint pariatur occaecati ex sed."
+        },
+        "descriptions": [
+            {
+                "id": 5,
+                "queue": 1,
+                "str_value": "Tenetur qui ullam enim ut labore nam rerum deleniti quod quidem reprehenderit.",
+                "preview_id": 5,
+                "created_at": "2025-04-26T14:55:32.000000Z",
+                "updated_at": "2025-04-26T14:55:32.000000Z"
+            }
+        ],
+        "task_count": 25,
+        "tags": [
+            {
+                "id": 13,
+                "course_id": 5,
+                "tag": "quasi",
+                "created_at": "2025-04-26T14:55:32.000000Z",
+                "updated_at": "2025-04-26T14:55:32.000000Z"
+            }
+        ],
+        "modules": [
+            {
+                "id": 21,
+                "queue": 1,
+                "str_value": "Atque deserunt consequatur fugit qui deleniti et.",
+                "course_id": 5,
+                "created_at": "2025-04-26T14:55:32.000000Z",
+                "updated_at": "2025-04-26T14:55:32.000000Z",
+                "tasks": [
+                    {
+                        "id": 101,
+                        "name": "voluptatum",
+                        "order_id": 1,
+                        "type": "task",
+                        "module_id": 21,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 102,
+                        "name": "architecto",
+                        "order_id": 2,
+                        "type": "task",
+                        "module_id": 21,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 103,
+                        "name": "rerum",
+                        "order_id": 3,
+                        "type": "task",
+                        "module_id": 21,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 104,
+                        "name": "ea",
+                        "order_id": 4,
+                        "type": "task",
+                        "module_id": 21,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 105,
+                        "name": "commodi",
+                        "order_id": 5,
+                        "type": "task",
+                        "module_id": 21,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 22,
+                "queue": 2,
+                "str_value": "Iure cum explicabo eaque porro qui odit illo qui.",
+                "course_id": 5,
+                "created_at": "2025-04-26T14:55:32.000000Z",
+                "updated_at": "2025-04-26T14:55:32.000000Z",
+                "tasks": [
+                    {
+                        "id": 106,
+                        "name": "maiores",
+                        "order_id": 6,
+                        "type": "task",
+                        "module_id": 22,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 107,
+                        "name": "omnis",
+                        "order_id": 7,
+                        "type": "task",
+                        "module_id": 22,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 108,
+                        "name": "est",
+                        "order_id": 8,
+                        "type": "task",
+                        "module_id": 22,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 109,
+                        "name": "reiciendis",
+                        "order_id": 9,
+                        "type": "task",
+                        "module_id": 22,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 110,
+                        "name": "ipsam",
+                        "order_id": 10,
+                        "type": "task",
+                        "module_id": 22,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 23,
+                "queue": 3,
+                "str_value": "Est doloremque animi beatae optio eveniet voluptatem consequatur assumenda est accusantium aut.",
+                "course_id": 5,
+                "created_at": "2025-04-26T14:55:32.000000Z",
+                "updated_at": "2025-04-26T14:55:32.000000Z",
+                "tasks": [
+                    {
+                        "id": 111,
+                        "name": "sapiente",
+                        "order_id": 11,
+                        "type": "task",
+                        "module_id": 23,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 112,
+                        "name": "ab",
+                        "order_id": 12,
+                        "type": "task",
+                        "module_id": 23,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 113,
+                        "name": "ut",
+                        "order_id": 13,
+                        "type": "task",
+                        "module_id": 23,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 114,
+                        "name": "quo",
+                        "order_id": 14,
+                        "type": "task",
+                        "module_id": 23,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 115,
+                        "name": "soluta",
+                        "order_id": 15,
+                        "type": "task",
+                        "module_id": 23,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 24,
+                "queue": 4,
+                "str_value": "Et quia praesentium doloremque aliquid rerum nostrum quia dolorem expedita veniam et.",
+                "course_id": 5,
+                "created_at": "2025-04-26T14:55:32.000000Z",
+                "updated_at": "2025-04-26T14:55:32.000000Z",
+                "tasks": [
+                    {
+                        "id": 116,
+                        "name": "rem",
+                        "order_id": 16,
+                        "type": "task",
+                        "module_id": 24,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 117,
+                        "name": "sit",
+                        "order_id": 17,
+                        "type": "task",
+                        "module_id": 24,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 118,
+                        "name": "eligendi",
+                        "order_id": 18,
+                        "type": "task",
+                        "module_id": 24,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 119,
+                        "name": "nulla",
+                        "order_id": 19,
+                        "type": "task",
+                        "module_id": 24,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 120,
+                        "name": "tempore",
+                        "order_id": 20,
+                        "type": "task",
+                        "module_id": 24,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 25,
+                "queue": 5,
+                "str_value": "Sit magnam nam ea quo similique unde est.",
+                "course_id": 5,
+                "created_at": "2025-04-26T14:55:32.000000Z",
+                "updated_at": "2025-04-26T14:55:32.000000Z",
+                "tasks": [
+                    {
+                        "id": 121,
+                        "name": "beatae",
+                        "order_id": 21,
+                        "type": "task",
+                        "module_id": 25,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 122,
+                        "name": "qui",
+                        "order_id": 22,
+                        "type": "task",
+                        "module_id": 25,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 123,
+                        "name": "culpa",
+                        "order_id": 23,
+                        "type": "task",
+                        "module_id": 25,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 124,
+                        "name": "quo",
+                        "order_id": 24,
+                        "type": "task",
+                        "module_id": 25,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    },
+                    {
+                        "id": 125,
+                        "name": "quia",
+                        "order_id": 25,
+                        "type": "task",
+                        "module_id": 25,
+                        "course_id": 5,
+                        "created_at": "2025-04-26T14:55:32.000000Z",
+                        "updated_at": "2025-04-26T14:55:32.000000Z"
+                    }
+                ]
+            }
+        ]
+    }
     cardBody.value = {
         name: courseInfo.value.name,
         image_path: courseInfo.value.image_path,
@@ -613,7 +652,7 @@ const handleDeleteModule = async () => {
 
 const handleSaveModule = async (moduleData) => {
     try {
-        let response; 
+        let response;
 
         if (moduleData.id) {
             response = await axios.put(`${API_URL}/course/module/${moduleData.id}`, moduleData);
@@ -697,239 +736,321 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.content {
-    margin-top: 30px;
+:root {
+    --primary: #59008E;
+    --primary-light: #7824a9;
+    --secondary: #B14788;
+    --dark: #1A1A1A;
+    --gray: #3D3D3D;
+    --light-gray: #6D6D6D;
+    --border: #4D4D4D;
+    --danger: #D32F2F;
+    --success: #388E3C;
 }
 
-.top-card-info {
+.course-editor {
+    margin-top: 2rem;
+    color: #E0E0E0;
+}
+
+.course-header {
     display: flex;
-    background-color: #59008E;
-    height: 450px;
-    padding: 30px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
-.courseMainAction {
+.course-meta {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    max-width: 250px;
-    gap: 15px;
-}
-
-.courseMainAction button {
-    padding: 5px;
-    border-radius: 10px;
-    border: none;
-    transition: transform 0.3s;
-    background: #7824a9;
-    border: 1px solid #bfbfbf;
-    cursor: pointer;
-}
-
-.l-info {
-    width: 60%;
-    color: white;
-    overflow-y: auto;
-}
-
-.r-info {
-    width: 40%;
-    display: flex;
-    justify-content: right;
-    align-items: center;
+    gap: 1rem;
     position: relative;
 }
 
-#courseImage {
+.course-title {
+    font-size: 2rem;
+    margin: 0;
+    color: white;
+}
+
+.course-description {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+}
+
+.course-stats {
+    display: flex;
+    gap: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.tags-section {
+    margin-top: 1rem;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-badge {
+    background-color: #a200ff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    position: absolute;
+    bottom: 0;
+}
+
+.course-visual {
     width: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.course-preview {
+    width: 100%;
+    max-width: 350px;
     height: 350px;
     object-fit: cover;
-    border-radius: 100%;
+    border-radius: 50%;
+    border: 4px solid var(--secondary);
 }
 
-.tags {
-    padding-left: 20px;
+.course-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
 }
 
-.tags li {
-    margin-top: 10px;
+.course-structure {
+    border: 1px solid #1A1A1A;
+    box-shadow: 0 0 12px rgba(177, 71, 136, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    background-color: #1A1A1A;
+
 }
 
-.obj-info {
-    margin-top: 30px;
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-}
-
-.r-obj-info {
-    width: 40%;
+.course-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 2rem;
 }
 
-.authorInfo {
-    background-color: #59008E;
-    height: 200px;
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.bg {
+.section-header {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: white;
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 20px;
-    text-align: center;
-    background-image: url('/src/assets/images/layouts/BgProfile.svg');
-    padding: 30px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 
-.authorInfo img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 100%;
-    border: 2px solid white;
+.section-header.with-button {
+    justify-content: space-between;
 }
 
-#author_name {
-    color: white;
-    font-size: 25px;
+.about-section {
+    margin-bottom: 2.5rem;
 }
 
-.text p {
-    margin: 5px;
+.description-block {
+    line-height: 1.6;
 }
 
-.modul-cont {
-    margin-top: 50px;
+.divider {
+    height: 1px;
+    background-color: var(--border);
+    margin: 1.5rem 0;
+    opacity: 0.5;
 }
 
-.buy-cont {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background-color: #59008E;
-    padding: 30px;
-    border-radius: 20px;
-}
-
-.buy-cont h2 {
-    margin: 0;
-}
-
-.btn-buy {
-    cursor: pointer;
-    height: 40px;
-    border-radius: 15px;
-    padding-left: 30px;
-    padding-right: 30px;
-    background-color: #7824a9;
-    color: white;
-    box-shadow: inset 0px 0px 7px rgb(255, 255, 255);
-    border: none;
-    transition: background 0.3s ease;
-}
-
-.btn-buy:hover {
-    background-color: #611e88;
-}
-
-.l-obj-info {
-    width: 60%;
-    border: 1px solid #B14788;
-    box-shadow: 0px 0px 7px #B14788;
-    height: auto;
-    border-radius: 20px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
+.module-card {
+    margin-bottom: 2rem;
 }
 
 .line {
     width: 100%;
-    height: 2px;
-    background-color: white;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    border: 1px solid white;
+    height: 1px;
+    margin-bottom: 50px;
 }
 
-.modules {
-    margin-top: 20px;
+.module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
-.modules ol li {
-    margin-top: 20px;
-}
-
-.modules ol {
-    margin: 40px 0;
-}
-
-.small-btn {
-    padding: 5px 10px;
-    margin-left: 10px;
-    border-radius: 5px;
-    background: #7824a9;
+.module-title {
+    font-size: 1.2rem;
+    margin: 0;
     color: white;
-    border: none;
-    cursor: pointer;
 }
 
-.iconEdition{
+.module-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.module-actions img {
     width: 20px;
 }
 
-.add-btn,
-.add-task-btn {
-    padding: 8px 15px;
-    background: #59008E;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px 0;
+.task-list {
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
 }
 
-.edit-btn {
-    background: #59008E;
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 10px;
-}
-
-.delete-btn {
-    background: #59008E;
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 10px;
-}
-
-/* Стили для переключателя сертификата */
-.certificate-toggle {
+.task-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 15px 0;
+    padding: 0.7rem 0;
+    border-bottom: 1px dashed var(--border);
 }
 
-.switch {
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-type {
+    color: var(--secondary);
+    margin-right: 0.5rem;
+    font-weight: 500;
+}
+
+.task-name {
+    flex: 1;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.task-actions img {
+    width: 20px;
+    margin: 5px;
+}
+
+.add-task-btn {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.author-card {
+    background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.author-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('/src/assets/images/layouts/BgProfile.svg');
+    background-size: cover;
+    background-position: center;
+}
+
+.author-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    object-fit: cover;
+}
+
+.author-info {
+    color: white;
+}
+
+.author-role {
+    margin: 0 0 0.3rem 0;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.author-name {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.purchase-card {
+    background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.price-section {
+    margin-bottom: 1.5rem;
+}
+
+.price-control {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.price-value {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.price-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 6px;
+    width: 100px;
+    outline: none;
+}
+
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.certificate-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.toggle-switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 50px;
+    height: 24px;
 }
 
-.switch input {
+.toggle-switch input {
     opacity: 0;
     width: 0;
     height: 0;
@@ -942,17 +1063,18 @@ onMounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #7e00c7;
     transition: .4s;
-    border-radius: 34px;
+    border-radius: 24px;
+    width: 50px;
+    padding: 5px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
+    height: 16px;
+    width: 16px;
     bottom: 4px;
     background-color: white;
     transition: .4s;
@@ -960,65 +1082,131 @@ onMounted(() => {
 }
 
 input:checked+.slider {
-    background-color: #8b24c7;
+    background-color: #c561ff;
 }
 
 input:checked+.slider:before {
     transform: translateX(26px);
 }
 
-.module-header {
+.toggle-label {
+    margin-left: 0.5rem;
+}
+
+.purchase-btn {
+    width: 100%;
+    padding: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+}
+
+.course-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.fact-item {
     display: flex;
     justify-content: space-between;
+}
+
+.fact-label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.fact-value {
+    font-weight: 500;
+}
+
+.btn {
+    display: inline-flex;
     align-items: center;
-}
-
-.module-item {
-    margin-bottom: 30px;
-}
-
-.module-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.module-actions {
-    display: flex;
-    gap: 15px;
-    margin-left: 15px; 
-
-}
-.module-actions button{
-    padding: 5px 15px;
-}
-
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-}
-
-.task-actions {
-    display: flex;
-    gap: 5px;
-}
-
-.task-actions button{
-    width: 50px;
-    display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 5px 30px;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
 }
 
-.price-input {
-    width: 120px;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    color: black;
-    outline: none;
+.btn.primary {
+    color: white;
+    background: #9400e9;
+}
+
+.btn.primary:hover {
+    background-color: #a200ff;
+}
+
+.btn.secondary {
+    background-color: #6b6b6b;
+    color: white;
+}
+
+.btn.secondary:hover {
+    background-color: #4d4d4d;
+}
+
+.btn.danger {
+    color: white;
+    background: #9400e9;
+}
+
+.btn.danger:hover {
+    background-color: #a200ff;
+}
+
+.btn.small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    background-color: #9400e9;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: #59008E;
+}
+
+
+.btn-icon.small {
+    padding: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.icon-edit,
+.icon-delete,
+.icon-add {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.icon-edit {
+    background-image: url('/src/assets/Icons/editorPencilWhite.svg');
+}
+
+.icon-delete {
+    background-image: url('/src/assets/Icons/deleteIconWhite.svg');
+}
+
+.icon-add {
+    background-image: url('/src/assets/Icons/addIconWhite.svg');
 }
 </style>
