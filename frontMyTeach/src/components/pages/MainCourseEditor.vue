@@ -38,11 +38,28 @@
             <div class="course-content-grid">
                 <div class="course-structure">
                     <section class="about-section">
-                        <h2 class="section-header">О курсе</h2>
+                        <div class="section-header with-button">
+                            <h2>О курсе</h2>
+                            <button class="btn primary small" @click="showAddDescriptionModal = true">
+                                Добавить описание
+                            </button>
+                        </div>
+
                         <div class="description-block">
-                            <p v-for="(description, index) in courseInfo.descriptions || []" :key="index">
-                                {{ description.str_value || '-' }}
-                            </p>
+                            <div v-for="(description, index) in courseInfo.descriptions || []" :key="index"
+                                class="description-item">
+                                <p>{{ description.str_value || '-' }}</p>
+                                <div class="description-actions">
+                                    <button class="btn-icon small" @click="editDescription(description)"
+                                        title="Редактировать">
+                                        <img src="/src/assets/Icons/editorPencilWhite.svg" alt="">
+                                    </button>
+                                    <button class="btn-icon small danger" @click="deleteDescription(description)"
+                                        title="Удалить">
+                                        <img src="/src/assets/Icons/deleteIconWhite.svg" alt="">
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
@@ -187,12 +204,15 @@
     <ConfirmCourseModal v-if="showConfirmDelete" message="Вы уверены, что хотите удалить этот модуль?"
         @confirm="handleDeleteModule" @cancel="showConfirmDelete = false" />
 
+    <DescriptionModal v-if="showDescriptionModal" :description="currentDescription" :isEditing="isEditingDescription"
+        @save="handleSaveDescription" @close="showDescriptionModal = false" />
+
     <Notification ref="notificationRef" />
     <FooterBar />
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
 import axios from 'axios';
@@ -203,6 +223,7 @@ import CardCourseModal from './CourseEditorLayouts/CardCourseModal.vue';
 import Notification from '../Notification.vue';
 import TaskModal from './CourseEditorLayouts/TaskModal.vue';
 import ModuleModal from './CourseEditorLayouts/ModuleModal.vue';
+import DescriptionModal from './CourseEditorLayouts/DescriptionModal.vue';
 
 const courseInfo = ref([]);
 const showConfrimModal = ref(false)
@@ -219,353 +240,16 @@ const currentModule = ref(null);
 const currentTask = ref(null);
 const currentModuleId = ref(null);
 const isEditingModule = ref(false);
+const showDescriptionModal = ref(false);
+const showAddDescriptionModal = ref(false);
+const currentDescription = ref(null);
+const isEditingDescription = ref(false);
+
 
 const getCourseInfo = async () => {
-    // const response = await axios.get(`${API_URL}/course/${route.params.id}`);
-    // courseInfo.value = response.data;
-    courseInfo.value = {
-        "id": 5,
-        "name": "Курс по .NET",
-        "image_path": "http://localhost:8082//storage/logoCourse/javaLogo.webp",
-        "is_active": true,
-        "amount": null,
-        "category": {
-            "id": 9,
-            "category": "HTML&CSS",
-            "created_at": "2025-04-26T14:55:31.000000Z",
-            "updated_at": "2025-04-26T14:55:31.000000Z"
-        },
-        "has_certificate": false,
-        "author_name": "Jovany Marvin",
-        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-        "status": "Отклонен",
-        "preview": {
-            "id": 5,
-            "title": "Voluptas at cumque at iusto debitis qui dicta at soluta sit alias sunt reiciendis omnis quia sint pariatur occaecati ex sed."
-        },
-        "descriptions": [
-            {
-                "id": 5,
-                "queue": 1,
-                "str_value": "Tenetur qui ullam enim ut labore nam rerum deleniti quod quidem reprehenderit.",
-                "preview_id": 5,
-                "created_at": "2025-04-26T14:55:32.000000Z",
-                "updated_at": "2025-04-26T14:55:32.000000Z"
-            }
-        ],
-        "task_count": 25,
-        "tags": [
-            {
-                "id": 13,
-                "course_id": 5,
-                "tag": "quasi",
-                "created_at": "2025-04-26T14:55:32.000000Z",
-                "updated_at": "2025-04-26T14:55:32.000000Z"
-            }
-        ],
-        "modules": [
-            {
-                "id": 21,
-                "queue": 1,
-                "str_value": "Atque deserunt consequatur fugit qui deleniti et.",
-                "course_id": 5,
-                "created_at": "2025-04-26T14:55:32.000000Z",
-                "updated_at": "2025-04-26T14:55:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 101,
-                        "name": "voluptatum",
-                        "order_id": 1,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 102,
-                        "name": "architecto",
-                        "order_id": 2,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 103,
-                        "name": "rerum",
-                        "order_id": 3,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 104,
-                        "name": "ea",
-                        "order_id": 4,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 105,
-                        "name": "commodi",
-                        "order_id": 5,
-                        "type": "task",
-                        "module_id": 21,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 22,
-                "queue": 2,
-                "str_value": "Iure cum explicabo eaque porro qui odit illo qui.",
-                "course_id": 5,
-                "created_at": "2025-04-26T14:55:32.000000Z",
-                "updated_at": "2025-04-26T14:55:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 106,
-                        "name": "maiores",
-                        "order_id": 6,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 107,
-                        "name": "omnis",
-                        "order_id": 7,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 108,
-                        "name": "est",
-                        "order_id": 8,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 109,
-                        "name": "reiciendis",
-                        "order_id": 9,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 110,
-                        "name": "ipsam",
-                        "order_id": 10,
-                        "type": "task",
-                        "module_id": 22,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 23,
-                "queue": 3,
-                "str_value": "Est doloremque animi beatae optio eveniet voluptatem consequatur assumenda est accusantium aut.",
-                "course_id": 5,
-                "created_at": "2025-04-26T14:55:32.000000Z",
-                "updated_at": "2025-04-26T14:55:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 111,
-                        "name": "sapiente",
-                        "order_id": 11,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 112,
-                        "name": "ab",
-                        "order_id": 12,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 113,
-                        "name": "ut",
-                        "order_id": 13,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 114,
-                        "name": "quo",
-                        "order_id": 14,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 115,
-                        "name": "soluta",
-                        "order_id": 15,
-                        "type": "task",
-                        "module_id": 23,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 24,
-                "queue": 4,
-                "str_value": "Et quia praesentium doloremque aliquid rerum nostrum quia dolorem expedita veniam et.",
-                "course_id": 5,
-                "created_at": "2025-04-26T14:55:32.000000Z",
-                "updated_at": "2025-04-26T14:55:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 116,
-                        "name": "rem",
-                        "order_id": 16,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 117,
-                        "name": "sit",
-                        "order_id": 17,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 118,
-                        "name": "eligendi",
-                        "order_id": 18,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 119,
-                        "name": "nulla",
-                        "order_id": 19,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 120,
-                        "name": "tempore",
-                        "order_id": 20,
-                        "type": "task",
-                        "module_id": 24,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 25,
-                "queue": 5,
-                "str_value": "Sit magnam nam ea quo similique unde est.",
-                "course_id": 5,
-                "created_at": "2025-04-26T14:55:32.000000Z",
-                "updated_at": "2025-04-26T14:55:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 121,
-                        "name": "beatae",
-                        "order_id": 21,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 122,
-                        "name": "qui",
-                        "order_id": 22,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 123,
-                        "name": "culpa",
-                        "order_id": 23,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 124,
-                        "name": "quo",
-                        "order_id": 24,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    },
-                    {
-                        "id": 125,
-                        "name": "quia",
-                        "order_id": 25,
-                        "type": "task",
-                        "module_id": 25,
-                        "course_id": 5,
-                        "created_at": "2025-04-26T14:55:32.000000Z",
-                        "updated_at": "2025-04-26T14:55:32.000000Z"
-                    }
-                ]
-            }
-        ]
-    }
+    const response = await axios.get(`${API_URL}/course/${route.params.id}`);
+    courseInfo.value = response.data;
+   
     cardBody.value = {
         name: courseInfo.value.name,
         image_path: courseInfo.value.image_path,
@@ -729,6 +413,66 @@ const handleSaveTask = async (taskData) => {
 
     showTaskModal.value = false;
 };
+
+const editDescription = (description) => {
+    currentDescription.value = { ...description };
+    isEditingDescription.value = true;
+    showDescriptionModal.value = true;
+};
+
+const deleteDescription = async (description) => {
+    try {
+        await axios.delete(`${API_URL}/course/description/${description.id}`);
+        courseInfo.value.descriptions = courseInfo.value.descriptions.filter(
+            d => d.id !== description.id
+        );
+        notificationRef.value.showNotification('Описание удалено');
+    } catch (error) {
+        notificationRef.value.showNotification('Ошибка при удалении описания');
+    }
+};
+
+const handleSaveDescription = async (descriptionData) => {
+    try {
+        let response;
+
+        if (descriptionData.id) {
+            response = await axios.put(`${API_URL}/course/description/${descriptionData.id}`, {
+                str_value: descriptionData.str_value
+            });
+
+            const index = courseInfo.value.descriptions.findIndex(d => d.id === descriptionData.id);
+            courseInfo.value.descriptions.splice(index, 1, descriptionData);
+            console.log(courseInfo.value.descriptions)
+        } else {
+            response = await axios.post(`${API_URL}/course/description/store/${route.params.id}`, {
+                str_value: descriptionData.str_value
+            });
+
+            if (!courseInfo.value.descriptions) {
+                courseInfo.value.descriptions = [];
+            }
+            courseInfo.value.descriptions.push(response.data);
+        }
+
+        notificationRef.value.showNotification(
+            descriptionData.id ? 'Описание обновлено' : 'Описание добавлено'
+        );
+    } catch (error) {
+        notificationRef.value.showNotification('Ошибка при сохранении описания');
+    }
+
+    showDescriptionModal.value = false;
+};
+
+watch(showAddDescriptionModal, (val) => {
+    if (val) {
+        currentDescription.value = { str_value: '' };
+        isEditingDescription.value = false;
+        showDescriptionModal.value = true;
+        showAddDescriptionModal.value = false;
+    }
+});
 
 onMounted(() => {
     getCourseInfo();
@@ -1208,5 +952,35 @@ input:checked+.slider:before {
 
 .icon-add {
     background-image: url('/src/assets/Icons/addIconWhite.svg');
+}
+
+.description-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.description-item p {
+    margin: 0;
+    padding-right: 4rem;
+}
+
+.description-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 10px;
+}
+
+.description-actions button {
+    padding: 10px !important;
+}
+
+.description-actions img {
+    width: 20px;
 }
 </style>
