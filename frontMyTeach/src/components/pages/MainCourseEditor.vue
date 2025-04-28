@@ -528,6 +528,7 @@ onMounted(() => {
 
 .course-stats {
     display: flex;
+    flex-direction: column;
     gap: 1.5rem;
     color: rgba(255, 255, 255, 0.9);
 }
@@ -537,8 +538,8 @@ onMounted(() => {
 }
 
 .section-title {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
     color: white;
 }
 

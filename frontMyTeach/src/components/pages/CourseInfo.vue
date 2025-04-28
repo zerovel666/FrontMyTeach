@@ -57,14 +57,35 @@
                         <button class="btn-buy" @click="buy()">Приобрести</button>
                         <div class="fastInfoCourse">
                             <div class="line"></div>
-                            <p>Категория: {{ courseInfo.category_name }}</p>
-                            <p>Курс: {{ courseInfo.course_name }}</p>
-                            <p>Учащихся: {{ courseInfo.has_course_count }}</p>
-                            <p>Примерное время прохождения: {{ Math.round(courseInfo.task_count *
-                                courseInfo.modules.length * 20 / 60) }}ч</p>
-                            <p>Количество модулей: {{ courseInfo.modules.length }}</p>
-                            <p>Количество задач: {{ courseInfo.task_count }}</p>
-                            <p>Выдача сертификат: {{ courseInfo.hasCertificate === true ? "Да" : "Нет" }}</p>
+                            <div class="row">
+                                <p>Категория:</p>
+                                <p>{{ courseInfo.category_name }}</p>
+                            </div>
+                            <div class="row">
+                                <p>Курс:</p>
+                                <p>{{ courseInfo.course_name }}</p>
+                            </div>
+                            <div class="row">
+                                <p>Учащихся</p>
+                                <p>{{ courseInfo.has_course_count }}</p>
+                            </div>
+                            <div class="row">
+                                <p>Время прохождения:</p>
+                                <p>{{ Math.round(courseInfo.task_count *
+                                    courseInfo.modules.length * 20 / 60) }}ч</p>
+                            </div>
+                            <div class="row">
+                                <p>Количество модулей:</p>
+                                <p>{{ courseInfo.modules.length }}</p>
+                            </div>
+                            <div class="row">
+                                <p>Количество задач:</p>
+                                <p>{{ courseInfo.task_count }}</p>
+                            </div>
+                            <div class="row">
+                                <p>Выдача сертификат:</p>
+                                <p>{{ courseInfo.hasCertificate === true ? "Да" : "Нет" }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -86,362 +107,8 @@ const route = useRoute();
 const courseInfo = ref([]);
 
 const getCourseInfo = async () => {
-    // const response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
-    // courseInfo.value = response.data[0];
-
-    courseInfo.value = {
-        "category_id": 1,
-        "category_name": "Python",
-        "course_id": 4,
-        "course_name": "Курс по JS",
-        "course_amount": null,
-        "image_path": "http://localhost:8082//storage/logoCourse/laravelLogo.png",
-        "author_id": "1",
-        "author_name": "Jovany Marvin",
-        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-        "rating": "5",
-        "tags": [
-            {
-                "id": 10,
-                "course_id": 4,
-                "tag": "et",
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z"
-            },
-            {
-                "id": 11,
-                "course_id": 4,
-                "tag": "eius",
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z"
-            },
-            {
-                "id": 12,
-                "course_id": 4,
-                "tag": "soluta",
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z"
-            }
-        ],
-        "preview": "Magnam dolor qui dolores dolorem sunt aut magni nemo odit nihil ab ut minima in eos ut asperiores rem aliquam ab ut sequi dolorum perferendis.",
-        "description": [
-            {
-                "id": 4,
-                "queue": 1,
-                "str_value": "Aut qui voluptatem itaque doloremque atque vitae et vitae sed quibusdam dolores et cupiditate.",
-                "preview_id": 4,
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z"
-            }
-        ],
-        "modules": [
-            {
-                "id": 16,
-                "queue": 1,
-                "str_value": "Commodi ipsum veritatis unde aut dolore quia facilis enim.",
-                "course_id": 4,
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z",
-                "tasks": [
-                    {
-                        "id": 76,
-                        "name": "atque",
-                        "order_id": 1,
-                        "type": "task",
-                        "module_id": 16,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 77,
-                        "name": "consequuntur",
-                        "order_id": 2,
-                        "type": "task",
-                        "module_id": 16,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 78,
-                        "name": "nisi",
-                        "order_id": 3,
-                        "type": "task",
-                        "module_id": 16,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 79,
-                        "name": "consectetur",
-                        "order_id": 4,
-                        "type": "task",
-                        "module_id": 16,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 80,
-                        "name": "sed",
-                        "order_id": 5,
-                        "type": "task",
-                        "module_id": 16,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 17,
-                "queue": 2,
-                "str_value": "Aut molestias tenetur reiciendis nihil qui eum accusamus et ut labore voluptates.",
-                "course_id": 4,
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z",
-                "tasks": [
-                    {
-                        "id": 81,
-                        "name": "consequatur",
-                        "order_id": 6,
-                        "type": "task",
-                        "module_id": 17,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 82,
-                        "name": "nostrum",
-                        "order_id": 7,
-                        "type": "task",
-                        "module_id": 17,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 83,
-                        "name": "minima",
-                        "order_id": 8,
-                        "type": "task",
-                        "module_id": 17,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 84,
-                        "name": "magni",
-                        "order_id": 9,
-                        "type": "task",
-                        "module_id": 17,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 85,
-                        "name": "eveniet",
-                        "order_id": 10,
-                        "type": "task",
-                        "module_id": 17,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 18,
-                "queue": 3,
-                "str_value": "Consequatur ut magnam accusamus commodi rerum eligendi et nihil.",
-                "course_id": 4,
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z",
-                "tasks": [
-                    {
-                        "id": 86,
-                        "name": "voluptatem",
-                        "order_id": 11,
-                        "type": "task",
-                        "module_id": 18,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 87,
-                        "name": "quasi",
-                        "order_id": 12,
-                        "type": "task",
-                        "module_id": 18,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 88,
-                        "name": "accusamus",
-                        "order_id": 13,
-                        "type": "task",
-                        "module_id": 18,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 89,
-                        "name": "omnis",
-                        "order_id": 14,
-                        "type": "task",
-                        "module_id": 18,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 90,
-                        "name": "illo",
-                        "order_id": 15,
-                        "type": "task",
-                        "module_id": 18,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 19,
-                "queue": 4,
-                "str_value": "Laboriosam quia vero non optio autem ad.",
-                "course_id": 4,
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z",
-                "tasks": [
-                    {
-                        "id": 91,
-                        "name": "nisi",
-                        "order_id": 16,
-                        "type": "task",
-                        "module_id": 19,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 92,
-                        "name": "error",
-                        "order_id": 17,
-                        "type": "task",
-                        "module_id": 19,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 93,
-                        "name": "dignissimos",
-                        "order_id": 18,
-                        "type": "task",
-                        "module_id": 19,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 94,
-                        "name": "reiciendis",
-                        "order_id": 19,
-                        "type": "task",
-                        "module_id": 19,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 95,
-                        "name": "officiis",
-                        "order_id": 20,
-                        "type": "task",
-                        "module_id": 19,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 20,
-                "queue": 5,
-                "str_value": "Tenetur omnis velit cum doloremque dolore ab iusto.",
-                "course_id": 4,
-                "created_at": "2025-04-25T19:58:35.000000Z",
-                "updated_at": "2025-04-25T19:58:35.000000Z",
-                "tasks": [
-                    {
-                        "id": 96,
-                        "name": "iusto",
-                        "order_id": 21,
-                        "type": "task",
-                        "module_id": 20,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 97,
-                        "name": "ut",
-                        "order_id": 22,
-                        "type": "task",
-                        "module_id": 20,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 98,
-                        "name": "ut",
-                        "order_id": 23,
-                        "type": "task",
-                        "module_id": 20,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 99,
-                        "name": "perspiciatis",
-                        "order_id": 24,
-                        "type": "task",
-                        "module_id": 20,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    },
-                    {
-                        "id": 100,
-                        "name": "qui",
-                        "order_id": 25,
-                        "type": "task",
-                        "module_id": 20,
-                        "course_id": 4,
-                        "created_at": "2025-04-25T19:58:35.000000Z",
-                        "updated_at": "2025-04-25T19:58:35.000000Z"
-                    }
-                ]
-            }
-        ],
-        "task_count": 25,
-        "has_course_count": 0,
-        "likes": 0,
-        "hasCertificate": false,
-        "created_at": "25-04-2025"
-    }
+    const response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
+    courseInfo.value = response.data[0];
 }
 
 onMounted(() => {
@@ -450,47 +117,82 @@ onMounted(() => {
 </script>
 
 <style scoped>
+:root {
+    --primary: #59008E;
+    --primary-light: #7824a9;
+    --secondary: #B14788;
+    --dark: #1A1A1A;
+    --gray: #3D3D3D;
+    --light-gray: #6D6D6D;
+    --border: #4D4D4D;
+    --danger: #D32F2F;
+    --success: #388E3C;
+}
+
 .content {
-    margin-top: 30px;
+    margin-top: 2rem;
+    color: #E0E0E0;
 }
 
 .top-card-info {
     display: flex;
-    background-color: #59008E;
-    height: 450px;
-    padding: 30px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    min-height: 350px;
 }
 
 .l-info {
-    width: 60%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     color: white;
-    overflow-y: auto;
+}
+
+.l-info h1 {
+    font-size: 2rem;
+    margin: 0;
+    color: white;
+}
+
+.l-info p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
 }
 
 .r-info {
-    width: 40%;
+    width: 350px;
     display: flex;
-    justify-content: right;
     align-items: center;
+    justify-content: center;
     position: relative;
 }
 
 #courseImage {
-    width: 350px;
+    width: 100%;
+    max-width: 350px;
     height: 350px;
     object-fit: cover;
-    border-radius: 100%;
+    border-radius: 50%;
+    border: 4px solid var(--secondary);
 }
 
 .rating {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 3px;
+    gap: 0.5rem;
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: -1rem;
+    right: -1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    color: white;
 }
 
 .rating img {
@@ -499,126 +201,177 @@ onMounted(() => {
 }
 
 .tags {
-    padding-left: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-left: 0;
+    list-style: none;
 }
 
 .tags li {
-    margin-top: 10px;
+    background-color: #a200ff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    color: #ffffff;
 }
 
 .obj-info {
-    margin-top: 30px;
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.l-obj-info {
+    border: 1px solid var(--dark);
+    box-shadow: 0 0 12px rgba(177, 71, 136, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    background-color: #1A1A1A;
 }
 
 .r-obj-info {
-    width: 40%;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 2rem;
 }
 
 .authorInfo {
-    background-color: #59008E;
-    height: 200px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
+    border-radius: 16px;
     overflow: hidden;
 }
 
 .bg {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 20px;
-    text-align: center;
-    background-image: url('/src/assets/images/layouts/BgProfile.svg');
-    padding: 30px;
-    background-position: center;
-    background-repeat: no-repeat;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('/src/assets/images/layouts/BgProfile.svg');
     background-size: cover;
+    background-position: center;
 }
 
 .authorInfo img {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
     object-fit: cover;
-    border-radius: 100%;
-    border: 2px solid white;
+}
+
+.text h3 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1rem;
+    opacity: 0.8;
+    color: white;
 }
 
 #author_name {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
     color: white;
-    font-size: 25px;
-}
-
-.text p {
-    margin: 5px;
-}
-
-.modul-cont {
-    margin-top: 50px;
 }
 
 .buy-cont {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background-color: #59008E;
-    padding: 30px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: white;
 }
 
 .buy-cont h2 {
-    margin: 0;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .btn-buy {
-    cursor: pointer;
-    height: 40px;
-    border-radius: 15px;
-    padding-left: 30px;
-    padding-right: 30px;
-    background-color: #7824a9;
+    width: 100%;
+    padding: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    background-color: #9900f1;
     color: white;
-    box-shadow: inset 0px 0px 7px rgb(255, 255, 255);
     border: none;
-    transition: background 0.3s ease;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-buy:hover {
-    background-color: #611e88;
+    background-color: #730ab0;
 }
 
-.l-obj-info {
-    width: 60%;
-    border: 1px solid #B14788;
-    box-shadow: 0px 0px 7px #B14788;
-    height: auto;
-    border-radius: 20px;
-    padding: 30px;
+.fastInfoCourse {
     display: flex;
     flex-direction: column;
+    gap: 0.8rem;
+}
+
+.fastInfoCourse p {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.fastInfoCourse p span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.fastInfoCourse p span:last-child {
+    font-weight: 500;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modul-cont {
+    margin-top: 2rem;
 }
 
 .line {
     width: 100%;
-    height: 2px;
+    height: 1px;
     background-color: white;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin: 1.5rem 0;
+    opacity: 0.5;
 }
 
 .modules {
-    margin-top: 20px;
+    margin-bottom: 2rem;
 }
 
-.modules ol li {
-    margin-top: 20px;
+.modules h4 {
+    font-size: 1.2rem;
+    margin: 0 0 1rem 0;
+    color: white;
 }
 
 .modules ol {
-    margin: 40px 0;
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.modules ol li {
+    display: flex;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px dashed var(--border);
+    color: white;
+}
+
+.modules ol li:last-child {
+    border-bottom: none;
+}
+
+.modules ol li::before {
+    color: var(--secondary);
+    font-weight: 500;
+    margin-right: 0.5rem;
 }
 </style>
