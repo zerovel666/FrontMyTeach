@@ -12,7 +12,7 @@
                         <ul>
                             <li v-for="(tag, i) in card.tags" :key="i">{{ tag.tag ? tag.tag : '—' }}</li>
                         </ul>
-                        <button>Подробнее</button>
+                        <button @click="goCourseInfo(card.id)">Подробнее</button>
                     </div>
                     <div class="rInfo">
                         <p class="rating">
@@ -48,8 +48,9 @@ import Filter from './CatalogLayouts/Filter.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import Paginate from '../layouts/Paginate.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
+const router = useRouter();
 const paginateData = ref([]);
 const cards = ref([]);
 const gradients = [
@@ -613,6 +614,10 @@ const updatePage = async (url) => {
         total: response.data.total
     }
 };
+
+async function goCourseInfo (id){
+    router.push(`/course/info/${id}`)
+}
 
 onMounted(() => {
     getCards();

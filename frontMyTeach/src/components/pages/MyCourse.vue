@@ -1,7 +1,7 @@
 <template>
     <TopBar />
     <div class="containerBody">
-        <div class="content" v-if="cards">
+        <div class="content" v-if="cards.length > 0">
             <div class="card" v-for="(card, index) in cards" :key="index" :style="{ background: getGradient(index) }">
                 <div class="cardBgImg" :style="{ backgroundImage: `url(${getBgImage(index)})` }">
                     <div class="cardInfo">
@@ -39,6 +39,7 @@
                 У вас нет курсов, которые вы можете продолжить. <br>
                 Пожалуйста, выберите желаемые курс и начните обучение.
             </h1>
+            <button @click="goCatalog()">Перейти в каталог</button>
         </div>
     </div>
     <FooterBar />
@@ -50,8 +51,11 @@ import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
+import { useRouter } from 'vue-router';
 
 const cards = ref([]);
+const router = useRouter();
+
 const getCards = async () => {
     const response = await axios.get(`${API_URL}/student/course/allMe`);
     cards.value = response.data;
@@ -75,6 +79,10 @@ const getGradient = (index) => {
 
 const getBgImage = (index) => {
     return bgImages[index % bgImages.length];
+}
+
+const goCatalog = async => {
+    router.push('/catalog')
 }
 
 onMounted(getCards);
@@ -211,5 +219,19 @@ onMounted(getCards);
 .no-content {
     text-align: center;
     margin-top: 150px;
+}
+
+.no-content button{
+    margin-top: 30px;
+    background: #8200F4;
+    padding: 10px 30px;
+    border-radius: 10px;
+    font-size: 32px;
+    border: none;
+    cursor: pointer;
+}
+
+.no-content button:hover{
+    background: #7200d5;
 }
 </style>

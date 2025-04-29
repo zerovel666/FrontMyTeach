@@ -92,6 +92,7 @@
             </div>
         </div>
     </div>
+    <Notification ref="notificationRef"/>
     <FooterBar />
 </template>
 
@@ -99,12 +100,24 @@
 import { onMounted, ref } from 'vue';
 import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { API_URL } from '@/config';
+import Notification from '../Notification.vue';
 
+const notificationRef = ref(null);
 const route = useRoute();
 const courseInfo = ref([]);
+const router = useRouter();
+
+const buy = async () => {
+    const response = await axios.post(`${API_URL}/student/course/${route.params.id}`)
+    if (response.data.uuid){
+        router.push(`/pay/course/${response.data.uuid}`);
+    }else{
+        notificationRef.value.showNotification(response.data.message ?? 'Этот курс уже был приобретен вами');
+    }
+}
 
 const getCourseInfo = async () => {
     const response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
