@@ -393,13 +393,15 @@ const handleSaveModule = async (moduleData) => {
                 str_value: moduleData.str_value
             });
         }
-
         if (isEditingModule.value) {
-            const index = courseInfo.value.modules.findIndex(m => m.id === moduleData.id);
-            courseInfo.value.modules.splice(index, 1, response.data);
+            const module = courseInfo.value.modules?.find(m => m.id === moduleData.id);
+            if (module) {
+                module.str_value = response.data.str_value;
+            }
         } else {
             courseInfo.value.modules.push(response.data);
         }
+
 
         currentModule.value = null;
         currentModuleId.value = null;
@@ -445,6 +447,7 @@ const handleSaveTask = async (taskData) => {
     try {
         console.log(taskData);
         let response;
+        
         if (taskData.id) {
             response = await axios.put(`${API_URL}/course/task/${taskData.id}`, taskData);
         } else {
@@ -452,9 +455,12 @@ const handleSaveTask = async (taskData) => {
         }
 
         const module = courseInfo.value.modules.find(m => m.id === currentModuleId.value);
+
         if (taskData.id) {
-            const index = module.tasks.findIndex(t => t.id === taskData.id);
-            module.tasks.splice(index, 1, response.data);
+            const taskIndex = module.tasks.findIndex(m => m.id === taskData.id);
+            if (taskIndex !== -1) {
+                module.tasks[taskIndex] = response.data; 
+            }
         } else {
             if (!Array.isArray(module.tasks)) {
                 module.tasks = [];
@@ -462,10 +468,10 @@ const handleSaveTask = async (taskData) => {
             module.tasks.push(response.data);
         }
 
-
         notificationRef.value.showNotification(
             taskData.id ? 'Задача обновлена' : 'Задача добавлена'
         );
+
         currentModuleId.value = null;
         currentModule.value = null;
         currentTask.value = null;
@@ -473,9 +479,9 @@ const handleSaveTask = async (taskData) => {
         notificationRef.value.showNotification('Ошибка при сохранении задачи');
         console.log(error);
     }
-
     showTaskModal.value = false;
 };
+
 
 const editDescription = (description) => {
     currentDescription.value = { ...description };
