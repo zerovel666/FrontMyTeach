@@ -37,7 +37,43 @@
 
             <div class="course-content-grid">
                 <div class="course-structure">
-                    <section class="about-section">
+                    <section class="preview-section">
+                        <div class="section-header with-button">
+                            <h2>Превью</h2>
+                            <button class="btn primary small" @click="initPreviewEdit">
+                                {{ courseInfo.preview?.title ? 'Редактировать превью' : 'Добавить превью текст' }}
+                            </button>
+                        </div>
+
+                        <div class="savePreview" v-if="showInputArea">
+                            <button class="backButton" @click="cancelPreviewEdit">
+                                <img src="/src/assets/Icons/arrowLeft.svg" alt="">
+                            </button>
+                            <div class="areaForm">
+                                <textarea class="previewArea" v-model="textArea" :maxlength="100"></textarea>
+                                <div class="counter">
+                                    {{ textArea.length }}/100
+                                </div>
+                            </div>
+                            <button class="btn primary purchase-btn" @click="savePreview(courseInfo.preview?.id)">
+                                Сохранить
+                            </button>
+                        </div>
+
+                        <div class="preview-block" v-if="courseInfo.preview?.title && !showInputArea">
+                            <p>{{ courseInfo.preview.title }}</p>
+                            <div class="description-actions">
+                                <button class="btn-icon small" @click="initPreviewEdit" title="Редактировать">
+                                    <img src="/src/assets/Icons/editorPencilWhite.svg" alt="">
+                                </button>
+                                <button class="btn-icon small danger" @click="deletePreview" title="Удалить">
+                                    <img src="/src/assets/Icons/deleteIconWhite.svg" alt="">
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="about-section" v-if="courseInfo.preview">
                         <div class="section-header with-button">
                             <h2>О курсе</h2>
                             <button class="btn primary small" @click="showAddDescriptionModal = true">
@@ -63,7 +99,7 @@
                         </div>
                     </section>
 
-                    <section class="modules-section">
+                    <section class="modules-section" v-if="courseInfo.preview">
                         <div class="section-header with-button">
                             <h2>Программа обучения</h2>
                             <button class="btn primary small" @click="showModuleModal = true">
@@ -187,6 +223,11 @@
                 </div>
             </div>
         </div>
+        <div v-else>
+            <div>
+                <h1 class="warning">Данного курса не существует</h1>
+            </div>
+        </div>
     </div>
 
     <ConfirmCourseModal v-if="showConfrimModal" message="Вы уверены, что хотите удалить этот курс?"
@@ -225,6 +266,7 @@ import TaskModal from './CourseEditorLayouts/TaskModal.vue';
 import ModuleModal from './CourseEditorLayouts/ModuleModal.vue';
 import DescriptionModal from './CourseEditorLayouts/DescriptionModal.vue';
 
+const showInputArea = ref(false);
 const courseInfo = ref([]);
 const showConfrimModal = ref(false)
 const showCardCourseModal = ref(false)
@@ -244,18 +286,20 @@ const showDescriptionModal = ref(false);
 const showAddDescriptionModal = ref(false);
 const currentDescription = ref(null);
 const isEditingDescription = ref(false);
-
+const textArea = ref('');
 
 const getCourseInfo = async () => {
     const response = await axios.get(`${API_URL}/course/${route.params.id}`);
     courseInfo.value = response.data;
-   
+
     cardBody.value = {
         name: courseInfo.value.name,
         image_path: courseInfo.value.image_path,
         category: courseInfo.value.category,
         tags: courseInfo.value.tags
     };
+
+    textArea.value = courseInfo.value.preview?.title ?? ''
 
 }
 
@@ -332,6 +376,8 @@ const handleDeleteModule = async () => {
         notificationRef.value.showNotification('Ошибка при удалении модуля');
     }
     showConfirmDelete.value = false;
+    currentModule.value = false;
+    currentModuleId.value = null;
 };
 
 const handleSaveModule = async (moduleData) => {
@@ -339,9 +385,13 @@ const handleSaveModule = async (moduleData) => {
         let response;
 
         if (moduleData.id) {
-            response = await axios.put(`${API_URL}/course/module/${moduleData.id}`, moduleData);
+            response = await axios.put(`${API_URL}/course/module/${moduleData.id}`, {
+                str_value: moduleData.str_value
+            });
         } else {
-            response = await axios.post(`${API_URL}/course/module/store/${route.params.id}`, moduleData);
+            response = await axios.post(`${API_URL}/course/module/store/${route.params.id}`, {
+                str_value: moduleData.str_value
+            });
         }
 
         if (isEditingModule.value) {
@@ -351,6 +401,9 @@ const handleSaveModule = async (moduleData) => {
             courseInfo.value.modules.push(response.data);
         }
 
+        currentModule.value = null;
+        currentModuleId.value = null;
+        isEditingModule.value = false;
         notificationRef.value.showNotification(
             isEditingModule.value ? 'Модуль обновлен' : 'Модуль добавлен'
         );
@@ -381,6 +434,8 @@ const deleteTask = async (module, task) => {
         await axios.delete(`${API_URL}/course/task/${task.id}`);
         module.tasks = module.tasks.filter(t => t.id !== task.id);
         notificationRef.value.showNotification('Задача удалена');
+        currentModuleId.value = null;
+        currentTask.value = null;
     } catch (error) {
         notificationRef.value.showNotification('Ошибка при удалении задачи');
     }
@@ -401,14 +456,22 @@ const handleSaveTask = async (taskData) => {
             const index = module.tasks.findIndex(t => t.id === taskData.id);
             module.tasks.splice(index, 1, response.data);
         } else {
+            if (!Array.isArray(module.tasks)) {
+                module.tasks = [];
+            }
             module.tasks.push(response.data);
         }
+
 
         notificationRef.value.showNotification(
             taskData.id ? 'Задача обновлена' : 'Задача добавлена'
         );
+        currentModuleId.value = null;
+        currentModule.value = null;
+        currentTask.value = null;
     } catch (error) {
         notificationRef.value.showNotification('Ошибка при сохранении задачи');
+        console.log(error);
     }
 
     showTaskModal.value = false;
@@ -427,6 +490,8 @@ const deleteDescription = async (description) => {
             d => d.id !== description.id
         );
         notificationRef.value.showNotification('Описание удалено');
+        currentDescription.value = null;
+        isEditingDescription.value = false;
     } catch (error) {
         notificationRef.value.showNotification('Ошибка при удалении описания');
     }
@@ -445,7 +510,7 @@ const handleSaveDescription = async (descriptionData) => {
             courseInfo.value.descriptions.splice(index, 1, descriptionData);
             console.log(courseInfo.value.descriptions)
         } else {
-            response = await axios.post(`${API_URL}/course/description/store/${route.params.id}`, {
+            response = await axios.post(`${API_URL}/course/description/store/${courseInfo.value.preview.id}`, {
                 str_value: descriptionData.str_value
             });
 
@@ -454,7 +519,8 @@ const handleSaveDescription = async (descriptionData) => {
             }
             courseInfo.value.descriptions.push(response.data);
         }
-
+        isEditingModule.value = false;
+        currentDescription.value = false;
         notificationRef.value.showNotification(
             descriptionData.id ? 'Описание обновлено' : 'Описание добавлено'
         );
@@ -463,6 +529,47 @@ const handleSaveDescription = async (descriptionData) => {
     }
 
     showDescriptionModal.value = false;
+};
+
+const initPreviewEdit = () => {
+    textArea.value = courseInfo.value.preview?.title || '';
+    showInputArea.value = true;
+};
+
+const cancelPreviewEdit = () => {
+    showInputArea.value = false;
+};
+
+const deletePreview = async () => {
+    try {
+        await axios.delete(`${API_URL}/course/preview/${courseInfo.value.preview.id}`);
+        courseInfo.value.preview = null;
+        notificationRef.value.showNotification('Превью удалено');
+    } catch (error) {
+        notificationRef.value.showNotification('Ошибка при удалении превью');
+    }
+};
+
+const savePreview = async (preview_id) => {
+    try {
+        let response;
+        if (preview_id) {
+            response = await axios.put(`${API_URL}/course/preview/${preview_id}`, {
+                title: textArea.value
+            });
+            courseInfo.value.preview.title = response.data.title;
+        } else {
+            response = await axios.post(`${API_URL}/course/preview/store/${route.params.id}`, {
+                title: textArea.value
+            });
+            courseInfo.value.preview = response.data
+        }
+
+        showInputArea.value = false;
+        notificationRef.value.showNotification('Превью сохранено');
+    } catch (error) {
+        notificationRef.value.showNotification('Ошибка при сохранении превью');
+    }
 };
 
 watch(showAddDescriptionModal, (val) => {
@@ -495,6 +602,11 @@ onMounted(() => {
 .course-editor {
     margin-top: 2rem;
     color: #E0E0E0;
+}
+
+.warning {
+    text-align: center;
+    margin-top: 16rem;
 }
 
 .course-header {
@@ -539,8 +651,8 @@ onMounted(() => {
 
 .section-title {
     font-size: 2rem;
-    margin-bottom: 1.5rem;
     color: white;
+    margin-bottom: 10px;
 }
 
 .tags-grid {
@@ -609,8 +721,81 @@ onMounted(() => {
     align-items: center;
 }
 
+.section-header h2,
+h3,
+h4,
+h5,
+p {
+    margin: 0;
+}
+
 .section-header.with-button {
     justify-content: space-between;
+}
+
+.preview-section {
+    margin-bottom: 2.5rem;
+}
+
+.savePreview textarea {
+    color: white;
+    background: #333;
+    width: 100%;
+    border-radius: 10px;
+    min-height: 200px;
+    padding: 15px;
+    line-height: 1.6;
+}
+
+.areaForm {
+    position: relative;
+    width: 100%;
+}
+
+.areaForm textarea {
+    padding-bottom: 24px;
+    outline: none;
+    min-height: 100px;
+}
+
+.counter {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    font-size: 12px;
+    color: #888;
+}
+
+.backButton {
+    background: #5e5e5e7f !important;
+    margin-top: 0 !important;
+    padding: 5px !important;
+    margin-bottom: 1rem;
+    border-radius: 100% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.savePreview button {
+    margin-top: 1.5rem;
+    color: white;
+    background: #6000de;
+    border-radius: 10px;
+    padding: 15px;
+    border: none;
+}
+
+.preview-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 1.6;
+}
+
+.preview-block p {
+    margin: 0;
 }
 
 .about-section {

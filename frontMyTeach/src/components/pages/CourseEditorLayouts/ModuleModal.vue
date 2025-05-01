@@ -72,7 +72,7 @@ watch(() => props.module, (newVal) => {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    color: black;
+    background-color: #333;
     outline: none;
 }
 

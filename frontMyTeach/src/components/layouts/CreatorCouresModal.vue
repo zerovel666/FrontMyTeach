@@ -81,55 +81,7 @@ const getCategories = async () => {
         categories.value = [
             {
                 "id": 1,
-                "category": "Python",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 2,
-                "category": "Java",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 3,
-                "category": "React.js",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 4,
-                "category": "PHP",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 5,
-                "category": "PHP",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 6,
-                "category": "HTML&CSS",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 7,
-                "category": "HTML&CSS",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 8,
-                "category": "HTML&CSS",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            },
-            {
-                "id": 9,
-                "category": "C++",
+                "category": "Laravel",
                 "created_at": "2025-04-25T19:58:34.000000Z",
                 "updated_at": "2025-04-25T19:58:34.000000Z"
             }
