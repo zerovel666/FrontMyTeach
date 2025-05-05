@@ -37,6 +37,13 @@
 
             <div class="course-content-grid">
                 <div class="course-structure">
+                    <button class="infoBtn" @mouseenter="showTooltip = true" @mouseleave="showTooltip = false">
+                        ?
+                    </button>
+
+                    <div v-if="showTooltip" class="tooltip">
+                        {{ tooltipText }}
+                    </div>
                     <section class="preview-section">
                         <div class="section-header with-button">
                             <h2>Превью</h2>
@@ -126,7 +133,7 @@
                             </div>
 
                             <ol class="task-list">
-                                <li v-for="task in module.tasks || []" :key="task.id" class="task-item">
+                                <li v-for="task in module.tasks ||[]" :key="task.id" class="task-item">
                                     <span class="task-type">{{ task.type === 'task' ? 'Задача' : 'Лекция' }}:</span>
                                     <span class="task-name">{{ task.name || '-' }}</span>
                                     <div class="task-actions">
@@ -206,8 +213,8 @@
                                 <span class="fact-label">Время прохождения:</span>
                                 <span class="fact-value">
                                     {{ courseInfo.task_count && courseInfo.modules?.length
-                                        ? Math.round(courseInfo.task_count * courseInfo.modules.length * 20 / 60) + ' ч'
-                                        : '-' }}
+                                    ? Math.round(courseInfo.task_count * courseInfo.modules.length * 20 / 60) + ' ч'
+                                    : '-' }}
                                 </span>
                             </div>
                             <div class="fact-item">
@@ -258,7 +265,7 @@ import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import ConfirmCourseModal from './CourseEditorLayouts/ConfirmCourseModal.vue';
 import CardCourseModal from './CourseEditorLayouts/CardCourseModal.vue';
 import Notification from '../Notification.vue';
@@ -287,10 +294,50 @@ const showAddDescriptionModal = ref(false);
 const currentDescription = ref(null);
 const isEditingDescription = ref(false);
 const textArea = ref('');
+const showTooltip = ref(false);
+const router = useRouter();
+const tooltipText = "Прежде чем создавать описания, модули и задачи, необходимо создать превью текст";
 
 const getCourseInfo = async () => {
-    const response = await axios.get(`${API_URL}/course/${route.params.id}`);
-    courseInfo.value = response.data;
+    // const response = await axios.get(`${API_URL}/course/${route.params.id}`);
+    // courseInfo.value = response.data;
+    courseInfo.value = {
+        "id": 2,
+        "name": "Быстрый курс по Laravel + Vue3: MVC API Микросервис",
+        "image_path": "http://localhost:8082//storage/logoCourse/gyivqWiRbnnEolwAMmwOKtpmCy7FONePsVS2WJo1.jpg",
+        "is_active": false,
+        "amount": null,
+        "category": {
+            "id": 1,
+            "category": "Laravel",
+            "created_at": null,
+            "updated_at": null
+        },
+        "has_certificate": false,
+        "author_name": "Jovany Marvin",
+        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+        "status": "В работе",
+        "preview": null,
+        "descriptions": null,
+        "task_count": 0,
+        "tags": [
+            {
+                "id": 1,
+                "course_id": 2,
+                "tag": "Laravel+VUECOMPOSITION",
+                "created_at": "2025-05-01T17:06:14.000000Z",
+                "updated_at": "2025-05-01T17:06:14.000000Z"
+            },
+            {
+                "id": 2,
+                "course_id": 2,
+                "tag": "API3",
+                "created_at": "2025-05-01T17:06:14.000000Z",
+                "updated_at": "2025-05-01T17:06:14.000000Z"
+            }
+        ],
+        "modules": []
+    }
 
     cardBody.value = {
         name: courseInfo.value.name,
@@ -320,8 +367,17 @@ const togglePriceEditing = async () => {
     editingPrice.value = !editingPrice.value;
 };
 
-function handleConfirmDeleteCourse() {
-    showConfrimModal.value = false
+async function handleConfirmDeleteCourse() {
+    try {
+        await axios.delete(`${API_URL}/course/${route.params.id}`);
+        showConfrimModal.value = false;
+        notificationRef.value.showNotification('Курс успешно удален');
+        setTimeout(() => {
+            router.push('/');
+        });
+    } catch (error){
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
 }
 
 async function handleConfirmEditCardCourse(newValue) {
@@ -447,7 +503,7 @@ const handleSaveTask = async (taskData) => {
     try {
         console.log(taskData);
         let response;
-        
+
         if (taskData.id) {
             response = await axios.put(`${API_URL}/course/task/${taskData.id}`, taskData);
         } else {
@@ -459,7 +515,7 @@ const handleSaveTask = async (taskData) => {
         if (taskData.id) {
             const taskIndex = module.tasks.findIndex(m => m.id === taskData.id);
             if (taskIndex !== -1) {
-                module.tasks[taskIndex] = response.data; 
+                module.tasks[taskIndex] = response.data;
             }
         } else {
             if (!Array.isArray(module.tasks)) {
@@ -710,7 +766,56 @@ onMounted(() => {
     border-radius: 16px;
     padding: 2rem;
     background-color: #1A1A1A;
+    position: relative;
+}
 
+.infoBtn {
+    background-color: #333;
+    border: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border-radius: 100%;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.infoBtn:hover {
+    background-color: #444;
+}
+
+.tooltip {
+    position: absolute;
+    top: -100px;
+    right: -250px;
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px 8px 8px 0;
+    max-width: 250px;
+    font-size: 14px;
+    line-height: 1.4;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .course-sidebar {
@@ -1112,9 +1217,7 @@ input:checked+.slider:before {
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
-}
-
-.btn-icon:hover {
+}.btn-icon:hover {
     background-color: #59008E;
 }
 
