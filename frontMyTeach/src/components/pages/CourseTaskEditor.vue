@@ -17,7 +17,9 @@
                             <h4>{{ task.displayIndex }} {{ task.name }}</h4>
                         </div>
                     </div>
+                    <button @click="showMainTaskCreator = true; currentModule = module.id">Добавить задачу</button>
                 </div>
+                <button @click="showModuleCreatorModal = true">Добавить модуль</button>
             </div>
 
             <div class="task-content">
@@ -30,20 +32,27 @@
                         <div class="str-value" v-if="item.str_value">
                             <p>{{ item.str_value }}</p>
                             <div class="task-action">
-                                <button @click="editValue(item)"><img src="/src/assets/Icons/editorPencilWhite.svg"
+                                <button @click="editValue(index)"><img src="/src/assets/Icons/editorPencilWhite.svg"
                                         alt=""></button>
-                                <button @click="deleteValue(item)"><img src="/src/assets/Icons/deleteIconWhite.svg"
+                                <button @click="deleteValue(index)"><img src="/src/assets/Icons/deleteIconWhite.svg"
                                         alt=""></button>
                             </div>
                         </div>
                         <div class="media-value" v-if="item.media_value">
                             <img :src="item.media_value" alt="" class="media-value-img">
                             <div class="task-action">
-                                <button @click="editValue(item)"><img src="/src/assets/Icons/editorPencilWhite.svg"
+                                <button @click="editValue(index)"><img src="/src/assets/Icons/editorPencilWhite.svg"
                                         alt=""></button>
-                                <button @click="deleteValue(item)"><img src="/src/assets/Icons/deleteIconWhite.svg"
+                                <button @click="deleteValue(index)"><img src="/src/assets/Icons/deleteIconWhite.svg"
                                         alt=""></button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="action">
+                        <button @click="showObjectTaskCreator = true">Добавить блок</button>
+                        <div class="action-page">
+                            <button>Удалить урок</button>
+                            <button>Перейти к следующему уроку</button>
                         </div>
                     </div>
                 </section>
@@ -63,9 +72,15 @@
     <MainTaskEditor v-if="showMainTaskEditor" :currentTask="currentTask" @confirm="handleSaveTaskHeader"
         @cancel="showMainTaskEditor = false" />
 
-    <ValueEditor v-if="showValueEditor" :currentValue="currentValue" @confirm="handleSaveValue"
+    <MainTaskEditor v-if="showMainTaskCreator" @confirm="handleSaveTaskHeader" @cancel="showMainTaskCreator = false" />
+
+    <ModuleCreatorModal v-if="showModuleCreatorModal" @confirm="handleSaveModule"
+        @cancel="showModuleCreatorModal = false" />
+
+    <ValueEditor v-if="showValueEditor" :currentValue="currentTask.lecture[currentValue]" @confirm="handleSaveValue"
         @cancel="showValueEditor = false" />
 
+    <ObjectTaskCreator v-if="showObjectTaskCreator" @confirm="addInTask" @cancel="showObjectTaskCreator = false" />
 </template>
 
 <script setup>
@@ -79,6 +94,8 @@ import ConfirmCourseModal from './CourseEditorLayouts/ConfirmCourseModal.vue';
 import Notification from '../Notification.vue';
 import MainTaskEditor from './CourseTaskEditorLayouts/MainTaskEditor.vue';
 import ValueEditor from './CourseTaskEditorLayouts/ValueEditor.vue';
+import ModuleCreatorModal from './CourseTaskEditorLayouts/ModuleCreatorModal.vue';
+import ObjectTaskCreator from './CourseTaskEditorLayouts/ObjectTaskCreator.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -93,6 +110,9 @@ const showValueEditor = ref(false);
 const currentValue = ref(null);
 const showConfrimDeleteValue = ref(false);
 const messageConfirm = ref('');
+const showMainTaskCreator = ref(false)
+const showModuleCreatorModal = ref(false)
+const showObjectTaskCreator = ref(false)
 
 const getModuleTasks = async () => {
     try {
@@ -108,13 +128,13 @@ const getModuleTasks = async () => {
                 "tasks": [
                     {
                         "id": 1,
-                        "name": "История мальчишки",
+                        "name": "История мальчишек",
                         "order_id": 1,
                         "type": "lecture",
                         "module_id": 1,
                         "course_id": 2,
                         "created_at": "2025-05-01T17:19:46.000000Z",
-                        "updated_at": "2025-05-01T17:19:46.000000Z"
+                        "updated_at": "2025-05-06T07:20:21.000000Z"
                     },
                     {
                         "id": 2,
@@ -147,8 +167,26 @@ const getModuleTasks = async () => {
                         "updated_at": "2025-05-01T17:19:46.000000Z"
                     }
                 ]
+            },
+            {
+                "id": 3,
+                "queue": 3,
+                "str_value": "Колекции",
+                "course_id": 2,
+                "created_at": "2025-05-05T13:42:18.000000Z",
+                "updated_at": "2025-05-05T13:42:18.000000Z",
+                "tasks": []
+            },
+            {
+                "id": 36,
+                "queue": 4,
+                "str_value": "ORM",
+                "course_id": 2,
+                "created_at": "2025-05-07T09:54:57.000000Z",
+                "updated_at": "2025-05-07T09:54:57.000000Z",
+                "tasks": []
             }
-        ];
+        ]
         const sortedModules = response
             .sort((a, b) => a.queue - b.queue)
             .map((module, mIndex) => {
@@ -223,7 +261,7 @@ const getTask = async (taskId) => {
         // currentTask.value = response.data;
         currentTask.value = {
             "id": 1,
-            "name": "История мальчишки",
+            "name": "История мальчишек",
             "order_id": 1,
             "type": "lecture",
             "lecture": [
@@ -237,13 +275,13 @@ const getTask = async (taskId) => {
                 {
                     "id": 2,
                     "str_value": null,
-                    "media_value": "http://localhost:8082/storage/lectureMediaValue/OUe5ia4BLimmWw8DtkwGBccWCKs9ICbQEizjCXZz.jpg",
+                    "media_value": "http://localhost:8082/storage/lectureMediaValue/E2VAjIYN00284WjAofy18HbhdBJ0OP7jTchzxOlH.png",
                     "task_id": 1,
                     "queue": 2
                 },
                 {
                     "id": 3,
-                    "str_value": "Новый текст лекции",
+                    "str_value": "Vite — современный сборщик фронтенда\n\nVite — это инструмент сборки, созданный для быстрой и удобной разработки современных веб-приложений. Его разработал автор Vue.js — Эван Ю. В отличие от традиционных сборщиков, таких как Webpack, Vite использует нативные возможности браузера и загружает модули по запросу. Это обеспечивает практически мгновенный запуск проекта и быстрые обновления при разработке.\n\nГлавное преимущество Vite — это мгновенная перезагрузка благодаря использованию ES-модулей и модуля Hot Module Replacement (HMR). Это делает разработку особенно комфортной: любые изменения отображаются на экране без полной перезагрузки страницы.\n\nVite имеет два режима: режим разработки и режим продакшена. В режиме разработки он не делает сборку, а просто отдает файлы через сервер, используя esbuild для трансформации. А в продакшене — использует Rollup для оптимизации и упаковки.\n\nОн поддерживает Vue, React, Preact, Svelte, TypeScript, JSX, CSS-модули и многое другое “из коробки”. Конфигурация проста, но при этом гибкая — её можно расширять с помощью плагинов.\n\nVite — отличный выбор для проектов, где важны скорость запуска и современная архитектура. Это будущее фронтенд-разработки.",
                     "media_value": null,
                     "task_id": 1,
                     "queue": 3
@@ -257,8 +295,12 @@ const getTask = async (taskId) => {
 
 async function handleConfirmDeleteModule() {
     try {
-        await axios.delete(`${API_URL}/course/module/${currentModule}`)
+        await axios.delete(`${API_URL}/course/module/${currentModule.value.id}`)
         notificationRef.value.showNotification("Модуль успешно удален");
+        const index = moduleTasks.value.findIndex(item => item.id === currentModule.value)
+        if (index !== -1) {
+            moduleTasks.value.splice(index, 1)
+        }
         showConfrimModal.value = false
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка: ${error}`);
@@ -268,10 +310,40 @@ async function handleConfirmDeleteModule() {
 
 async function handleSaveTaskHeader(newTaskVal) {
     try {
-        const response = await axios.put(`${API_URL}/course/task/${route.params.id}`, newTaskVal)
-        currentTask.value = response.data
-        showMainTaskEditor.value = false;
-        notificationRef.value.showNotification("Задача успешно обновлена")
+        if (newTaskVal.id) {
+            await axios.put(`${API_URL}/course/task/${route.params.id}`, newTaskVal)
+            currentTask.value.name = newTaskVal.name;
+            currentTask.value.type = newTaskVal.type;
+            const taskToUpdate = moduleTasks.value.flatMap(m => m.tasks).find(task => task.id === newTaskVal.id);
+            if (taskToUpdate) {
+                taskToUpdate.name = newTaskVal.name;
+                taskToUpdate.type = newTaskVal.type;
+            }
+            showMainTaskEditor.value = false;
+            notificationRef.value.showNotification("Задача успешно обновлена")
+        } else if (newTaskVal.id === '' || newTaskVal.id === null) {
+            await axios.post(`${API_URL}/course/task/store/${route.params.course_id}/${currentModule.value}`, newTaskVal);
+            const moduleIndex = moduleTasks.value.findIndex(item => item.id === currentModule.value)
+            moduleTasks.value[moduleIndex].tasks.push(newTaskVal)
+            const sortedModules = moduleTasks.value
+                .sort((a, b) => a.queue - b.queue)
+                .map((module, mIndex) => {
+                    const sortedTasks = module.tasks
+                        .sort((a, b) => a.order_id - b.order_id)
+                        .map((task, tIndex) => ({
+                            ...task,
+                            displayIndex: `${mIndex + 1}.${tIndex + 1}`
+                        }));
+                    return {
+                        ...module,
+                        tasks: sortedTasks,
+                        displayIndex: `${mIndex + 1}`
+                    };
+                });
+
+            moduleTasks.value = sortedModules
+        }
+
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка: ${error}`)
     }
@@ -290,12 +362,11 @@ async function deleteValue(item) {
 
 async function handleSaveValue(newItem) {
     try {
-        const lectureIndex = currentTask.value.lecture.findIndex(item => item.id === currentValue.value.id);
-        if (lectureIndex !== -1) {
+        if (currentTask.value.lecture[currentValue.value]?.id != null) {
             if (newItem.str_value) {
-                await axios.put(`${API_URL}/course/lecture/${currentTask.value.lecture[lectureIndex].id}`, newItem);
-                currentTask.value.lecture[lectureIndex] = {
-                    ...currentTask.value.lecture[lectureIndex],
+                await axios.put(`${API_URL}/course/lecture/${currentTask.value.lecture[currentValue.value].id}`, newItem);
+                currentTask.value.lecture[currentValue.value] = {
+                    ...currentTask.value.lecture[currentValue.value],
                     str_value: newItem.str_value
                 };
                 console.log(currentTask.value);
@@ -317,7 +388,7 @@ async function handleSaveValue(newItem) {
                 formData.append('image_path', imageFile);
 
                 const response = await axios.post(
-                    `${API_URL}/course/lecture/mediaValue/update/${currentTask.value.lecture[lectureIndex].id}`,
+                    `${API_URL}/course/lecture/mediaValue/update/${currentTask.value.lecture[currentValue.value].id}`,
                     formData,
                     {
                         headers: {
@@ -326,9 +397,9 @@ async function handleSaveValue(newItem) {
                     }
                 );
 
-                currentTask.value.lecture[lectureIndex] = {
-                    ...currentTask.value.lecture[lectureIndex],
-                    media_value: response.data.imageUrl || newItem.media_value 
+                currentTask.value.lecture[currentValue.value] = {
+                    ...currentTask.value.lecture[currentValue.value],
+                    media_value: response.data.imageUrl || newItem.media_value
                 };
 
                 console.log('Обновленные данные:', currentTask.value);
@@ -337,27 +408,106 @@ async function handleSaveValue(newItem) {
                 showValueEditor.value = false;
                 currentValue.value = null;
             }
+
         } else {
-            notificationRef.value.showNotification("Лекция не найдена");
+            if (newItem.str_value) {
+                const response = await axios.post(`${API_URL}/course/lecture/store/${route.params.id}`, newItem);
+                currentTask.value.lecture.push(response.data);
+                notificationRef.value.showNotification("Лекция успешно добавлена");
+                showValueEditor.value = false;
+                currentValue.value = null;
+            } else if (newItem.media_value) {
+                const formData = new FormData();
+
+                let imageFile;
+                if (newItem.media_value.startsWith('data:image')) {
+                    const blob = await fetch(newItem.media_value).then(r => r.blob());
+                    imageFile = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+                } else {
+                    imageFile = newItem.media_value;
+                }
+
+                formData.append('image_path', imageFile);
+
+                const response = await axios.post(
+                    `${API_URL}/course/lecture/mediaValue/store/${route.params.id}`,
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                );
+
+                currentTask.value.lecture.push(response.data);
+                notificationRef.value.showNotification("Изображение успешно добавлено");
+                showValueEditor.value = false;
+                currentValue.value = null;
+            }
         }
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка: ${error.message}`);
     }
 }
 
-
-
 async function handleConfirmDeleteValue() {
     try {
-        await axios.delete(`${API_URL}/course/lecture/${currentValue.id}`)
-        currentTask.value.lecture = currentTask.value.lecture.filter(
-            item => item.id !== Number(currentValue.value.id)
-        );
+        if (currentTask.value.lecture[currentValue.value]?.id !== null) {
+            await axios.delete(`${API_URL}/course/lecture/${currentTask.value.lecture[currentValue.value].id}`)
+        }
+        currentTask.value.lecture.splice(currentValue.value, 1);
         currentValue.value = null;
         showConfrimDeleteValue.value = false;
-
+        notificationRef.value.showNotification("Блок успешно удалён");
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка: ${error}`)
+    }
+}
+
+async function handleSaveModule(name) {
+    const response = await axios.post(`${API_URL}/course/module/store/${route.params.course_id}`, {
+        str_value: name
+    });
+
+    moduleTasks.value.push({
+        id: response.data.id,
+        queue: response.data.queue,
+        str_value: response.data.str_value,
+        course_id: response.data.course_id,
+        created_at: response.data.created_at,
+        updated_at: response.data.updated_at,
+        tasks: []
+    })
+
+    const sortedModules = moduleTasks.value
+        .sort((a, b) => a.queue - b.queue)
+        .map((module, mIndex) => {
+            const sortedTasks = module.tasks
+                .sort((a, b) => a.order_id - b.order_id)
+                .map((task, tIndex) => ({
+                    ...task,
+                    displayIndex: `${mIndex + 1}.${tIndex + 1}`
+                }));
+            return {
+                ...module,
+                tasks: sortedTasks,
+                displayIndex: `${mIndex + 1}`
+            };
+        });
+
+    moduleTasks.value = sortedModules;
+
+    showModuleCreatorModal.value = false
+}
+
+async function addInTask(type) {
+    if (type = 'TEXT') {
+        currentTask.value.lecture.push({
+            media_value: null,
+            str_value: "Введите текст",
+            task_id: currentTask.value.id
+        })
+        showObjectTaskCreator.value = false
     }
 }
 
@@ -400,18 +550,41 @@ h6 {
     width: 30%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
     background-color: #470070;
     padding: 20px;
     border-radius: 10px;
     overflow: auto;
-    max-height: 700px;
+}
+
+.module-content button {
+    background-color: #59008E;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.module-content button:hover {
+    background-color: #7300b5;
 }
 
 .modules {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.modules button {
+    background-color: #59008E;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.modules button:hover {
+    background-color: #7300b5;
 }
 
 .module-item {
@@ -465,6 +638,8 @@ h6 {
 .module-task-item:hover {
     background-color: #7300b5;
 }
+
+
 
 .task-content {
     width: 70%;
@@ -544,5 +719,29 @@ h6 {
 .media-value-img {
     max-width: 80%;
     border-radius: 10px;
+}
+
+.action {
+    text-align: center;
+}
+
+.action-page {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.action button {
+    background: none;
+    border: 1px solid #B14788;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease-in-out;
+    padding: 10px 40px;
+    border-radius: 10px;
+    margin-top: 40px;
+}
+
+.action button:hover {
+    box-shadow: 0 0 20px #B14788 !important;
 }
 </style>

@@ -28,6 +28,7 @@ const showOption = ref(false);
 const notificationRef = ref(null);
 
 const localBody = ref({
+    id: '',
     name: '',
     type: ''
 });
@@ -37,8 +38,18 @@ const props = defineProps({
 });
 
 async function showOptionFunc() {
-    const hasLecture = Array.isArray(props.currentTask.lecture) ? props.currentTask.lecture.length > 0 : !!props.currentTask.lecture;
-    const hasModule = Array.isArray(props.currentTask.module) ? props.currentTask.module.length > 0 : !!props.currentTask.module;
+    const currentTask = props.currentTask || {};
+    const hasLecture = currentTask.lecture 
+        ? (Array.isArray(currentTask.lecture) 
+            ? currentTask.lecture.length > 0 
+            : !!currentTask.lecture)
+        : false;
+    
+    const hasModule = currentTask.module
+        ? (Array.isArray(currentTask.module) 
+            ? currentTask.module.length > 0 
+            : !!currentTask.module)
+        : false;
 
     if (hasLecture || hasModule) {
         notificationRef.value.showNotification("Нельзя менять тип урока, если он наполнен данными");
@@ -52,8 +63,9 @@ watch(
     () => props.currentTask,
     (newVal) => {
         if (newVal) {
-            localBody.value.name = newVal.name;
-            localBody.value.type = newVal.type;
+            localBody.value.id = newVal.id || null;
+            localBody.value.name = newVal.name || '';
+            localBody.value.type = newVal.type || '';
         }
     },
     { immediate: true, deep: true }
@@ -78,7 +90,7 @@ const displayedType = computed(() => {
 });
 
 const save = () => {
-    emit('confirm', localBody);
+    emit('confirm', localBody.value );
 };
 </script>
 
