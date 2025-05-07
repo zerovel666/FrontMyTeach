@@ -51,8 +51,8 @@
                     <div class="action">
                         <button @click="showObjectTaskCreator = true">Добавить блок</button>
                         <div class="action-page">
-                            <button>Удалить урок</button>
-                            <button>Перейти к следующему уроку</button>
+                            <button @click="handleShowDeleteTask">Удалить урок</button>
+                            <button @click="goToNextLesson">Перейти к следующему уроку</button>
                         </div>
                     </div>
                 </section>
@@ -68,6 +68,9 @@
 
     <ConfirmCourseModal v-if="showConfrimDeleteValue" :message=messageConfirm @confirm="handleConfirmDeleteValue"
         @cancel="showConfrimDeleteValue = false" />
+
+    <ConfirmCourseModal v-if="showConfrimDeleteTask" :message=messageConfirm @confirm="handleConfirmDeleteTask"
+        @cancel="showConfrimDeleteTask = false" />
 
     <MainTaskEditor v-if="showMainTaskEditor" :currentTask="currentTask" @confirm="handleSaveTaskHeader"
         @cancel="showMainTaskEditor = false" />
@@ -113,81 +116,82 @@ const messageConfirm = ref('');
 const showMainTaskCreator = ref(false)
 const showModuleCreatorModal = ref(false)
 const showObjectTaskCreator = ref(false)
+const showConfrimDeleteTask = ref(false);
 
 const getModuleTasks = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/task/all/${route.params.course_id}`);
-        const response = [
-            {
-                "id": 1,
-                "queue": 1,
-                "str_value": "Начало начал",
-                "course_id": 2,
-                "created_at": "2025-05-01T17:19:32.000000Z",
-                "updated_at": "2025-05-01T17:19:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 1,
-                        "name": "История мальчишек",
-                        "order_id": 1,
-                        "type": "lecture",
-                        "module_id": 1,
-                        "course_id": 2,
-                        "created_at": "2025-05-01T17:19:46.000000Z",
-                        "updated_at": "2025-05-06T07:20:21.000000Z"
-                    },
-                    {
-                        "id": 2,
-                        "name": "Проверка лекции",
-                        "order_id": 2,
-                        "type": "task",
-                        "module_id": 1,
-                        "course_id": 2,
-                        "created_at": "2025-05-01T17:25:50.000000Z",
-                        "updated_at": "2025-05-01T17:25:39.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "queue": 2,
-                "str_value": "Введение",
-                "course_id": 2,
-                "created_at": "2025-05-01T17:19:32.000000Z",
-                "updated_at": "2025-05-01T17:19:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 3,
-                        "name": "Laravel теория",
-                        "order_id": 1,
-                        "type": "lecture",
-                        "module_id": 2,
-                        "course_id": 2,
-                        "created_at": "2025-05-01T17:19:46.000000Z",
-                        "updated_at": "2025-05-01T17:19:46.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 3,
-                "queue": 3,
-                "str_value": "Колекции",
-                "course_id": 2,
-                "created_at": "2025-05-05T13:42:18.000000Z",
-                "updated_at": "2025-05-05T13:42:18.000000Z",
-                "tasks": []
-            },
-            {
-                "id": 36,
-                "queue": 4,
-                "str_value": "ORM",
-                "course_id": 2,
-                "created_at": "2025-05-07T09:54:57.000000Z",
-                "updated_at": "2025-05-07T09:54:57.000000Z",
-                "tasks": []
-            }
-        ]
-        const sortedModules = response
+        const response = await axios.get(`${API_URL}/course/task/all/${route.params.course_id}`);
+        // const response = [
+        //     {
+        //         "id": 1,
+        //         "queue": 1,
+        //         "str_value": "Начало начал",
+        //         "course_id": 2,
+        //         "created_at": "2025-05-01T17:19:32.000000Z",
+        //         "updated_at": "2025-05-01T17:19:32.000000Z",
+        //         "tasks": [
+        //             {
+        //                 "id": 1,
+        //                 "name": "История мальчишек",
+        //                 "order_id": 1,
+        //                 "type": "lecture",
+        //                 "module_id": 1,
+        //                 "course_id": 2,
+        //                 "created_at": "2025-05-01T17:19:46.000000Z",
+        //                 "updated_at": "2025-05-06T07:20:21.000000Z"
+        //             },
+        //             {
+        //                 "id": 2,
+        //                 "name": "Проверка лекции",
+        //                 "order_id": 2,
+        //                 "type": "task",
+        //                 "module_id": 1,
+        //                 "course_id": 2,
+        //                 "created_at": "2025-05-01T17:25:50.000000Z",
+        //                 "updated_at": "2025-05-01T17:25:39.000000Z"
+        //             }
+        //         ]
+        //     },
+        //     {
+        //         "id": 2,
+        //         "queue": 2,
+        //         "str_value": "Введение",
+        //         "course_id": 2,
+        //         "created_at": "2025-05-01T17:19:32.000000Z",
+        //         "updated_at": "2025-05-01T17:19:32.000000Z",
+        //         "tasks": [
+        //             {
+        //                 "id": 3,
+        //                 "name": "Laravel теория",
+        //                 "order_id": 1,
+        //                 "type": "lecture",
+        //                 "module_id": 2,
+        //                 "course_id": 2,
+        //                 "created_at": "2025-05-01T17:19:46.000000Z",
+        //                 "updated_at": "2025-05-01T17:19:46.000000Z"
+        //             }
+        //         ]
+        //     },
+        //     {
+        //         "id": 3,
+        //         "queue": 3,
+        //         "str_value": "Колекции",
+        //         "course_id": 2,
+        //         "created_at": "2025-05-05T13:42:18.000000Z",
+        //         "updated_at": "2025-05-05T13:42:18.000000Z",
+        //         "tasks": []
+        //     },
+        //     {
+        //         "id": 36,
+        //         "queue": 4,
+        //         "str_value": "ORM",
+        //         "course_id": 2,
+        //         "created_at": "2025-05-07T09:54:57.000000Z",
+        //         "updated_at": "2025-05-07T09:54:57.000000Z",
+        //         "tasks": []
+        //     }
+        // ]
+        const sortedModules = response.data
             .sort((a, b) => a.queue - b.queue)
             .map((module, mIndex) => {
                 const sortedTasks = module.tasks
@@ -211,8 +215,8 @@ const getModuleTasks = async () => {
 
 const getAnswerEditors = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/answer/editor/all`);
-        // answerEditors.value = response.data;
+        const response = await axios.get(`${API_URL}/course/answer/editor/all`);
+        answerEditors.value = response.data;
         answerEditors.value = [
             {
                 "id": 1,
@@ -255,39 +259,10 @@ const getAnswerEditors = async () => {
     }
 };
 
-const getTask = async (taskId) => {
+const getTask = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/task/${taskId}`);
-        // currentTask.value = response.data;
-        currentTask.value = {
-            "id": 1,
-            "name": "История мальчишек",
-            "order_id": 1,
-            "type": "lecture",
-            "lecture": [
-                {
-                    "id": 1,
-                    "str_value": "Жил-был мальчишка, который устал обновлять страницы при каждом клике. Он любил Laravel за мощный бэкенд, но мечтал о волшебной кнопке без перезагрузки. Тогда он нашёл Vue 3 — лёгкий и быстрый фреймворк. Он подружил их: Laravel отдавал данные через API, а Vue 3 красиво показывал их на странице. Так родилась их дружба — и проект, где всё было быстро, красиво и без лишней мороки.",
-                    "media_value": null,
-                    "task_id": 1,
-                    "queue": 1
-                },
-                {
-                    "id": 2,
-                    "str_value": null,
-                    "media_value": "http://localhost:8082/storage/lectureMediaValue/E2VAjIYN00284WjAofy18HbhdBJ0OP7jTchzxOlH.png",
-                    "task_id": 1,
-                    "queue": 2
-                },
-                {
-                    "id": 3,
-                    "str_value": "Vite — современный сборщик фронтенда\n\nVite — это инструмент сборки, созданный для быстрой и удобной разработки современных веб-приложений. Его разработал автор Vue.js — Эван Ю. В отличие от традиционных сборщиков, таких как Webpack, Vite использует нативные возможности браузера и загружает модули по запросу. Это обеспечивает практически мгновенный запуск проекта и быстрые обновления при разработке.\n\nГлавное преимущество Vite — это мгновенная перезагрузка благодаря использованию ES-модулей и модуля Hot Module Replacement (HMR). Это делает разработку особенно комфортной: любые изменения отображаются на экране без полной перезагрузки страницы.\n\nVite имеет два режима: режим разработки и режим продакшена. В режиме разработки он не делает сборку, а просто отдает файлы через сервер, используя esbuild для трансформации. А в продакшене — использует Rollup для оптимизации и упаковки.\n\nОн поддерживает Vue, React, Preact, Svelte, TypeScript, JSX, CSS-модули и многое другое “из коробки”. Конфигурация проста, но при этом гибкая — её можно расширять с помощью плагинов.\n\nVite — отличный выбор для проектов, где важны скорость запуска и современная архитектура. Это будущее фронтенд-разработки.",
-                    "media_value": null,
-                    "task_id": 1,
-                    "queue": 3
-                }
-            ]
-        }
+        const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
+        currentTask.value = response.data;
     } catch (error) {
         console.error('Ошибка при загрузке задачи:', error);
     }
@@ -511,12 +486,67 @@ async function addInTask(type) {
     }
 }
 
+async function handleShowDeleteTask() {
+    messageConfirm.value = 'Вы уверены что хотите удалить этот курс?';
+    showConfrimDeleteTask.value = true;
+}
+
+async function handleConfirmDeleteTask() {
+    try {
+        await axios.delete(`${API_URL}/course/task/${route.params.id}`);
+        notificationRef.value.showNotification(`Успешно удалено`);
+        showConfrimDeleteTask.value = false;
+        setTimeout(() => {
+            router.push(`/main/course/editor/${route.params.course_id}`)
+        }, 2000)
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
+}
+
+async function goToNextLesson() {
+    try {
+        const currentModuleIndex = moduleTasks.value.findIndex(module => 
+            module.tasks.some(task => task.id === parseInt(route.params.id))
+        );
+        
+        if (currentModuleIndex === -1) {
+            notificationRef.value.showNotification("Текущий урок не найден");
+            return;
+        }
+        
+        const currentModule = moduleTasks.value[currentModuleIndex];
+        const currentTaskIndex = currentModule.tasks.findIndex(task => 
+            task.id === parseInt(route.params.id)
+        );
+        
+        if (currentTaskIndex < currentModule.tasks.length - 1) {
+            const nextTaskId = currentModule.tasks[currentTaskIndex + 1].id;
+            router.push(`/task/editor/${route.params.course_id}/${nextTaskId}`);
+            return;
+        }
+        
+        for (let i = currentModuleIndex + 1; i < moduleTasks.value.length; i++) {
+            const nextModule = moduleTasks.value[i];
+            if (nextModule.tasks.length > 0) {
+                const firstTaskId = nextModule.tasks[0].id;
+                router.push(`/task/editor/${route.params.course_id}/${firstTaskId}`);
+                return;
+            }
+        }
+        
+        notificationRef.value.showNotification("Следующих уроков не найдено. Создайте новый урок.");
+        currentModule.value = currentModule.id;
+        showMainTaskCreator.value = true;
+        
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error.message}`);
+    }
+}
+
 watch(() => route.params.id, (newId) => {
     if (newId) {
-        getModuleTasks();
-        if (currentTask.value) {
-            getTask(currentTask.value.id);
-        }
+        getTask();
     }
 });
 
