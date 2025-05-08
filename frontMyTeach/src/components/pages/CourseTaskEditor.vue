@@ -1,7 +1,7 @@
 <template>
     <TopBar />
-    <div class="containerBody">
-        <div class="main-content">
+    <div class="containerBody" @click.stop="showOptionAnswer = false">
+        <div class="main-content" v-if="moduleTasks.length > 0, currentTask?.id, answerEditors.length > 0">
             <div class="module-content">
                 <div class="modules" v-for="(module, index) in moduleTasks" :key="index">
                     <div class="module-item">
@@ -27,6 +27,7 @@
                     <h2>{{ currentTask?.name }}</h2>
                     <img src="/src/assets/Icons/editorIcon.svg" alt="" @click="showMainTaskEditor = true">
                 </section>
+
                 <section class="lecture-section" v-if="currentTask?.type == 'lecture'">
                     <div class="lecture-item" v-for="(item, index) in currentTask?.lecture">
                         <div class="str-value" v-if="item.str_value">
@@ -56,6 +57,122 @@
                         </div>
                     </div>
                 </section>
+
+                <section class="task-section" v-else-if="currentTask?.type == 'task'">
+
+                    <section class="taskDescription">
+                        <h3>Описание задачи</h3>
+                        <div v-if="currentTask?.taskDescription && showEditorTaskDescription == false"
+                            class="taskDescription-editor">
+                            <p>{{ currentTask?.taskDescription.description }}</p>
+                            <div class="task-action">
+                                <button @click="showEditorTaskDescription = true"><img
+                                        src="/src/assets/Icons/editorPencilWhite.svg" alt=""></button>
+                                <button @click="deleteTaskDescription()"><img
+                                        src="/src/assets/Icons/deleteIconWhite.svg" alt=""></button>
+                            </div>
+                        </div>
+
+                        <div v-else class="taskDescription-creator">
+                            <textarea v-model="taskDescription"></textarea>
+                            <button @click="saveDescription" class="saveDescription">Сохранить</button>
+                        </div>
+                    </section>
+
+                    <section class="question">
+                        <h3>Вопросы</h3>
+                        <div class="question-item" v-for="(item, index) in currentTask.question">
+                            <div class="str-value" v-if="item.str_value">
+                                <p>{{ item.str_value }}</p>
+                                <div class="task-action">
+                                    <button @click="editQuestion(item)"><img
+                                            src="/src/assets/Icons/editorPencilWhite.svg" alt=""></button>
+                                    <button @click="deleteQuestion(item)"><img
+                                            src="/src/assets/Icons/deleteIconWhite.svg" alt=""></button>
+                                </div>
+                            </div>
+                            <div class="media-value" v-if="item.media_value">
+                                <img :src="item.media_value" alt="" class="media-value-img">
+                                <div class="task-action">
+                                    <button @click="editQuestion(item)"><img
+                                            src="/src/assets/Icons/editorPencilWhite.svg" alt=""></button>
+                                    <button @click="deleteQuestion(item)"><img
+                                            src="/src/assets/Icons/deleteIconWhite.svg" alt=""></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button @click="showQuestionEditor = true" class="add-question-btn">Добавить вопрос</button>
+                    </section>
+
+                    <section class="answer">
+
+                        <div @click.stop="showOptionAnswer = false">
+                            <div class="choise-type-cont" @click.stop>
+                                <input class="choise-type" type="text" v-model="currentAnswerEditor.description"
+                                    placeholder="Выберите тип" @focus="showOptionAnswer = true" readonly />
+                                <div class="answer-editor-options" v-if="showOptionAnswer">
+                                    <p v-for="(type, index) in answerEditors" @click="selectType(type)">{{
+                                        type.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="answer-cont">
+
+                            <div class="word" v-if="currentTask.answerEditor?.code == 'WORD'">
+                                <p>Правильный ответ: {{ currentTask.answer.str_value }}</p>
+                                <div class="task-action">
+                                    <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
+                                            alt=""></button>
+                                    <button @click="deleteAnswer()"><img src="/src/assets/Icons/deleteIconWhite.svg"
+                                            alt=""></button>
+                                </div>
+                            </div>
+
+                            <div class="one_choise" v-if="currentTask.answerEditor?.code == 'ONE_CHOISE'">
+                                <p>Правильный ответ: {{ currentTask.answer.str_value }}</p>
+                                <div class="task-action">
+                                    <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
+                                            alt=""></button>
+                                    <button @click="deleteAnswer()"><img src="/src/assets/Icons/deleteIconWhite.svg"
+                                            alt=""></button>
+                                </div>
+                            </div>
+
+                            <div class="multi_choise" v-if="currentTask.answerEditor?.code == 'MULTI_CHOISE'">
+                                <p v-for="(item, index) in JSON.parse(currentTask.json)">{{ item }}</p>
+                                <div class="task-action">
+                                    <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
+                                            alt=""></button>
+                                    <button @click="deleteAnswer()"><img src="/src/assets/Icons/deleteIconWhite.svg"
+                                            alt=""></button>
+                                </div>
+
+                            </div>
+
+                            <div class="code" v-if="currentTask.answerEditor?.code == 'CODE'">
+                                <p>Результат вывода: {{ currentTask.str_value }}</p>
+                                <div class="task-action">
+                                    <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
+                                            alt=""></button>
+                                    <button @click="deleteAnswer()"><img src="/src/assets/Icons/deleteIconWhite.svg"
+                                            alt=""></button>
+                                </div>
+
+                            </div>
+
+                            <div class="matching" v-if="currentTask.answerEditor?.code == 'MATCHING'">
+                                <div class="task-action">
+                                    <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
+                                            alt=""></button>
+                                    <button @click="deleteAnswer()"><img src="/src/assets/Icons/deleteIconWhite.svg"
+                                            alt=""></button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
             </div>
         </div>
     </div>
@@ -72,6 +189,15 @@
     <ConfirmCourseModal v-if="showConfrimDeleteTask" :message=messageConfirm @confirm="handleConfirmDeleteTask"
         @cancel="showConfrimDeleteTask = false" />
 
+    <ConfirmCourseModal v-if="showConfrimDeleteTaskDescription" :message=messageConfirm
+        @confirm="handleConfirmDeleteTaskDescription" @cancel="showConfrimDeleteTaskDescription = false" />
+
+    <ConfirmCourseModal v-if="showConfrimDeleteAnswer" :message=messageConfirm @confirm="handleConfirmDeleteAnswer"
+        @cancel="showConfrimDeleteAnswer = false" />
+
+    <ConfirmCourseModal v-if="showConfrimDeleteQuestion" :message=messageConfirm @confirm="handleConfirmDeleteQuestion"
+        @cancel="showConfrimDeleteQuestion = false" />
+
     <MainTaskEditor v-if="showMainTaskEditor" :currentTask="currentTask" @confirm="handleSaveTaskHeader"
         @cancel="showMainTaskEditor = false" />
 
@@ -83,7 +209,14 @@
     <ValueEditor v-if="showValueEditor" :currentValue="currentTask.lecture[currentValue]" @confirm="handleSaveValue"
         @cancel="showValueEditor = false" />
 
+    <AnswerEditor v-if="showAnswerEditor" :currentAnswer="currentTask.answer" :currentAnswerEditor="currentAnswerEditor"
+        @confirm="handleSaveAnswer" @cancel="showAnswerEditor = false" />
+
     <ObjectTaskCreator v-if="showObjectTaskCreator" @confirm="addInTask" @cancel="showObjectTaskCreator = false" />
+
+    <QuestionEditor v-if="showQuestionEditor" :currentQuestion="currentQuestion" @confirm="handleSaveQuestion"
+        @cancel="showQuestionEditor = false" />
+
 </template>
 
 <script setup>
@@ -99,6 +232,8 @@ import MainTaskEditor from './CourseTaskEditorLayouts/MainTaskEditor.vue';
 import ValueEditor from './CourseTaskEditorLayouts/ValueEditor.vue';
 import ModuleCreatorModal from './CourseTaskEditorLayouts/ModuleCreatorModal.vue';
 import ObjectTaskCreator from './CourseTaskEditorLayouts/ObjectTaskCreator.vue';
+import AnswerEditor from './CourseTaskEditorLayouts/AnswerEditor.vue';
+import QuestionEditor from './CourseTaskEditorLayouts/QuestionEditor.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -117,81 +252,91 @@ const showMainTaskCreator = ref(false)
 const showModuleCreatorModal = ref(false)
 const showObjectTaskCreator = ref(false)
 const showConfrimDeleteTask = ref(false);
+const currentAnswerEditor = ref([]);
+const showOptionAnswer = ref(false)
+const showConfrimDeleteAnswer = ref(false);
+const showAnswerEditor = ref(false)
+const showEditorTaskDescription = ref(false)
+const taskDescription = ref('');
+const showConfrimDeleteTaskDescription = ref(false)
+const showQuestionEditor = ref(false);
+const currentQuestion = ref({});
+const showConfrimDeleteQuestion = ref(false);
 
 const getModuleTasks = async () => {
     try {
-        const response = await axios.get(`${API_URL}/course/task/all/${route.params.course_id}`);
-        // const response = [
-        //     {
-        //         "id": 1,
-        //         "queue": 1,
-        //         "str_value": "Начало начал",
-        //         "course_id": 2,
-        //         "created_at": "2025-05-01T17:19:32.000000Z",
-        //         "updated_at": "2025-05-01T17:19:32.000000Z",
-        //         "tasks": [
-        //             {
-        //                 "id": 1,
-        //                 "name": "История мальчишек",
-        //                 "order_id": 1,
-        //                 "type": "lecture",
-        //                 "module_id": 1,
-        //                 "course_id": 2,
-        //                 "created_at": "2025-05-01T17:19:46.000000Z",
-        //                 "updated_at": "2025-05-06T07:20:21.000000Z"
-        //             },
-        //             {
-        //                 "id": 2,
-        //                 "name": "Проверка лекции",
-        //                 "order_id": 2,
-        //                 "type": "task",
-        //                 "module_id": 1,
-        //                 "course_id": 2,
-        //                 "created_at": "2025-05-01T17:25:50.000000Z",
-        //                 "updated_at": "2025-05-01T17:25:39.000000Z"
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         "id": 2,
-        //         "queue": 2,
-        //         "str_value": "Введение",
-        //         "course_id": 2,
-        //         "created_at": "2025-05-01T17:19:32.000000Z",
-        //         "updated_at": "2025-05-01T17:19:32.000000Z",
-        //         "tasks": [
-        //             {
-        //                 "id": 3,
-        //                 "name": "Laravel теория",
-        //                 "order_id": 1,
-        //                 "type": "lecture",
-        //                 "module_id": 2,
-        //                 "course_id": 2,
-        //                 "created_at": "2025-05-01T17:19:46.000000Z",
-        //                 "updated_at": "2025-05-01T17:19:46.000000Z"
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         "id": 3,
-        //         "queue": 3,
-        //         "str_value": "Колекции",
-        //         "course_id": 2,
-        //         "created_at": "2025-05-05T13:42:18.000000Z",
-        //         "updated_at": "2025-05-05T13:42:18.000000Z",
-        //         "tasks": []
-        //     },
-        //     {
-        //         "id": 36,
-        //         "queue": 4,
-        //         "str_value": "ORM",
-        //         "course_id": 2,
-        //         "created_at": "2025-05-07T09:54:57.000000Z",
-        //         "updated_at": "2025-05-07T09:54:57.000000Z",
-        //         "tasks": []
-        //     }
-        // ]
-        const sortedModules = response.data
+        // const response = await axios.get(`${API_URL}/course/task/all/${route.params.course_id}`);
+        const response = [
+            {
+                "id": 1,
+                "queue": 1,
+                "str_value": "Начало начал",
+                "course_id": 2,
+                "created_at": "2025-05-01T17:19:32.000000Z",
+                "updated_at": "2025-05-01T17:19:32.000000Z",
+                "tasks": [
+                    {
+                        "id": 1,
+                        "name": "История мальчишек",
+                        "order_id": 1,
+                        "type": "lecture",
+                        "module_id": 1,
+                        "course_id": 2,
+                        "created_at": "2025-05-01T17:19:46.000000Z",
+                        "updated_at": "2025-05-06T07:20:21.000000Z"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Проверка лекции",
+                        "order_id": 2,
+                        "type": "task",
+                        "module_id": 1,
+                        "course_id": 2,
+                        "created_at": "2025-05-01T17:25:50.000000Z",
+                        "updated_at": "2025-05-01T17:25:39.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "queue": 2,
+                "str_value": "Введение",
+                "course_id": 2,
+                "created_at": "2025-05-01T17:19:32.000000Z",
+                "updated_at": "2025-05-01T17:19:32.000000Z",
+                "tasks": [
+                    {
+                        "id": 3,
+                        "name": "Laravel теория",
+                        "order_id": 1,
+                        "type": "lecture",
+                        "module_id": 2,
+                        "course_id": 2,
+                        "created_at": "2025-05-01T17:19:46.000000Z",
+                        "updated_at": "2025-05-01T17:19:46.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "queue": 3,
+                "str_value": "Колекции",
+                "course_id": 2,
+                "created_at": "2025-05-05T13:42:18.000000Z",
+                "updated_at": "2025-05-05T13:42:18.000000Z",
+                "tasks": []
+            },
+            {
+                "id": 36,
+                "queue": 4,
+                "str_value": "ORM",
+                "course_id": 2,
+                "created_at": "2025-05-07T09:54:57.000000Z",
+                "updated_at": "2025-05-07T09:54:57.000000Z",
+                "tasks": []
+            }
+        ]
+        const sortedModules = response
             .sort((a, b) => a.queue - b.queue)
             .map((module, mIndex) => {
                 const sortedTasks = module.tasks
@@ -215,8 +360,8 @@ const getModuleTasks = async () => {
 
 const getAnswerEditors = async () => {
     try {
-        const response = await axios.get(`${API_URL}/course/answer/editor/all`);
-        answerEditors.value = response.data;
+        // const response = await axios.get(`${API_URL}/course/answer/editor/all`);
+        // answerEditors.value = response.data;
         answerEditors.value = [
             {
                 "id": 1,
@@ -263,6 +408,52 @@ const getTask = async () => {
     try {
         const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
         currentTask.value = response.data;
+        // currentTask.value = {
+        //     "id": 2,
+        //     "name": "Проверка лекции",
+        //     "order_id": 1,
+        //     "type": "task",
+        //     "taskDescription": {
+        //         "id": 2,
+        //         "description": "Ну что готовы проверить свои знания о предыдущей лекции или рискнете еще раз пробежаться глазами?)",
+        //         "task_id": 2,
+        //         "created_at": null,
+        //         "updated_at": null
+        //     },
+        //     "question": [
+        //         {
+        //             "id": 2,
+        //             "str_value": "1. О волшебной кнопке",
+        //             "media_value": null,
+        //             "task_id": 2,
+        //             "json_value": null,
+        //             "queue": 2
+        //         },
+        //         {
+        //             "id": 3,
+        //             "str_value": "2. О быстром отображении",
+        //             "media_value": null,
+        //             "task_id": 2,
+        //             "json_value": null,
+        //             "queue": 3
+        //         },
+        //         {
+        //             "id": 4,
+        //             "str_value": "3. О красивом оформлении",
+        //             "media_value": null,
+        //             "task_id": 2,
+        //             "json_value": null,
+        //             "queue": 4
+        //         }
+        //     ],
+        //     "answer": null,
+        //     "answerEditor": null
+        // }
+
+        if (currentTask.value.type === 'task') {
+            currentAnswerEditor.value = currentTask.value?.answerEditor ?? '';
+            taskDescription.value = currentTask.value?.taskDescription?.description ?? '';
+        }
     } catch (error) {
         console.error('Ошибка при загрузке задачи:', error);
     }
@@ -506,26 +697,26 @@ async function handleConfirmDeleteTask() {
 
 async function goToNextLesson() {
     try {
-        const currentModuleIndex = moduleTasks.value.findIndex(module => 
+        const currentModuleIndex = moduleTasks.value.findIndex(module =>
             module.tasks.some(task => task.id === parseInt(route.params.id))
         );
-        
+
         if (currentModuleIndex === -1) {
             notificationRef.value.showNotification("Текущий урок не найден");
             return;
         }
-        
+
         const currentModule = moduleTasks.value[currentModuleIndex];
-        const currentTaskIndex = currentModule.tasks.findIndex(task => 
+        const currentTaskIndex = currentModule.tasks.findIndex(task =>
             task.id === parseInt(route.params.id)
         );
-        
+
         if (currentTaskIndex < currentModule.tasks.length - 1) {
             const nextTaskId = currentModule.tasks[currentTaskIndex + 1].id;
             router.push(`/task/editor/${route.params.course_id}/${nextTaskId}`);
             return;
         }
-        
+
         for (let i = currentModuleIndex + 1; i < moduleTasks.value.length; i++) {
             const nextModule = moduleTasks.value[i];
             if (nextModule.tasks.length > 0) {
@@ -534,14 +725,168 @@ async function goToNextLesson() {
                 return;
             }
         }
-        
+
         notificationRef.value.showNotification("Следующих уроков не найдено. Создайте новый урок.");
         currentModule.value = currentModule.id;
         showMainTaskCreator.value = true;
-        
+
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка: ${error.message}`);
     }
+}
+
+async function selectType(type) {
+    if (currentTask.value?.answer?.str_value || currentTask.value?.answer?.media_value || currentTask.value?.answer?.json) {
+        notificationRef.value.showNotification("Вы уже выбрали тип ответа. Чтобы изменить, удалите текущий ответ.");
+        showOptionAnswer.value = false
+        return;
+    }
+    if (currentTask.value?.answer?.id !== null) {
+        await axios.put(`${API_URL}/course/answer/${currentTask.value?.answer?.id}`, {
+            type_id: type.id
+        })
+    }
+    currentAnswerEditor.value = type;
+    showOptionAnswer.value = false
+}
+
+async function editAnswer() {
+    showAnswerEditor.value = true;
+}
+
+async function deleteAnswer() {
+    showConfrimDeleteAnswer.value = true;
+    messageConfirm.value = "Вы уверены что хотите удалить ответ?"
+}
+
+async function handleConfirmDeleteAnswer() {
+    try {
+        if (currentTask.value.answer?.id !== null) {
+            await axios.delete(`${API_URL}/course/answer/${currentTask.value.answer.id}`);
+            delete currentTask.value.answer;
+            delete currentTask.value.answerEditor;
+            showConfrimDeleteAnswer.value = false;
+            notificationRef.value.showNotification("Ответ успешно удалён");
+        } else {
+            delete currentTask.value.answer;
+            delete currentTask.value.answerEditor;
+            showConfrimDeleteAnswer.value = false;
+            notificationRef.value.showNotification("Ответ успешно удалён");
+        }
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
+}
+
+async function handleConfirmDeleteQuestion() {
+    try {
+        await axios.delete(`${API_URL}/course/question/${currentQuestion.value.id}`);
+        const index = currentTask.value.question.findIndex(item => item.id === currentQuestion.value.id);
+        if (index !== -1) {
+            currentTask.value.question.splice(index, 1);
+        }
+        showConfrimDeleteQuestion.value = false;
+        notificationRef.value.showNotification("Вопрос успешно удалён")
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
+}
+
+async function saveDescription() {
+    try {
+        if (currentTask.value.taskDescription) {
+            await axios.put(`${API_URL}/course/taskDescription/${currentTask.value.taskDescription.id}`, {
+                description: taskDescription.value
+            });
+            currentTask.value.taskDescription.description = taskDescription.value;
+            showEditorTaskDescription.value = false;
+            notificationRef.value.showNotification("Описание задачи успешно обновлено")
+        } else {
+            const response = await axios.post(`${API_URL}/course/taskDescription/store/${route.params.id}`, {
+                description: taskDescription.value
+            });
+            currentTask.value.taskDescription = response.data;
+            showEditorTaskDescription.value = false;
+            notificationRef.value.showNotification("Описание задачи успешно добавлено")
+        }
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
+
+}
+
+async function handleSaveAnswer(params) {
+    try {
+        if (currentTask.value?.answer?.id != null) {
+            const response = await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, params);
+            if (params.str_value) {
+                currentTask.value.answer.str_value = params.str_value;
+            } else if (params.json) {
+                currentTask.value.answer.json = response.data.json;
+            }
+            showAnswerEditor.value = false;
+            notificationRef.value.showNotification("Ответ успешно изменен")
+        } else {
+            const response = await axios.post(`${API_URL}/course/answer/store/${route.params.id}`, params);
+            currentTask.value.answer = response.data;
+            currentTask.value.answerEditor = currentAnswerEditor.value;
+            notificationRef.value.showNotification("Ответ успешно добавлен")
+        }
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка : ${error}`)
+    }
+}
+
+async function handleConfirmDeleteTaskDescription() {
+    try {
+        await axios.delete(`${API_URL}/course/taskDescription/${currentTask.value.taskDescription.id}`);
+        delete currentTask.value.taskDescription;
+        showConfrimDeleteTaskDescription.value = false;
+        taskDescription.value = '';
+        notificationRef.value.showNotification("Описание задачи успешно удалено")
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
+}
+
+async function deleteTaskDescription() {
+    showConfrimDeleteTaskDescription.value = true;
+    messageConfirm.value = "Вы уверены что хотите удалить описание задачи?"
+}
+
+async function handleSaveQuestion(newQuestion) {
+    try {
+        if (currentQuestion.value?.id) {
+            await axios.put(`${API_URL}/course/question/${currentQuestion.value.id}`, newQuestion);
+            const index = currentTask.value.question.findIndex(item => item.id === currentQuestion.value.id);
+            if (index !== -1) {
+                currentTask.value.question[index] = newQuestion;
+            }
+            currentQuestion.value = null;
+            showQuestionEditor.value = false;
+            notificationRef.value.showNotification("Вопрос успешно обновлен")
+        } else {
+            const response = await axios.post(`${API_URL}/course/question/store/${route.params.id}`, newQuestion);
+            currentTask.value.question.push(response.data);
+            showQuestionEditor.value = false;
+            currentQuestion.value = null;
+            notificationRef.value.showNotification("Вопрос успешно добавлен")
+        }
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
+}
+
+async function editQuestion(item) {
+    console.log(item);
+    currentQuestion.value = item;
+    showQuestionEditor.value = true;
+}
+
+async function deleteQuestion(item) {
+    currentQuestion.value = item;
+    messageConfirm.value = "Вы уверены что хотите удалить вопрос?"
+    showConfrimDeleteQuestion.value = true;
 }
 
 watch(() => route.params.id, (newId) => {
@@ -773,5 +1118,125 @@ h6 {
 
 .action button:hover {
     box-shadow: 0 0 20px #B14788 !important;
+}
+
+.taskDescription {
+    margin-top: 30px;
+}
+
+.taskDescription-creator {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.taskDescription-editor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.taskDescription-creator textarea {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #2b0045;
+    padding: 10px;
+    line-height: 130%;
+    border-radius: 10px;
+    outline: none;
+    min-height: 100px;
+}
+
+.taskDescription-creator button {
+    background-color: #59008E;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s ease-in-out;
+}
+
+.taskDescription-creator button:hover {
+    background-color: #7300b5;
+}
+
+.question {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.answer {
+    margin-top: 30px;
+    color: white;
+}
+
+.choise-type-cont {
+    position: relative;
+    width: 300px;
+}
+
+.choise-type {
+    padding: 10px;
+    border-radius: 10px;
+    width: 300px;
+    outline: none;
+    background-color: #7300b5;
+    border: none;
+}
+
+.choise-type::placeholder {
+    color: rgb(202, 202, 202);
+}
+
+.answer-editor-options {
+    position: absolute;
+    background-color: #7300b5;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.answer-editor-options p {
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    transition: background 0.1s ease-in-out;
+}
+
+.answer-editor-options p:hover {
+    background-color: #59008E;
+}
+
+.answer-cont {
+    margin-top: 20px;
+}
+
+.word,
+.one_choise,
+.multi_choise,
+.code,
+.matching {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-question-btn  {
+    background-color: #59008E;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s ease-in-out;
+}
+
+.add-question-btn:hover {
+    background-color: #7300b5;
 }
 </style>
