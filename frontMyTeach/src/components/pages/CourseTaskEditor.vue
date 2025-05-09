@@ -118,8 +118,8 @@
                             </div>
                         </div>
 
-                        <div class="answer-cont">
-
+                        <div class="answer-cont"
+                            v-if="currentTask.answer?.str_value || currentTask.answer?.media_value || currentTask.answer?.json">
                             <div class="word" v-if="currentTask.answerEditor?.code == 'WORD'">
                                 <p>Правильный ответ: {{ currentTask.answer.str_value }}</p>
                                 <div class="task-action">
@@ -141,7 +141,10 @@
                             </div>
 
                             <div class="multi_choise" v-if="currentTask.answerEditor?.code == 'MULTI_CHOISE'">
-                                <p v-for="(item, index) in JSON.parse(currentTask.json)">{{ item }}</p>
+                                <div class="multi-choise-content">
+                                    <p v-for="(item, index) in currentTask.answer.json">{{ index }}: {{ item ? 'Да' :
+                                        'Нет' }}</p>
+                                </div>
                                 <div class="task-action">
                                     <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
                                             alt=""></button>
@@ -159,7 +162,6 @@
                                     <button @click="deleteAnswer()"><img src="/src/assets/Icons/deleteIconWhite.svg"
                                             alt=""></button>
                                 </div>
-
                             </div>
 
                             <div class="matching" v-if="currentTask.answerEditor?.code == 'MATCHING'">
@@ -171,6 +173,8 @@
                                 </div>
                             </div>
                         </div>
+                        <button v-else class="add-answer-btn" @click="handleShowAnswerCreator()">Добавить ответ</button>
+
                     </section>
                 </section>
             </div>
@@ -217,6 +221,9 @@
     <QuestionEditor v-if="showQuestionEditor" :currentQuestion="currentQuestion" @confirm="handleSaveQuestion"
         @cancel="showQuestionEditor = false" />
 
+    <AnswerCreator v-if="showAnswerCreator" :currentTask="currentTask" @confirm="handleCreateAnswer"
+        @cancel="showAnswerCreator = false" />
+
 </template>
 
 <script setup>
@@ -234,6 +241,7 @@ import ModuleCreatorModal from './CourseTaskEditorLayouts/ModuleCreatorModal.vue
 import ObjectTaskCreator from './CourseTaskEditorLayouts/ObjectTaskCreator.vue';
 import AnswerEditor from './CourseTaskEditorLayouts/AnswerEditor.vue';
 import QuestionEditor from './CourseTaskEditorLayouts/QuestionEditor.vue';
+import AnswerCreator from './CourseTaskEditorLayouts/AnswerCreator.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -262,6 +270,8 @@ const showConfrimDeleteTaskDescription = ref(false)
 const showQuestionEditor = ref(false);
 const currentQuestion = ref({});
 const showConfrimDeleteQuestion = ref(false);
+const showAnswerCreator = ref(false);
+
 
 const getModuleTasks = async () => {
     try {
@@ -406,49 +416,67 @@ const getAnswerEditors = async () => {
 
 const getTask = async () => {
     try {
-        const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
-        currentTask.value = response.data;
-        // currentTask.value = {
-        //     "id": 2,
-        //     "name": "Проверка лекции",
-        //     "order_id": 1,
-        //     "type": "task",
-        //     "taskDescription": {
-        //         "id": 2,
-        //         "description": "Ну что готовы проверить свои знания о предыдущей лекции или рискнете еще раз пробежаться глазами?)",
-        //         "task_id": 2,
-        //         "created_at": null,
-        //         "updated_at": null
-        //     },
-        //     "question": [
-        //         {
-        //             "id": 2,
-        //             "str_value": "1. О волшебной кнопке",
-        //             "media_value": null,
-        //             "task_id": 2,
-        //             "json_value": null,
-        //             "queue": 2
-        //         },
-        //         {
-        //             "id": 3,
-        //             "str_value": "2. О быстром отображении",
-        //             "media_value": null,
-        //             "task_id": 2,
-        //             "json_value": null,
-        //             "queue": 3
-        //         },
-        //         {
-        //             "id": 4,
-        //             "str_value": "3. О красивом оформлении",
-        //             "media_value": null,
-        //             "task_id": 2,
-        //             "json_value": null,
-        //             "queue": 4
-        //         }
-        //     ],
-        //     "answer": null,
-        //     "answerEditor": null
-        // }
+        // const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
+        // currentTask.value = response.data;
+        currentTask.value = {
+            "id": 2,
+            "name": "Проверка лекции",
+            "order_id": 1,
+            "type": "task",
+            "taskDescription": {
+                "id": 2,
+                "description": "Ну что готовы проверить свои знания о предыдущей лекции или рискнете еще раз пробежаться глазами?) О чем мечтал мальчик?",
+                "task_id": 2,
+                "created_at": null,
+                "updated_at": "2025-05-08T18:48:32.000000Z"
+            },
+            "question": [
+                {
+                    "id": 2,
+                    "str_value": "1. О волшебной кнопке",
+                    "media_value": null,
+                    "task_id": 2,
+                    "json_value": null,
+                    "queue": 2
+                },
+                {
+                    "id": 3,
+                    "str_value": "2. О быстром отображении",
+                    "media_value": null,
+                    "task_id": 2,
+                    "json_value": null,
+                    "queue": 3
+                },
+                {
+                    "id": 4,
+                    "str_value": "3. О красивом оформлении",
+                    "media_value": null,
+                    "task_id": 2,
+                    "json_value": null,
+                    "queue": 4
+                }
+            ],
+            "answer": {
+                "id": 8,
+                "str_value": null,
+                "media_value": null,
+                "json": {
+                    "1": false,
+                    "2": true,
+                    "3": true,
+                },
+                "task_id": 2,
+                "queue": 1,
+                "type_id": 3
+            },
+            "answerEditor": {
+                "id": 3,
+                "code": "MULTI_CHOISE",
+                "description": "Выберите одно или несколько:",
+                "created_at": "2025-05-01T17:05:40.000000Z",
+                "updated_at": "2025-05-01T17:05:40.000000Z"
+            }
+        }
 
         if (currentTask.value.type === 'task') {
             currentAnswerEditor.value = currentTask.value?.answerEditor ?? '';
@@ -736,18 +764,24 @@ async function goToNextLesson() {
 }
 
 async function selectType(type) {
-    if (currentTask.value?.answer?.str_value || currentTask.value?.answer?.media_value || currentTask.value?.answer?.json) {
-        notificationRef.value.showNotification("Вы уже выбрали тип ответа. Чтобы изменить, удалите текущий ответ.");
+    try {
+        if (currentTask.value?.answer?.str_value || currentTask.value?.answer?.media_value || currentTask.value?.answer?.json !== null) {
+            notificationRef.value.showNotification("Вы уже выбрали тип ответа. Чтобы изменить, удалите текущий ответ.");
+            showOptionAnswer.value = false
+            return;
+        }
+        if (currentTask.value?.answer?.id !== null) {
+            const response = await axios.put(`${API_URL}/course/answer/${currentTask.value?.answer?.id || 0}`, {
+                type_id: type.id,
+                task_id: route.params.id
+            })
+            currentTask.value.answer = response.data;
+        }
+        currentAnswerEditor.value = type;
         showOptionAnswer.value = false
-        return;
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
     }
-    if (currentTask.value?.answer?.id !== null) {
-        await axios.put(`${API_URL}/course/answer/${currentTask.value?.answer?.id}`, {
-            type_id: type.id
-        })
-    }
-    currentAnswerEditor.value = type;
-    showOptionAnswer.value = false
 }
 
 async function editAnswer() {
@@ -826,11 +860,13 @@ async function handleSaveAnswer(params) {
             }
             showAnswerEditor.value = false;
             notificationRef.value.showNotification("Ответ успешно изменен")
+            showAnswerCreator.value = false;
         } else {
             const response = await axios.post(`${API_URL}/course/answer/store/${route.params.id}`, params);
             currentTask.value.answer = response.data;
             currentTask.value.answerEditor = currentAnswerEditor.value;
             notificationRef.value.showNotification("Ответ успешно добавлен")
+            showAnswerCreator.value = false;
         }
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка : ${error}`)
@@ -889,6 +925,42 @@ async function deleteQuestion(item) {
     showConfrimDeleteQuestion.value = true;
 }
 
+async function handleShowAnswerCreator() {
+    if (currentTask.value?.answerEditor === null) {
+        notificationRef.value.showNotification("Выберите тип ответа")
+        return
+    } else if (currentTask.value?.answerEditor?.code === 'MULTI_CHOISE') {
+        if (currentTask.value.question.length < 3) {
+            notificationRef.value.showNotification("Для этого типа ответа нужно минимум 3 вопроса")
+            return
+        }
+    } else if (currentTask.value?.answerEditor?.code === 'ONE_CHOISE') {
+        if (currentTask.value.question.length < 2) {
+            notificationRef.value.showNotification("Для этого типа ответа нужно минимум 2 вопроса")
+            return
+        }
+    }
+
+    showAnswerCreator.value = true;
+}
+
+async function handleCreateAnswer(params) {
+    try {
+        await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, {
+            str_value: params.answer.str_value,
+            media_value: params.answer.media_value,
+            json_value: params.answer.json,
+            task_id: route.params.id,
+            type_id: currentTask.value.answerEditor.id
+        });
+        currentTask.value.answer.str_value = params.answer.str_value;
+        currentTask.value.answerEditor = currentAnswerEditor.value;
+        notificationRef.value.showNotification("Ответ успешно добавлен")
+        showAnswerCreator.value = false;
+    } catch (error) {
+        notificationRef.value.showNotification(`Ошибка: ${error}`);
+    }
+}
 watch(() => route.params.id, (newId) => {
     if (newId) {
         getTask();
@@ -1227,7 +1299,7 @@ h6 {
     align-items: center;
 }
 
-.add-question-btn  {
+.add-question-btn {
     background-color: #59008E;
     padding: 20px 20px 20px 20px;
     border-radius: 10px;
@@ -1238,5 +1310,27 @@ h6 {
 
 .add-question-btn:hover {
     background-color: #7300b5;
+}
+
+.add-answer-btn {
+    background-color: #59008E;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s ease-in-out;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.add-answer-btn:hover {
+    background-color: #7300b5;
+}
+
+.multi-choise-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
 }
 </style>
