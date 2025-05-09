@@ -12,7 +12,7 @@
             <div class="one-choise" v-if="localbody.answerEditor.code == 'ONE_CHOISE'">
                 <input type="number" placeholder="Установите правильный вариант ответа"
                     v-model.number="localbody.answer.str_value" :min="1" :max="localbody.question.length"
-                    @input="validateAnswer" class="input-oc" />
+                    @input="validateAnswer" class="default-input" />
             </div>
 
             <div class="multi-choise" v-else-if="localbody.answerEditor.code == 'MULTI_CHOISE'">
@@ -23,6 +23,11 @@
                 </label>
             </div>
 
+            <div class="word" v-else-if="localbody.answerEditor.code == 'WORD'">
+                <input type="text" placeholder="Введите правильный ответ"
+                    v-model="localbody.answer.str_value" class="default-input" />
+
+            </div>
             <div class="modal-action">
                 <button @click="save">Сохранить</button>
                 <button @click="emit('cancel')">Закрыть</button>
@@ -85,7 +90,7 @@ async function validateAnswer() {
 };
 
 async function save() {
-    if (localbody.value.answerEditor.code == 'ONE_CHOISE') {
+    if (localbody.value.answerEditor.code == 'ONE_CHOISE' || localbody.value.answerEditor.code == 'WORD') {
         if (!localbody.value.answer.str_value) {
             notificationRef.value.showNotification('Укажите правильный вариант ответа');
             return;
@@ -166,7 +171,7 @@ input[type=number]::-webkit-inner-spin-button {
     gap: 10px;
 }
 
-.input-oc {
+.default-input {
     color: black;
     width: 400px;
     outline: none;

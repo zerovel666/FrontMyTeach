@@ -12,7 +12,7 @@
             <div class="one-choise" v-if="localTask.answerEditor.code === 'ONE_CHOISE'">
                 <input type="number" placeholder="Установите правильный вариант ответа"
                     v-model.number="localTask.answer.str_value" :min="1" :max="localTask.question.length"
-                    @input="validateAnswer" class="input-oc" />
+                    @input="validateAnswer" class="default-input" />
             </div>
 
             <div class="multi-choise-editor-wrapper" v-else-if="localTask.answerEditor.code == 'MULTI_CHOISE'">
@@ -22,6 +22,12 @@
                     <span class="multi-choise-editor-checkmark"></span>
                     {{ item.str_value }}
                 </label>
+            </div>
+            
+            <div class="word" v-else-if="localTask.answerEditor.code == 'WORD'">
+                <input type="text" placeholder="Введите правильный ответ"
+                    v-model="localTask.answer.str_value" class="default-input" />
+
             </div>
 
 
@@ -106,7 +112,7 @@ async function save() {
     gap: 10px;
 }
 
-.input-oc {
+.default-input {
     color: black;
     width: 400px;
     outline: none;
