@@ -8,11 +8,13 @@
             <div class="type-answer">
                 <h4>Тип ответа: {{ localbody.answerEditor.description }}</h4>
             </div>
+            
             <div class="one-choise" v-if="localbody.answerEditor.code == 'ONE_CHOISE'">
                 <input type="number" placeholder="Установите правильный вариант ответа"
                     v-model.number="localbody.answer.str_value" :min="1" :max="localbody.question.length"
                     @input="validateAnswer" class="input-oc" />
             </div>
+
             <div class="multi-choise" v-else-if="localbody.answerEditor.code == 'MULTI_CHOISE'">
                 <label v-for="(item, index) in localbody.question" :key="index" class="multi-choise-checkbox-container">
                     <input type="checkbox" v-model="correctAnswers[index + 1]" />

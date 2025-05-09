@@ -213,8 +213,8 @@
     <ValueEditor v-if="showValueEditor" :currentValue="currentTask.lecture[currentValue]" @confirm="handleSaveValue"
         @cancel="showValueEditor = false" />
 
-    <AnswerEditor v-if="showAnswerEditor" :currentAnswer="currentTask.answer" :currentAnswerEditor="currentAnswerEditor"
-        @confirm="handleSaveAnswer" @cancel="showAnswerEditor = false" />
+    <AnswerEditor v-if="showAnswerEditor" :currentTask="currentTask" @confirm="handleSaveAnswer"
+        @cancel="showAnswerEditor = false" />
 
     <ObjectTaskCreator v-if="showObjectTaskCreator" @confirm="addInTask" @cancel="showObjectTaskCreator = false" />
 
@@ -852,11 +852,11 @@ async function saveDescription() {
 async function handleSaveAnswer(params) {
     try {
         if (currentTask.value?.answer?.id != null) {
-            const response = await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, params);
-            if (params.str_value) {
+            await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, params);
+            if (params.str_value !== null && params.str_value !== undefined) {
                 currentTask.value.answer.str_value = params.str_value;
-            } else if (params.json) {
-                currentTask.value.answer.json = response.data.json;
+            } else if (params.json_value !== null && params.json_value !== undefined) {
+                currentTask.value.answer.json = params.json_value;
             }
             showAnswerEditor.value = false;
             notificationRef.value.showNotification("Ответ успешно изменен")
@@ -961,6 +961,7 @@ async function handleCreateAnswer(params) {
         notificationRef.value.showNotification(`Ошибка: ${error}`);
     }
 }
+
 watch(() => route.params.id, (newId) => {
     if (newId) {
         getTask();
