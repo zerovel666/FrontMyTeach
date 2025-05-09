@@ -165,13 +165,26 @@
                             </div>
 
                             <div class="matching" v-if="currentTask.answerEditor?.code == 'MATCHING'">
+                                <div class="matching-content">
+                                    <h3>Сопоставление</h3>
+                                    <div class="column-matching">
+                                        <p v-for="(leftIndex, rightIndex) in currentTask.answer.json.correct"
+                                            :key="rightIndex">
+                                            <strong>{{ currentTask.answer.json.right[rightIndex] }}</strong> →
+                                            {{ currentTask.answer.json.left[leftIndex] }}
+                                        </p>
+                                    </div>
+                                </div>
                                 <div class="task-action">
-                                    <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
-                                            alt=""></button>
-                                    <button @click="deleteAnswer()"><img src="/src/assets/Icons/deleteIconWhite.svg"
-                                            alt=""></button>
+                                    <button @click="editAnswer()">
+                                        <img src="/src/assets/Icons/editorPencilWhite.svg" alt="">
+                                    </button>
+                                    <button @click="deleteAnswer()">
+                                        <img src="/src/assets/Icons/deleteIconWhite.svg" alt="">
+                                    </button>
                                 </div>
                             </div>
+
                         </div>
                         <button v-else class="add-answer-btn" @click="handleShowAnswerCreator()">Добавить ответ</button>
 
@@ -416,9 +429,83 @@ const getAnswerEditors = async () => {
 
 const getTask = async () => {
     try {
-        const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
-        currentTask.value = response.data;
-       
+        // const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
+        // currentTask.value = response.data;
+
+        currentTask.value = {
+            "id": 2,
+            "name": "Проверка лекции",
+            "order_id": 1,
+            "type": "task",
+            "taskDescription": {
+                "id": 2,
+                "description": "Ну что готовы проверить свои знания о предыдущей лекции или рискнете еще раз пробежаться глазами?) О чем мечтал мальчик?",
+                "task_id": 2,
+                "created_at": null,
+                "updated_at": "2025-05-08T18:48:32.000000Z"
+            },
+            "question": [
+                {
+                    "id": 2,
+                    "str_value": "1. О волшебной кнопке",
+                    "media_value": null,
+                    "task_id": 2,
+                    "json_value": null,
+                    "queue": 2
+                },
+                {
+                    "id": 3,
+                    "str_value": "2. О быстром отображении",
+                    "media_value": null,
+                    "task_id": 2,
+                    "json_value": null,
+                    "queue": 3
+                },
+                {
+                    "id": 4,
+                    "str_value": "3. О красивом оформлении",
+                    "media_value": null,
+                    "task_id": 2,
+                    "json_value": null,
+                    "queue": 4
+                }
+            ],
+            "answer": {
+                "id": 10,
+                "str_value": null,
+                "media_value": null,
+                "json": {
+                    "left": [
+                        "Мальчик",
+                        "Laravel + vue3",
+                        "Vite",
+                        "20=20"
+                    ],
+                    "right": [
+                        "Кто главный герой рассказа",
+                        "О каком сборищке идет речь",
+                        "О каких/ом фреймворке/ах шла речь",
+                        "18=18"
+                    ],
+                    "correct": [
+                        0,
+                        2,
+                        1,
+                        3
+                    ]
+                },
+                "task_id": 2,
+                "queue": 1,
+                "type_id": 5
+            },
+            "answerEditor": {
+                "id": 5,
+                "code": "MATCHING",
+                "description": "Сопоставьте:",
+                "created_at": "2025-05-01T17:05:40.000000Z",
+                "updated_at": "2025-05-01T17:05:40.000000Z"
+            }
+        }
         if (currentTask.value.type === 'task') {
             currentAnswerEditor.value = currentTask.value?.answerEditor ?? '';
             taskDescription.value = currentTask.value?.taskDescription?.description ?? '';
@@ -797,7 +884,11 @@ async function handleSaveAnswer(params) {
             if (params.str_value !== null && params.str_value !== undefined) {
                 currentTask.value.answer.str_value = params.str_value;
             } else if (params.json_value !== null && params.json_value !== undefined) {
-                currentTask.value.answer.json = params.json_value;
+                if (currentTask.value.answerEditor.code === 'MATCHING') {
+                    currentTask.value.answer.json = JSON.parse(params.json_value);
+                } else {
+                    currentTask.value.answer.json = params.json_value;
+                }
             }
             showAnswerEditor.value = false;
             notificationRef.value.showNotification("Ответ успешно изменен")
@@ -1241,6 +1332,8 @@ h6 {
     align-items: center;
 }
 
+
+
 .add-question-btn {
     background-color: #59008E;
     padding: 20px 20px 20px 20px;
@@ -1274,5 +1367,12 @@ h6 {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     width: 100%;
+}
+
+.column-matching {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 </style>
