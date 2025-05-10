@@ -288,78 +288,60 @@ const showAnswerCreator = ref(false);
 
 const getModuleTasks = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/task/all/${route.params.course_id}`);
-        const response = [
-            {
-                "id": 1,
-                "queue": 1,
-                "str_value": "Начало начал",
-                "course_id": 2,
-                "created_at": "2025-05-01T17:19:32.000000Z",
-                "updated_at": "2025-05-01T17:19:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 1,
-                        "name": "История мальчишек",
-                        "order_id": 1,
-                        "type": "lecture",
-                        "module_id": 1,
-                        "course_id": 2,
-                        "created_at": "2025-05-01T17:19:46.000000Z",
-                        "updated_at": "2025-05-06T07:20:21.000000Z"
-                    },
-                    {
-                        "id": 2,
-                        "name": "Проверка лекции",
-                        "order_id": 2,
-                        "type": "task",
-                        "module_id": 1,
-                        "course_id": 2,
-                        "created_at": "2025-05-01T17:25:50.000000Z",
-                        "updated_at": "2025-05-01T17:25:39.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "queue": 2,
-                "str_value": "Введение",
-                "course_id": 2,
-                "created_at": "2025-05-01T17:19:32.000000Z",
-                "updated_at": "2025-05-01T17:19:32.000000Z",
-                "tasks": [
-                    {
-                        "id": 3,
-                        "name": "Laravel теория",
-                        "order_id": 1,
-                        "type": "lecture",
-                        "module_id": 2,
-                        "course_id": 2,
-                        "created_at": "2025-05-01T17:19:46.000000Z",
-                        "updated_at": "2025-05-01T17:19:46.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 3,
-                "queue": 3,
-                "str_value": "Колекции",
-                "course_id": 2,
-                "created_at": "2025-05-05T13:42:18.000000Z",
-                "updated_at": "2025-05-05T13:42:18.000000Z",
-                "tasks": []
-            },
-            {
-                "id": 36,
-                "queue": 4,
-                "str_value": "ORM",
-                "course_id": 2,
-                "created_at": "2025-05-07T09:54:57.000000Z",
-                "updated_at": "2025-05-07T09:54:57.000000Z",
-                "tasks": []
-            }
-        ]
-        const sortedModules = response
+        const response = await axios.get(`${API_URL}/course/task/all/${route.params.course_id}`);
+        // const response = [
+        //     {
+        //         "id": 37,
+        //         "queue": 1,
+        //         "str_value": "Введение в Laravel",
+        //         "course_id": 3,
+        //         "created_at": "2025-05-10T08:50:20.000000Z",
+        //         "updated_at": "2025-05-10T08:50:20.000000Z",
+        //         "tasks": [
+        //             {
+        //                 "id": 4,
+        //                 "name": "Установка Laravel и настройка окружения",
+        //                 "order_id": 1,
+        //                 "type": "lecture",
+        //                 "module_id": 37,
+        //                 "course_id": 3,
+        //                 "created_at": "2025-05-10T08:51:04.000000Z",
+        //                 "updated_at": "2025-05-10T08:51:04.000000Z"
+        //             },
+        //             {
+        //                 "id": 5,
+        //                 "name": "Структура проекта Laravel",
+        //                 "order_id": 2,
+        //                 "type": "lecture",
+        //                 "module_id": 37,
+        //                 "course_id": 3,
+        //                 "created_at": "2025-05-10T08:51:24.000000Z",
+        //                 "updated_at": "2025-05-10T08:51:24.000000Z"
+        //             },
+        //             {
+        //                 "id": 6,
+        //                 "name": "Роутинг и базовые контроллеры",
+        //                 "order_id": 3,
+        //                 "type": "lecture",
+        //                 "module_id": 37,
+        //                 "course_id": 3,
+        //                 "created_at": "2025-05-10T08:51:49.000000Z",
+        //                 "updated_at": "2025-05-10T08:51:49.000000Z"
+        //             },
+        //             {
+        //                 "id": 7,
+        //                 "name": "Первый API-запрос",
+        //                 "order_id": 4,
+        //                 "type": "task",
+        //                 "module_id": 37,
+        //                 "course_id": 3,
+        //                 "created_at": "2025-05-10T08:52:10.000000Z",
+        //                 "updated_at": "2025-05-10T08:52:10.000000Z"
+        //             }
+        //         ]
+        //     }
+        // ]
+        const sortedModules = response.data
             .sort((a, b) => a.queue - b.queue)
             .map((module, mIndex) => {
                 const sortedTasks = module.tasks
@@ -385,25 +367,12 @@ const getAnswerEditors = async () => {
     try {
         // const response = await axios.get(`${API_URL}/course/answer/editor/all`);
         // answerEditors.value = response.data;
+
         answerEditors.value = [
-            {
-                "id": 1,
-                "code": "WORD",
-                "description": "Введите слово или число:",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            },
             {
                 "id": 2,
                 "code": "ONE_CHOISE",
                 "description": "Выберите одно:",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            },
-            {
-                "id": 3,
-                "code": "MULTI_CHOISE:",
-                "description": "Выберите одно или несколько:",
                 "created_at": "2025-05-01T17:05:40.000000Z",
                 "updated_at": "2025-05-01T17:05:40.000000Z"
             },
@@ -420,6 +389,20 @@ const getAnswerEditors = async () => {
                 "description": "Сопоставьте:",
                 "created_at": "2025-05-01T17:05:40.000000Z",
                 "updated_at": "2025-05-01T17:05:40.000000Z"
+            },
+            {
+                "id": 3,
+                "code": "MULTI_CHOISE",
+                "description": "Выберите одно или несколько:",
+                "created_at": "2025-05-01T17:05:40.000000Z",
+                "updated_at": "2025-05-01T17:05:40.000000Z"
+            },
+            {
+                "id": 1,
+                "code": "WORD",
+                "description": "Введите слово или число:",
+                "created_at": "2025-05-01T17:05:40.000000Z",
+                "updated_at": "2025-05-01T17:05:40.000000Z"
             }
         ]
     } catch (error) {
@@ -432,6 +415,28 @@ const getTask = async () => {
         const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
         currentTask.value = response.data;
 
+        // currentTask.value = {
+        //     "id": 4,
+        //     "name": "Установка Laravel и настройка окружения",
+        //     "order_id": 1,
+        //     "type": "lecture",
+        //     "lecture": [
+        //         {
+        //             "id": 7,
+        //             "str_value": "Установка PHP, Composer, MySQL/PostgreSQL",
+        //             "media_value": null,
+        //             "task_id": 4,
+        //             "queue": 1
+        //         },
+        //         {
+        //             "id": 8,
+        //             "str_value": "В этом уроке вы узнаете, как правильно установить Laravel и подготовить рабочее окружение для разработки. Мы рассмотрим два подхода: установку Laravel на локальной машине и использование Docker-контейнеров для изолированной и воспроизводимой среды.",
+        //             "media_value": null,
+        //             "task_id": 4,
+        //             "queue": 2
+        //         }
+        //     ]
+        // }
         if (currentTask.value.type === 'task') {
             currentAnswerEditor.value = currentTask.value?.answerEditor ?? '';
             taskDescription.value = currentTask.value?.taskDescription?.description ?? '';
@@ -467,12 +472,11 @@ async function handleSaveTaskHeader(newTaskVal) {
                 taskToUpdate.name = newTaskVal.name;
                 taskToUpdate.type = newTaskVal.type;
             }
-            showMainTaskEditor.value = false;
             notificationRef.value.showNotification("Задача успешно обновлена")
         } else if (newTaskVal.id === '' || newTaskVal.id === null) {
-            await axios.post(`${API_URL}/course/task/store/${route.params.course_id}/${currentModule.value}`, newTaskVal);
+            const response = await axios.post(`${API_URL}/course/task/store/${route.params.course_id}/${currentModule.value}`, newTaskVal);
             const moduleIndex = moduleTasks.value.findIndex(item => item.id === currentModule.value)
-            moduleTasks.value[moduleIndex].tasks.push(newTaskVal)
+            moduleTasks.value[moduleIndex].tasks.push(response.data)
             const sortedModules = moduleTasks.value
                 .sort((a, b) => a.queue - b.queue)
                 .map((module, mIndex) => {
@@ -490,8 +494,10 @@ async function handleSaveTaskHeader(newTaskVal) {
                 });
 
             moduleTasks.value = sortedModules
+
         }
 
+        showMainTaskCreator.value = false;
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка: ${error}`)
     }
@@ -517,7 +523,6 @@ async function handleSaveValue(newItem) {
                     ...currentTask.value.lecture[currentValue.value],
                     str_value: newItem.str_value
                 };
-                console.log(currentTask.value);
                 notificationRef.value.showNotification("Лекция успешно обновлена");
 
                 showValueEditor.value = false;
@@ -550,7 +555,6 @@ async function handleSaveValue(newItem) {
                     media_value: response.data.imageUrl || newItem.media_value
                 };
 
-                console.log('Обновленные данные:', currentTask.value);
                 notificationRef.value.showNotification("Изображение успешно обновлено");
 
                 showValueEditor.value = false;
@@ -560,7 +564,7 @@ async function handleSaveValue(newItem) {
         } else {
             if (newItem.str_value) {
                 const response = await axios.post(`${API_URL}/course/lecture/store/${route.params.id}`, newItem);
-                currentTask.value.lecture.push(response.data);
+                currentTask.value.lecture[currentValue.value] = response.data;
                 notificationRef.value.showNotification("Лекция успешно добавлена");
                 showValueEditor.value = false;
                 currentValue.value = null;
@@ -587,7 +591,7 @@ async function handleSaveValue(newItem) {
                     }
                 );
 
-                currentTask.value.lecture.push(response.data);
+                currentTask.value.lecture[currentValue.value] = response.data;
                 notificationRef.value.showNotification("Изображение успешно добавлено");
                 showValueEditor.value = false;
                 currentValue.value = null;
@@ -600,8 +604,8 @@ async function handleSaveValue(newItem) {
 
 async function handleConfirmDeleteValue() {
     try {
-        if (currentTask.value.lecture[currentValue.value]?.id !== null) {
-            await axios.delete(`${API_URL}/course/lecture/${currentTask.value.lecture[currentValue.value].id}`)
+        if (currentTask.value.lecture[currentValue.value]?.id !== null && currentTask.value.lecture[currentValue.value]?.id !== undefined) {
+            await axios.delete(`${API_URL}/course/lecture/${currentTask.value.lecture[currentValue.value].id}`);
         }
         currentTask.value.lecture.splice(currentValue.value, 1);
         currentValue.value = null;
@@ -616,6 +620,7 @@ async function handleSaveModule(name) {
     const response = await axios.post(`${API_URL}/course/module/store/${route.params.course_id}`, {
         str_value: name
     });
+
 
     moduleTasks.value.push({
         id: response.data.id,
@@ -649,10 +654,17 @@ async function handleSaveModule(name) {
 }
 
 async function addInTask(type) {
-    if (type = 'TEXT') {
+    if (type == 'TEXT') {
         currentTask.value.lecture.push({
             media_value: null,
             str_value: "Введите текст",
+            task_id: currentTask.value.id
+        })
+        showObjectTaskCreator.value = false
+    } else if (type == 'MEDIA') {
+        currentTask.value.lecture.push({
+            media_value: "/src/assets/images/SelectImage.png",
+            str_value: null,
             task_id: currentTask.value.id
         })
         showObjectTaskCreator.value = false
@@ -719,26 +731,34 @@ async function goToNextLesson() {
 
 async function selectType(type) {
     try {
-        if ((!!currentTask.value?.answer && (currentTask.value.answer.str_value || currentTask.value.answer.media_value || currentTask.value.answer.json !== null))) {
+        const answer = currentTask.value?.answer;
+
+        const hasId = answer?.id != null;
+        const hasAnyValue = answer?.str_value != null || answer?.json != null || answer?.media_value != null;
+
+        if (hasId && hasAnyValue) {
             notificationRef.value.showNotification("Вы уже выбрали тип ответа. Чтобы изменить, удалите текущий ответ.");
-            showOptionAnswer.value = false
+            showOptionAnswer.value = false;
             return;
         }
-        if (currentTask.value?.answer?.id !== null) {
-            const response = await axios.put(`${API_URL}/course/answer/${currentTask.value?.answer?.id || 0}`, {
-                type_id: type.id,
-                task_id: route.params.id
-            })
-            currentTask.value.answer = response.data;
-            currentTask.value.answerEditor = type;
-            currentAnswerEditor.value = type;
-        }
+
+        let id = answer?.id || 0;
+
+        const response = await axios.put(`${API_URL}/course/answer/${id}`, {
+            type_id: type.id,
+            task_id: route.params.id
+        });
+        currentTask.value.answer = response.data;
+
+        currentTask.value.answerEditor = type;
         currentAnswerEditor.value = type;
-        showOptionAnswer.value = false
+        showOptionAnswer.value = false;
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        const msg = error.response?.data?.error || error.message || 'Неизвестная ошибка';
+        notificationRef.value.showNotification(`Ошибка: ${msg}`);
     }
 }
+
 
 async function editAnswer() {
     showAnswerEditor.value = true;
@@ -753,13 +773,11 @@ async function handleConfirmDeleteAnswer() {
     try {
         if (currentTask.value.answer?.id !== null) {
             await axios.delete(`${API_URL}/course/answer/${currentTask.value.answer.id}`);
-            delete currentTask.value.answer;
-            delete currentTask.value.answerEditor;
+            getTask();
             showConfrimDeleteAnswer.value = false;
             notificationRef.value.showNotification("Ответ успешно удалён");
         } else {
-            delete currentTask.value.answer;
-            delete currentTask.value.answerEditor;
+            getTask();
             showConfrimDeleteAnswer.value = false;
             notificationRef.value.showNotification("Ответ успешно удалён");
         }
@@ -807,8 +825,9 @@ async function saveDescription() {
 
 async function handleSaveAnswer(params) {
     try {
+        console.log(currentTask.value);
         if (currentTask.value?.answer?.id != null) {
-            await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, params);
+            const response = await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, params);
             if (params.str_value !== null && params.str_value !== undefined) {
                 currentTask.value.answer.str_value = params.str_value;
             } else if (params.json_value !== null && params.json_value !== undefined) {
@@ -818,6 +837,8 @@ async function handleSaveAnswer(params) {
                     currentTask.value.answer.json = params.json_value;
                 }
             }
+            console.log(currentTask.value);
+            console.log(response.data);
             showAnswerEditor.value = false;
             notificationRef.value.showNotification("Ответ успешно изменен")
             showAnswerCreator.value = false;
@@ -906,14 +927,25 @@ async function handleShowAnswerCreator() {
 
 async function handleCreateAnswer(params) {
     try {
-        await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, {
+        const response = await axios.put(`${API_URL}/course/answer/${currentTask.value.answer.id}`, {
             str_value: params.answer.str_value,
             media_value: params.answer.media_value,
             json_value: params.answer.json,
             task_id: route.params.id,
             type_id: currentTask.value.answerEditor.id
         });
-        currentTask.value.answer.str_value = params.answer.str_value;
+        if (params.answer.str_value !== null && params.answer.str_value !== undefined) {
+            currentTask.value.answer.str_value = params.answer.str_value;
+        } else if (params.answer.json !== null && params.answer.json !== undefined) {
+            if (currentTask.value.answerEditor.code === 'MATCHING') {
+                currentTask.value.answer.json = JSON.parse(params.answer.json);
+            } else {
+                currentTask.value.answer.json = JSON.parse(params.answer.json);
+            }
+        }
+
+        console.log(currentTask.value);
+        console.log(response.data);
         currentTask.value.answerEditor = currentAnswerEditor.value;
         notificationRef.value.showNotification("Ответ успешно добавлен")
         showAnswerCreator.value = false;

@@ -46,9 +46,6 @@
                                 <div class="metaItem">
                                     {{ course.task_count }} заданий
                                 </div>
-                                <div class="metaItem" v-if="course.relUsersCourses && course.relUsersCourses.length">
-                                    {{ course.relUsersCourses.length }} студентов
-                                </div>
                             </div>
 
                             <div class="tagsContainer">
@@ -792,6 +789,7 @@ const getCourses = async () => {
         // count_courses.value = response.count_courses;
         // count_tasks.value = response.count_tasks;
 
+        
     } catch (error) {
         console.error('Error fetching courses:', error);
     }

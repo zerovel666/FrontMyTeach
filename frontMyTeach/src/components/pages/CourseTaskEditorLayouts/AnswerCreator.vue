@@ -6,7 +6,7 @@
                 <div v-for="(item, index) in localbody.question" class="question">{{ item.str_value }}</div>
             </div>
             <div class="type-answer">
-                <h4>Тип ответа: {{ localbody.answerEditor.description }}</h4>
+                <h4>Тип ответа: {{ localbody.answerEditor?.description }}</h4>
             </div>
 
             <div class="one-choise" v-if="localbody.answerEditor.code == 'ONE_CHOISE'">
@@ -194,7 +194,6 @@ watch(() => props.currentTask, (newVal) => {
         localbody.value = JSON.parse(JSON.stringify(newVal));
         initCorrectAnswers();
 
-        // Инициализация matchingBody если это тип MATCHING
         if (localbody.value.answerEditor.code === 'MATCHING' && localbody.value.answer?.json) {
             const savedData = JSON.parse(localbody.value.answer.json);
             matchingBody.value.left = savedData.left || [];
@@ -250,6 +249,10 @@ function save() {
         if (!hasCorrectAnswer) {
             notificationRef.value.showNotification('Выберите хотя бы один правильный вариант ответа');
             return;
+        }
+
+        if (!localbody.value.answer) {
+            localbody.value.answer = {};
         }
 
         localbody.value.answer.json = JSON.stringify(correctAnswers.value);

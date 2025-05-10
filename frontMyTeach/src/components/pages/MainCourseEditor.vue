@@ -134,8 +134,8 @@
 
                             <ol class="task-list">
                                 <li v-for="task in module.tasks ||[]" :key="task.id" class="task-item">
-                                    <span class="task-type">{{ task.type === 'task' ? 'Задача' : 'Лекция' }}:</span>
-                                    <span class="task-name">{{ task.name || '-' }}</span>
+                                    <span class="task-type" @click="goToTask(task)">{{ task.type === 'task' ? 'Задача' : 'Лекция' }}:</span>
+                                    <span class="task-name" @click="goToTask(task)">{{ task.name || '-' }}</span>
                                     <div class="task-actions">
                                         <button class="btn-icon small" @click="editTask(module, task)"
                                             title="Редактировать"> <img src="/src/assets/Icons/editorPencilWhite.svg"
@@ -186,14 +186,14 @@
                         <div class="certificate-section">
                             <span>Выдача сертификата:</span>
                             <label class="toggle-switch">
-                                <input type="checkbox" v-model="courseInfo.hasCertificate" @change="updateCertificate">
+                                <input type="checkbox" v-model="courseInfo.has_certificate" @change="updateCertificate">
                                 <span class="slider"></span>
                             </label>
-                            <span class="toggle-label">{{ courseInfo.hasCertificate ? 'Да' : 'Нет' }}</span>
+                            <span class="toggle-label">{{ courseInfo.has_certificate ? 'Да' : 'Нет' }}</span>
                         </div>
 
-                        <button class="btn primary purchase-btn" @click="buy()">
-                            Приобрести курс
+                        <button class="btn primary purchase-btn">
+                            Опубликовать
                         </button>
 
                         <div class="course-facts">
@@ -299,45 +299,9 @@ const router = useRouter();
 const tooltipText = "Прежде чем создавать описания, модули и задачи, необходимо создать превью текст";
 
 const getCourseInfo = async () => {
-    // const response = await axios.get(`${API_URL}/course/${route.params.id}`);
-    // courseInfo.value = response.data;
-    courseInfo.value = {
-        "id": 2,
-        "name": "Быстрый курс по Laravel + Vue3: MVC API Микросервис",
-        "image_path": "http://localhost:8082//storage/logoCourse/gyivqWiRbnnEolwAMmwOKtpmCy7FONePsVS2WJo1.jpg",
-        "is_active": false,
-        "amount": null,
-        "category": {
-            "id": 1,
-            "category": "Laravel",
-            "created_at": null,
-            "updated_at": null
-        },
-        "has_certificate": false,
-        "author_name": "Jovany Marvin",
-        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-        "status": "В работе",
-        "preview": null,
-        "descriptions": null,
-        "task_count": 0,
-        "tags": [
-            {
-                "id": 1,
-                "course_id": 2,
-                "tag": "Laravel+VUECOMPOSITION",
-                "created_at": "2025-05-01T17:06:14.000000Z",
-                "updated_at": "2025-05-01T17:06:14.000000Z"
-            },
-            {
-                "id": 2,
-                "course_id": 2,
-                "tag": "API3",
-                "created_at": "2025-05-01T17:06:14.000000Z",
-                "updated_at": "2025-05-01T17:06:14.000000Z"
-            }
-        ],
-        "modules": []
-    }
+    const response = await axios.get(`${API_URL}/course/${route.params.id}`);
+    courseInfo.value = response.data;
+
 
     cardBody.value = {
         name: courseInfo.value.name,
@@ -356,13 +320,13 @@ const togglePriceEditing = async () => {
             await axios.put(`${API_URL}/course/${route.params.id}`, {
                 amount: editedPrice.value
             });
-            courseInfo.value.course_amount = editedPrice.value;
+            courseInfo.value.amount = editedPrice.value;
             notificationRef.value.showNotification('Цена успешно обновлена');
         } catch (error) {
             notificationRef.value.showNotification('Ошибка при обновлении цены');
         }
     } else {
-        editedPrice.value = courseInfo.value.course_amount;
+        editedPrice.value = courseInfo.value.amount;
     }
     editingPrice.value = !editingPrice.value;
 };
@@ -486,6 +450,10 @@ const editTask = (module, task) => {
     showTaskModal.value = true;
 };
 
+const goToTask = (task) => {
+    router.push(`/task/editor/${route.params.id}/${task.id}`);
+};
+
 const deleteTask = async (module, task) => {
     try {
         console.log(task);
@@ -501,7 +469,6 @@ const deleteTask = async (module, task) => {
 
 const handleSaveTask = async (taskData) => {
     try {
-        console.log(taskData);
         let response;
 
         if (taskData.id) {
@@ -532,8 +499,7 @@ const handleSaveTask = async (taskData) => {
         currentModule.value = null;
         currentTask.value = null;
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при сохранении задачи');
-        console.log(error);
+        notificationRef.value.showNotification(`Ошибка при сохранении задачи: ${error.response?.data?.error}`);
     }
     showTaskModal.value = false;
 };
@@ -977,10 +943,12 @@ p {
     color: var(--secondary);
     margin-right: 0.5rem;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .task-name {
     flex: 1;
+    cursor: pointer;
 }
 
 .task-actions {
