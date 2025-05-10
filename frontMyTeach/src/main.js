@@ -73,6 +73,7 @@ const routes = [
   { path: '/teaching', component: TeachingBible },
   { path: '/main/course/editor/:id', component: MainCourseEditor },
   { path: '/task/editor/:course_id/:id', component: CourseTaskEditor },
+  { path: '/task/:course_id/:id'},
   { path: '/:pathMatch(.*)*', redirect: '/' },
 
 ];

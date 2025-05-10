@@ -29,6 +29,9 @@
                     </div>
                 </div>
             </div>
+            <div v-else>
+                <h1 style="text-align: center; margin-top: 100px;">Курсов нет</h1>
+            </div>
         </div>
     </div>
     <FooterBar />

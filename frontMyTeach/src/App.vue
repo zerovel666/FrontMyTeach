@@ -28,7 +28,7 @@ axios.interceptors.response.use(
 		if (error.config.url.startsWith(API_URL) && error.response?.status === 401) {
 			VueCookies.remove('token');
 			VueCookies.remove('role');
-			notificationRef.value.showNotification('Сессия истекла. Пожалуйста войдите снова');
+			notificationRef.value.showNotification('Доступ запрещен');
 			router.push('/auth');
 		}
 		return Promise.reject(error);
@@ -77,11 +77,11 @@ const getUserInfo = async () => {
 			// const response = await axios.get(`${API_URL}/client/info`);
 			// userInfo.value = response.data;
 			userInfo.value = {
-				"id": 1,
-				"email": "teacher@gmail.com",
-				"first_name": "Jovany",
-				"last_name": "Marvin",
-				"iin": "943826053129",
+				"id": 2,
+				"email": "student@gmail.com",
+				"first_name": "Pete",
+				"last_name": "Deckow",
+				"iin": "668555715520",
 				"organization_id": 1,
 				"group_id": 1,
 				"is_active": true,
@@ -89,31 +89,31 @@ const getUserInfo = async () => {
 				"updated_at": "2025-04-17T07:05:23.000000Z",
 				"roles": [
 					{
-						"id": 3,
-						"name": "Преподаватель",
-						"slug": "teacher",
+						"id": 2,
+						"name": "Студент",
+						"slug": "student",
 						"created_at": "2025-04-17T07:05:22.000000Z",
 						"updated_at": "2025-04-17T07:05:22.000000Z",
 						"pivot": {
-							"user_id": 1,
-							"role_id": 3
+							"user_id": 2,
+							"role_id": 2
 						}
 					}
 				],
 				"client_infos": {
-					"id": 1,
-					"user_id": 1,
+					"id": 2,
+					"user_id": 2,
 					"has_courses": 0,
 					"complete_course_count": 0,
 					"complete_tasks": 0,
-					"pastime": "0",
+					"pastime": "1.3666666666667",
 					"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
 					"created_at": "2025-04-17T07:05:23.000000Z",
-					"updated_at": "2025-04-17T07:05:23.000000Z"
+					"updated_at": "2025-05-10T13:07:15.000000Z"
 				},
 				"user_image": {
-					"id": 1,
-					"user_id": 1,
+					"id": 2,
+					"user_id": 2,
 					"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
 					"created_at": "2025-04-17T07:05:23.000000Z",
 					"updated_at": "2025-04-17T07:05:23.000000Z"
