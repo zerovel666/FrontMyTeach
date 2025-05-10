@@ -4,14 +4,14 @@
         <div class="main-content" v-if="moduleTasks.length > 0, currentTask?.id, answerEditors.length > 0">
             <div class="module-content">
                 <div class="goHome" @click="router.push(`/main/course/editor/${route.params.course_id}`)">
-                        <h3>Перейти на главную</h3>
-                    </div>
+                    <h3>Перейти на главную</h3>
+                </div>
                 <div class="modules" v-for="(module, index) in moduleTasks" :key="index">
                     <div class="module-item">
                         <h3>{{ module.displayIndex }}. {{ module.str_value }}</h3>
                         <div class="action-module">
                             <img src="/src/assets/Icons/deleteIconWhite.svg" alt=""
-                                @click="showConfrimModal = true; currentModule = module.id; messageConfirm = 'Вы точно хотите удалить этот модуль?'">
+                                @click="handleShowConfirmModal(module.id)">
                         </div>
                     </div>
                     <div class="tasks" v-for="(task, index) in module.tasks" :key="index">
@@ -20,15 +20,15 @@
                             <h4>{{ task.displayIndex }} {{ task.name }}</h4>
                         </div>
                     </div>
-                    <button @click="showMainTaskCreator = true; currentModule = module.id">Добавить задачу</button>
+                    <button @click="handleShowMainTaskCreator(module.id)">Добавить задачу</button>
                 </div>
-                <button @click="showModuleCreatorModal = true">Добавить модуль</button>
+                <button @click="handleShowModuleCreatorModal()">Добавить модуль</button>
             </div>
 
             <div class="task-content">
                 <section class="header-section">
                     <h2>{{ currentTask?.name }}</h2>
-                    <img src="/src/assets/Icons/editorIcon.svg" alt="" @click="showMainTaskEditor = true">
+                    <img src="/src/assets/Icons/editorIcon.svg" alt="" @click="handleShowMainTaskEditor">
                 </section>
 
                 <section class="lecture-section" v-if="currentTask?.type == 'lecture'">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="action">
-                        <button @click="showObjectTaskCreator = true">Добавить блок</button>
+                        <button @click="handleShowObjectTaskCreator">Добавить блок</button>
                         <div class="action-page">
                             <button @click="handleShowDeleteTask">Удалить урок</button>
                             <button @click="goToNextLesson">Перейти к следующему уроку</button>
@@ -69,7 +69,7 @@
                             class="taskDescription-editor">
                             <p>{{ currentTask?.taskDescription.description }}</p>
                             <div class="task-action">
-                                <button @click="showEditorTaskDescription = true"><img
+                                <button @click="handleShowEditorTaskHeader()"><img
                                         src="/src/assets/Icons/editorPencilWhite.svg" alt=""></button>
                                 <button @click="deleteTaskDescription()"><img
                                         src="/src/assets/Icons/deleteIconWhite.svg" alt=""></button>
@@ -105,7 +105,7 @@
                             </div>
                         </div>
 
-                        <button @click="showQuestionEditor = true" class="add-question-btn">Добавить вопрос</button>
+                        <button @click="handleShowQuestionEditor()" class="add-question-btn">Добавить вопрос</button>
                     </section>
 
                     <section class="answer">
@@ -288,62 +288,17 @@ const currentQuestion = ref({});
 const showConfrimDeleteQuestion = ref(false);
 const showAnswerCreator = ref(false);
 
+async function handleShowMainTaskEditor() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showMainTaskEditor.value = true
+}
 
 const getModuleTasks = async () => {
     try {
         const response = await axios.get(`${API_URL}/course/task/all/${route.params.course_id}`);
-        // const response = [
-        //     {
-        //         "id": 37,
-        //         "queue": 1,
-        //         "str_value": "Введение в Laravel",
-        //         "course_id": 3,
-        //         "created_at": "2025-05-10T08:50:20.000000Z",
-        //         "updated_at": "2025-05-10T08:50:20.000000Z",
-        //         "tasks": [
-        //             {
-        //                 "id": 4,
-        //                 "name": "Установка Laravel и настройка окружения",
-        //                 "order_id": 1,
-        //                 "type": "lecture",
-        //                 "module_id": 37,
-        //                 "course_id": 3,
-        //                 "created_at": "2025-05-10T08:51:04.000000Z",
-        //                 "updated_at": "2025-05-10T08:51:04.000000Z"
-        //             },
-        //             {
-        //                 "id": 5,
-        //                 "name": "Структура проекта Laravel",
-        //                 "order_id": 2,
-        //                 "type": "lecture",
-        //                 "module_id": 37,
-        //                 "course_id": 3,
-        //                 "created_at": "2025-05-10T08:51:24.000000Z",
-        //                 "updated_at": "2025-05-10T08:51:24.000000Z"
-        //             },
-        //             {
-        //                 "id": 6,
-        //                 "name": "Роутинг и базовые контроллеры",
-        //                 "order_id": 3,
-        //                 "type": "lecture",
-        //                 "module_id": 37,
-        //                 "course_id": 3,
-        //                 "created_at": "2025-05-10T08:51:49.000000Z",
-        //                 "updated_at": "2025-05-10T08:51:49.000000Z"
-        //             },
-        //             {
-        //                 "id": 7,
-        //                 "name": "Первый API-запрос",
-        //                 "order_id": 4,
-        //                 "type": "task",
-        //                 "module_id": 37,
-        //                 "course_id": 3,
-        //                 "created_at": "2025-05-10T08:52:10.000000Z",
-        //                 "updated_at": "2025-05-10T08:52:10.000000Z"
-        //             }
-        //         ]
-        //     }
-        // ]
         const sortedModules = response.data
             .sort((a, b) => a.queue - b.queue)
             .map((module, mIndex) => {
@@ -418,28 +373,6 @@ const getTask = async () => {
         const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
         currentTask.value = response.data;
 
-        // currentTask.value = {
-        //     "id": 4,
-        //     "name": "Установка Laravel и настройка окружения",
-        //     "order_id": 1,
-        //     "type": "lecture",
-        //     "lecture": [
-        //         {
-        //             "id": 7,
-        //             "str_value": "Установка PHP, Composer, MySQL/PostgreSQL",
-        //             "media_value": null,
-        //             "task_id": 4,
-        //             "queue": 1
-        //         },
-        //         {
-        //             "id": 8,
-        //             "str_value": "В этом уроке вы узнаете, как правильно установить Laravel и подготовить рабочее окружение для разработки. Мы рассмотрим два подхода: установку Laravel на локальной машине и использование Docker-контейнеров для изолированной и воспроизводимой среды.",
-        //             "media_value": null,
-        //             "task_id": 4,
-        //             "queue": 2
-        //         }
-        //     ]
-        // }
         if (currentTask.value.type === 'task') {
             currentAnswerEditor.value = currentTask.value?.answerEditor ?? '';
             taskDescription.value = currentTask.value?.taskDescription?.description ?? '';
@@ -462,6 +395,58 @@ async function handleConfirmDeleteModule() {
         notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
         showConfrimModal.value = false
     }
+}
+
+async function handleShowQuestionEditor() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showQuestionEditor = true
+}
+
+async function handleShowMainTaskCreator(moduleId) {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    currentModule.value = moduleId
+    showMainTaskCreator.value = true
+    
+}
+
+async function handleShowModuleCreatorModal() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showModuleCreatorModal.value = true
+}
+
+async function handleShowObjectTaskCreator() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showObjectTaskCreator.value = true
+}
+
+async function handleShowConfirmModal(moduleId) {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    currentModule.value = moduleId
+    messageConfirm.value = 'Вы точно хотите удалить этот модуль?'
+    showConfrimModal.value = true
+}
+
+async function handleShowEditorTaskHeader() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showEditorTaskDescription.value = true
 }
 
 async function handleSaveTaskHeader(newTaskVal) {
@@ -507,11 +492,19 @@ async function handleSaveTaskHeader(newTaskVal) {
 }
 
 async function editValue(item) {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentValue.value = item;
     showValueEditor.value = true
 }
 
 async function deleteValue(item) {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentValue.value = item;
     messageConfirm.value = 'Вы точно хотите удалить этот объект лекции?'
     showConfrimDeleteValue.value = true;
@@ -675,6 +668,10 @@ async function addInTask(type) {
 }
 
 async function handleShowDeleteTask() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     messageConfirm.value = 'Вы уверены что хотите удалить этот курс?';
     showConfrimDeleteTask.value = true;
 }
@@ -734,6 +731,11 @@ async function goToNextLesson() {
 
 async function selectType(type) {
     try {
+        if (currentTask.value.status_course !== 'В работе') {
+            notificationRef.value.showNotification('Курс на модерации');
+            showOptionAnswer.value = false;
+            return;
+        }
         const answer = currentTask.value?.answer;
 
         const hasId = answer?.id != null;
@@ -763,10 +765,18 @@ async function selectType(type) {
 
 
 async function editAnswer() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     showAnswerEditor.value = true;
 }
 
 async function deleteAnswer() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     showConfrimDeleteAnswer.value = true;
     messageConfirm.value = "Вы уверены что хотите удалить ответ?"
 }
@@ -869,6 +879,10 @@ async function handleConfirmDeleteTaskDescription() {
 }
 
 async function deleteTaskDescription() {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     showConfrimDeleteTaskDescription.value = true;
     messageConfirm.value = "Вы уверены что хотите удалить описание задачи?"
 }
@@ -897,12 +911,19 @@ async function handleSaveQuestion(newQuestion) {
 }
 
 async function editQuestion(item) {
-    console.log(item);
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentQuestion.value = item;
     showQuestionEditor.value = true;
 }
 
 async function deleteQuestion(item) {
+    if (currentTask.value.status_course !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentQuestion.value = item;
     messageConfirm.value = "Вы уверены что хотите удалить вопрос?"
     showConfrimDeleteQuestion.value = true;
@@ -1029,7 +1050,7 @@ h6 {
     background-color: #7300b5;
 }
 
-.goHome{
+.goHome {
     background-color: #5f0096;
     padding: 20px;
     border-radius: 10px;

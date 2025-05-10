@@ -21,10 +21,10 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn primary" @click="showCardCourseModal = true">
+                        <button class="btn primary" @click="handleShowCardCourseModal">
                             Редактировать
                         </button>
-                        <button class="btn danger" @click="showConfrimModal = true">
+                        <button class="btn danger" @click="handleShowDeleteCourse">
                             Удалить курс
                         </button>
                     </div>
@@ -83,7 +83,7 @@
                     <section class="about-section" v-if="courseInfo.preview">
                         <div class="section-header with-button">
                             <h2>О курсе</h2>
-                            <button class="btn primary small" @click="showAddDescriptionModal = true">
+                            <button class="btn primary small" @click="handleShowAddDescriptionModal">
                                 Добавить описание
                             </button>
                         </div>
@@ -109,7 +109,7 @@
                     <section class="modules-section" v-if="courseInfo.preview">
                         <div class="section-header with-button">
                             <h2>Программа обучения</h2>
-                            <button class="btn primary small" @click="showModuleModal = true">
+                            <button class="btn primary small" @click="handleShowModuleModal">
                                 Добавить модуль
                             </button>
                         </div>
@@ -133,8 +133,9 @@
                             </div>
 
                             <ol class="task-list">
-                                <li v-for="task in module.tasks ||[]" :key="task.id" class="task-item">
-                                    <span class="task-type" @click="goToTask(task)">{{ task.type === 'task' ? 'Задача' : 'Лекция' }}:</span>
+                                <li v-for="task in module.tasks || []" :key="task.id" class="task-item">
+                                    <span class="task-type" @click="goToTask(task)">{{ task.type === 'task' ? 'Задача' :
+                                        'Лекция' }}:</span>
                                     <span class="task-name" @click="goToTask(task)">{{ task.name || '-' }}</span>
                                     <div class="task-actions">
                                         <button class="btn-icon small" @click="editTask(module, task)"
@@ -213,8 +214,8 @@
                                 <span class="fact-label">Время прохождения:</span>
                                 <span class="fact-value">
                                     {{ courseInfo.task_count && courseInfo.modules?.length
-                                    ? Math.round(courseInfo.task_count * courseInfo.modules.length * 20 / 60) + ' ч'
-                                    : '-' }}
+                                        ? Math.round(courseInfo.task_count * courseInfo.modules.length * 20 / 60) + ' ч'
+                                        : '-' }}
                                 </span>
                             </div>
                             <div class="fact-item">
@@ -299,8 +300,166 @@ const router = useRouter();
 const tooltipText = "Прежде чем создавать описания, модули и задачи, необходимо создать превью текст";
 
 const getCourseInfo = async () => {
-    const response = await axios.get(`${API_URL}/course/${route.params.id}`);
-    courseInfo.value = response.data;
+    // const response = await axios.get(`${API_URL}/course/${route.params.id}`);
+    // courseInfo.value = response.data;
+    courseInfo.value = {
+        "id": 3,
+        "name": "Laravel: backend development",
+        "image_path": "http://localhost:8082//storage/logoCourse/xxRRRO1jG8EWSTaq8k1GZZthNpZfAxHzJHicfPuv.webp",
+        "is_active": false,
+        "amount": 25000,
+        "category": {
+            "id": 1,
+            "category": "Laravel",
+            "created_at": null,
+            "updated_at": null
+        },
+        "has_certificate": true,
+        "author_name": "Jovany Marvin",
+        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+        "status": "Проверяется",
+        "preview": {
+            "id": 2,
+            "title": "Освой современную разработку серверной части на Laravel — самом популярном PHP-фреймворке."
+        },
+        "descriptions": [
+            {
+                "id": 3,
+                "queue": 1,
+                "str_value": "Курс «Laravel: Backend Development» — это практическое руководство по созданию мощных и гибких серверных приложений с использованием фреймворка Laravel. Вы начнете с основ маршрутизации и контроллеров, постепенно перейдете к работе с базами данных через Eloquent ORM, настройке API, системе авторизации и middleware, а также познакомитесь с архитектурными паттернами и принципами SOLID.",
+                "preview_id": 2,
+                "created_at": "2025-05-10T08:49:44.000000Z",
+                "updated_at": "2025-05-10T08:49:44.000000Z"
+            },
+            {
+                "id": 4,
+                "queue": 2,
+                "str_value": "Курс идеально подойдет тем, кто уже знаком с PHP и хочет освоить Laravel для создания профессиональных backend-решений.",
+                "preview_id": 2,
+                "created_at": "2025-05-10T08:49:54.000000Z",
+                "updated_at": "2025-05-10T08:49:54.000000Z"
+            }
+        ],
+        "task_count": 8,
+        "tags": [
+            {
+                "id": 3,
+                "course_id": 3,
+                "tag": "Laravel-11",
+                "created_at": "2025-05-10T08:48:17.000000Z",
+                "updated_at": "2025-05-10T08:48:17.000000Z"
+            },
+            {
+                "id": 4,
+                "course_id": 3,
+                "tag": "API",
+                "created_at": "2025-05-10T08:48:17.000000Z",
+                "updated_at": "2025-05-10T08:48:17.000000Z"
+            }
+        ],
+        "modules": [
+            {
+                "id": 37,
+                "queue": 1,
+                "str_value": "Введение в Laravel",
+                "course_id": 3,
+                "created_at": "2025-05-10T08:50:20.000000Z",
+                "updated_at": "2025-05-10T08:50:20.000000Z",
+                "tasks": [
+                    {
+                        "id": 5,
+                        "name": "Структура проекта Laravel",
+                        "order_id": 2,
+                        "type": "lecture",
+                        "module_id": 37,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T08:51:24.000000Z",
+                        "updated_at": "2025-05-10T08:51:24.000000Z"
+                    },
+                    {
+                        "id": 6,
+                        "name": "Роутинг и базовые контроллеры",
+                        "order_id": 3,
+                        "type": "lecture",
+                        "module_id": 37,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T08:51:49.000000Z",
+                        "updated_at": "2025-05-10T08:51:49.000000Z"
+                    },
+                    {
+                        "id": 7,
+                        "name": "Первый API-запрос",
+                        "order_id": 4,
+                        "type": "task",
+                        "module_id": 37,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T08:52:10.000000Z",
+                        "updated_at": "2025-05-10T08:52:10.000000Z"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Установка Laravel и настройка окружения.",
+                        "order_id": 1,
+                        "type": "lecture",
+                        "module_id": 37,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T08:51:04.000000Z",
+                        "updated_at": "2025-05-10T09:54:54.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 38,
+                "queue": 2,
+                "str_value": "Алгоритмы",
+                "course_id": 3,
+                "created_at": "2025-05-10T10:14:13.000000Z",
+                "updated_at": "2025-05-10T10:14:13.000000Z",
+                "tasks": [
+                    {
+                        "id": 8,
+                        "name": "Простая математика",
+                        "order_id": 5,
+                        "type": "task",
+                        "module_id": 38,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T10:14:44.000000Z",
+                        "updated_at": "2025-05-10T10:14:44.000000Z"
+                    },
+                    {
+                        "id": 9,
+                        "name": "Все о return",
+                        "order_id": 6,
+                        "type": "task",
+                        "module_id": 38,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T10:18:56.000000Z",
+                        "updated_at": "2025-05-10T10:18:56.000000Z"
+                    },
+                    {
+                        "id": 10,
+                        "name": "Тернарные операторы",
+                        "order_id": 7,
+                        "type": "task",
+                        "module_id": 38,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T10:32:03.000000Z",
+                        "updated_at": "2025-05-10T10:32:03.000000Z"
+                    },
+                    {
+                        "id": 14,
+                        "name": "Тест",
+                        "order_id": 8,
+                        "type": "task",
+                        "module_id": 38,
+                        "course_id": 3,
+                        "created_at": "2025-05-10T10:36:38.000000Z",
+                        "updated_at": "2025-05-10T10:36:38.000000Z"
+                    }
+                ]
+            }
+        ]
+    }
 
 
     cardBody.value = {
@@ -339,7 +498,7 @@ async function handleConfirmDeleteCourse() {
         setTimeout(() => {
             router.push('/');
         });
-    } catch (error){
+    } catch (error) {
         notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
@@ -364,6 +523,10 @@ async function handleConfirmEditCardCourse(newValue) {
 
 const updateCertificate = async () => {
     try {
+        if (courseInfo.value.status !== 'В работе') {
+            notificationRef.value.showNotification('Курс на модерации, операция отменена');
+            return;
+        }
         await axios.put(`${API_URL}/course/${route.params.id}`, {
             has_certificate: courseInfo.value.hasCertificate
         });
@@ -375,12 +538,20 @@ const updateCertificate = async () => {
 };
 
 const editModule = (module) => {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentModule.value = { ...module };
     isEditingModule.value = true;
     showModuleModal.value = true;
 };
 
 const confirmDeleteModule = (module) => {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentModule.value = module;
     showConfirmDelete.value = true;
 };
@@ -437,14 +608,21 @@ const handleSaveModule = async (moduleData) => {
     showModuleModal.value = false;
 };
 
-
 const showAddTaskModal = (module) => {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentModuleId.value = module.id;
     currentTask.value = { type: 'task', name: '', module_id: module.id };
     showTaskModal.value = true;
 };
 
 const editTask = (module, task) => {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentModuleId.value = module.id;
     currentTask.value = { ...task };
     showTaskModal.value = true;
@@ -456,8 +634,10 @@ const goToTask = (task) => {
 
 const deleteTask = async (module, task) => {
     try {
-        console.log(task);
-        await axios.delete(`${API_URL}/course/task/${task.id}`);
+        if (courseInfo.value.status !== 'В работе') {
+            notificationRef.value.showNotification('Курс на модерации');
+            return;
+        } await axios.delete(`${API_URL}/course/task/${task.id}`);
         module.tasks = module.tasks.filter(t => t.id !== task.id);
         notificationRef.value.showNotification('Задача удалена');
         currentModuleId.value = null;
@@ -506,6 +686,10 @@ const handleSaveTask = async (taskData) => {
 
 
 const editDescription = (description) => {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     currentDescription.value = { ...description };
     isEditingDescription.value = true;
     showDescriptionModal.value = true;
@@ -513,6 +697,10 @@ const editDescription = (description) => {
 
 const deleteDescription = async (description) => {
     try {
+        if (courseInfo.value.status !== 'В работе') {
+            notificationRef.value.showNotification('Курс на модерации');
+            return;
+        }
         await axios.delete(`${API_URL}/course/description/${description.id}`);
         courseInfo.value.descriptions = courseInfo.value.descriptions.filter(
             d => d.id !== description.id
@@ -560,6 +748,10 @@ const handleSaveDescription = async (descriptionData) => {
 };
 
 const initPreviewEdit = () => {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
     textArea.value = courseInfo.value.preview?.title || '';
     showInputArea.value = true;
 };
@@ -570,6 +762,10 @@ const cancelPreviewEdit = () => {
 
 const deletePreview = async () => {
     try {
+        if (courseInfo.value.status !== 'В работе') {
+            notificationRef.value.showNotification('Курс на модерации');
+            return;
+        }
         await axios.delete(`${API_URL}/course/preview/${courseInfo.value.preview.id}`);
         courseInfo.value.preview = null;
         notificationRef.value.showNotification('Превью удалено');
@@ -602,12 +798,51 @@ const savePreview = async (preview_id) => {
 
 const publish = async () => {
     try {
+        if (courseInfo.value.status !== 'В работе') {
+            notificationRef.value.showNotification('Курс на модерации');
+            return;
+        }
         await axios.post(`${API_URL}/course/sendAdminForCheck/${route.params.id}`);
         notificationRef.value.showNotification('Курс передан на проверку');
     } catch (error) {
         notificationRef.value.showNotification('Ошибка при передаче курса' + error?.response?.data?.error || "Неизвестная ошибка");
     }
 }
+
+async function handleShowCardCourseModal() {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showCardCourseModal.value = true
+}
+
+async function handleShowDeleteCourse() {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+
+    showConfrimModal.value = true
+}
+
+async function handleShowAddDescriptionModal() {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showAddDescriptionModal.value = true
+}
+
+async function handleShowModuleModal() {
+    if (courseInfo.value.status !== 'В работе') {
+        notificationRef.value.showNotification('Курс на модерации');
+        return;
+    }
+    showModuleModal.value = true
+}
+
+
 
 watch(showAddDescriptionModal, (val) => {
     if (val) {
@@ -1194,7 +1429,9 @@ input:checked+.slider:before {
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
-}.btn-icon:hover {
+}
+
+.btn-icon:hover {
     background-color: #59008E;
 }
 
