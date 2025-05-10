@@ -52,6 +52,11 @@
                 </div>
             </div>
 
+            <div class="code" v-else-if="localbody.answerEditor.code == 'CODE'">
+                <input v-model="localbody.answer.str_value" class="default-input"
+                    placeholder="Введите результат выполнения кода" />
+            </div>
+
             <div class="matching-modal" v-if="showMatchingModal">
                 <div class="matching-modal-overlay" @click.self="showMatchingModal = false">
                     <div class="matching-modal-container">
@@ -233,7 +238,7 @@ function initCorrectAnswers() {
 }
 
 function save() {
-    if (localbody.value.answerEditor.code == 'ONE_CHOISE' || localbody.value.answerEditor.code == 'WORD') {
+    if (localbody.value.answerEditor.code == 'ONE_CHOISE' || localbody.value.answerEditor.code == 'WORD' || localbody.value.answerEditor.code == 'CODE') {
         if (!localbody.value.answer.str_value) {
             notificationRef.value.showNotification('Укажите правильный вариант ответа');
             return;

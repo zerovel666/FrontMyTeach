@@ -23,10 +23,15 @@
                     {{ item.str_value }}
                 </label>
             </div>
-            
+
             <div class="word" v-else-if="localTask.answerEditor.code == 'WORD'">
-                <input type="text" placeholder="Введите правильный ответ"
-                    v-model="localTask.answer.str_value" class="default-input" />
+                <input type="text" placeholder="Введите правильный ответ" v-model="localTask.answer.str_value"
+                    class="default-input" />
+            </div>
+
+            <div class="word" v-else-if="localTask.answerEditor.code == 'CODE'">
+                <input type="text" placeholder="Введите правильный ответ" v-model="localTask.answer.str_value"
+                    class="default-input" />
             </div>
 
             <div class="matching" v-else-if="localTask.answerEditor.code == 'MATCHING'">
@@ -133,26 +138,22 @@ const showMatchingModal = ref(false);
 const matchingBody = ref({
     left: [],
     right: [],
-    correct: [], // индексы левой колонки, соответствующие правой
+    correct: [],
 });
 
-// Добавление новой пары
 function addMatchingPair() {
     matchingBody.value.left.push('');
     matchingBody.value.right.push('');
     matchingBody.value.correct.push(undefined);
 };
 
-// Удаление пары
 function removeMatchingPair(index) {
     matchingBody.value.left.splice(index, 1);
     matchingBody.value.right.splice(index, 1);
     matchingBody.value.correct.splice(index, 1);
 };
 
-// Открытие модального окна для сопоставления
 function openMatchingModal() {
-    // Проверяем, что все поля заполнены
     if (matchingBody.value.left.some(item => !item.trim())) {
         notificationRef.value.showNotification('Заполните все поля в левой колонке');
         return;
@@ -164,13 +165,11 @@ function openMatchingModal() {
     showMatchingModal.value = true;
 };
 
-// Сохранение сопоставленных пар
 function saveMatchingPairs() {
     showMatchingModal.value = false;
     console.log(matchingBody.value);
 };
 
-// Проверка, используется ли уже элемент левой колонки
 function isLeftItemAlreadyUsed(leftIndex) {
     return matchingBody.value.correct.includes(leftIndex) &&
         matchingBody.value.correct.indexOf(leftIndex) !== matchingBody.value.correct.lastIndexOf(leftIndex);
@@ -185,8 +184,7 @@ watch(
     (newVal) => {
         if (newVal) {
             localTask.value = JSON.parse(JSON.stringify(newVal));
-            
-            // Инициализация matchingBody если это тип MATCHING
+
             if (localTask.value.answerEditor.code === 'MATCHING' && localTask.value.answer?.json) {
                 const savedData = localTask.value.answer.json;
                 matchingBody.value.left = savedData.left || [];
@@ -217,7 +215,6 @@ async function save() {
     let params = {};
 
     if (localTask.value.answerEditor.code === 'MATCHING') {
-        // Проверка для MATCHING
         if (matchingBody.value.left.length === 0 || matchingBody.value.right.length === 0) {
             notificationRef.value.showNotification('Добавьте элементы в обе колонки');
             return;
@@ -252,7 +249,6 @@ async function save() {
 </script>
 
 <style scoped>
-/* Существующие стили оставляем без изменений */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -284,7 +280,6 @@ input[type=number]::-webkit-inner-spin-button {
     position: relative;
 }
 
-/* Стили для matching */
 .matching-columns {
     display: flex;
     gap: 20px;
@@ -358,7 +353,6 @@ input[type=number]::-webkit-inner-spin-button {
     background: #707070;
 }
 
-/* Modern Matching Modal Styles */
 .matching-modal {
     position: fixed;
     top: 0;

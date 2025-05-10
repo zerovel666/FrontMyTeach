@@ -155,7 +155,7 @@
                             </div>
 
                             <div class="code" v-if="currentTask.answerEditor?.code == 'CODE'">
-                                <p>Результат вывода: {{ currentTask.str_value }}</p>
+                                <p>Результат вывода: {{ currentTask.answer.str_value }}</p>
                                 <div class="task-action">
                                     <button @click="editAnswer()"><img src="/src/assets/Icons/editorPencilWhite.svg"
                                             alt=""></button>
@@ -429,83 +429,83 @@ const getAnswerEditors = async () => {
 
 const getTask = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
-        // currentTask.value = response.data;
+        const response = await axios.get(`${API_URL}/course/task/${route.params.id}`);
+        currentTask.value = response.data;
 
-        currentTask.value = {
-            "id": 2,
-            "name": "Проверка лекции",
-            "order_id": 1,
-            "type": "task",
-            "taskDescription": {
-                "id": 2,
-                "description": "Ну что готовы проверить свои знания о предыдущей лекции или рискнете еще раз пробежаться глазами?) О чем мечтал мальчик?",
-                "task_id": 2,
-                "created_at": null,
-                "updated_at": "2025-05-08T18:48:32.000000Z"
-            },
-            "question": [
-                {
-                    "id": 2,
-                    "str_value": "1. О волшебной кнопке",
-                    "media_value": null,
-                    "task_id": 2,
-                    "json_value": null,
-                    "queue": 2
-                },
-                {
-                    "id": 3,
-                    "str_value": "2. О быстром отображении",
-                    "media_value": null,
-                    "task_id": 2,
-                    "json_value": null,
-                    "queue": 3
-                },
-                {
-                    "id": 4,
-                    "str_value": "3. О красивом оформлении",
-                    "media_value": null,
-                    "task_id": 2,
-                    "json_value": null,
-                    "queue": 4
-                }
-            ],
-            "answer": {
-                "id": 10,
-                "str_value": null,
-                "media_value": null,
-                "json": {
-                    "left": [
-                        "Мальчик",
-                        "Laravel + vue3",
-                        "Vite",
-                        "20=20"
-                    ],
-                    "right": [
-                        "Кто главный герой рассказа",
-                        "О каком сборищке идет речь",
-                        "О каких/ом фреймворке/ах шла речь",
-                        "18=18"
-                    ],
-                    "correct": [
-                        0,
-                        2,
-                        1,
-                        3
-                    ]
-                },
-                "task_id": 2,
-                "queue": 1,
-                "type_id": 5
-            },
-            "answerEditor": {
-                "id": 5,
-                "code": "MATCHING",
-                "description": "Сопоставьте:",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            }
-        }
+        // currentTask.value = {
+        //     "id": 2,
+        //     "name": "Проверка лекции",
+        //     "order_id": 1,
+        //     "type": "task",
+        //     "taskDescription": {
+        //         "id": 2,
+        //         "description": "Ну что готовы проверить свои знания о предыдущей лекции или рискнете еще раз пробежаться глазами?) О чем мечтал мальчик?",
+        //         "task_id": 2,
+        //         "created_at": null,
+        //         "updated_at": "2025-05-08T18:48:32.000000Z"
+        //     },
+        //     "question": [
+        //         {
+        //             "id": 2,
+        //             "str_value": "1. О волшебной кнопке",
+        //             "media_value": null,
+        //             "task_id": 2,
+        //             "json_value": null,
+        //             "queue": 2
+        //         },
+        //         {
+        //             "id": 3,
+        //             "str_value": "2. О быстром отображении",
+        //             "media_value": null,
+        //             "task_id": 2,
+        //             "json_value": null,
+        //             "queue": 3
+        //         },
+        //         {
+        //             "id": 4,
+        //             "str_value": "3. О красивом оформлении",
+        //             "media_value": null,
+        //             "task_id": 2,
+        //             "json_value": null,
+        //             "queue": 4
+        //         }
+        //     ],
+        //     "answer": {
+        //         "id": 10,
+        //         "str_value": null,
+        //         "media_value": null,
+        //         "json": {
+        //             "left": [
+        //                 "Мальчик",
+        //                 "Laravel + vue3",
+        //                 "Vite",
+        //                 "20=20"
+        //             ],
+        //             "right": [
+        //                 "Кто главный герой рассказа",
+        //                 "О каком сборищке идет речь",
+        //                 "О каких/ом фреймворке/ах шла речь",
+        //                 "18=18"
+        //             ],
+        //             "correct": [
+        //                 0,
+        //                 2,
+        //                 1,
+        //                 3
+        //             ]
+        //         },
+        //         "task_id": 2,
+        //         "queue": 1,
+        //         "type_id": 5
+        //     },
+        //     "answerEditor": {
+        //         "id": 5,
+        //         "code": "MATCHING",
+        //         "description": "Сопоставьте:",
+        //         "created_at": "2025-05-01T17:05:40.000000Z",
+        //         "updated_at": "2025-05-01T17:05:40.000000Z"
+        //     }
+        // }
         if (currentTask.value.type === 'task') {
             currentAnswerEditor.value = currentTask.value?.answerEditor ?? '';
             taskDescription.value = currentTask.value?.taskDescription?.description ?? '';
@@ -804,6 +804,8 @@ async function selectType(type) {
                 task_id: route.params.id
             })
             currentTask.value.answer = response.data;
+            currentTask.value.answerEditor = type;
+            currentAnswerEditor.value = type;
         }
         currentAnswerEditor.value = type;
         showOptionAnswer.value = false
