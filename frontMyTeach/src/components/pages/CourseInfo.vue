@@ -54,7 +54,7 @@
                         <h2>{{ courseInfo.course_amount === null ? 'Цена: Бесплатно' : `Цена:
                             ${courseInfo.course_amount}KZT` }}
                         </h2>
-                        <button class="btn-buy" @click="buy()">{{ courseInfo.buyed ? "Продолжить" : "Приобрести"
+                        <button class="btn-buy" @click="buy()" v-if="courseInfo.buyed">{{ courseInfo.buyed ? "Продолжить" : "Приобрести"
                         }}</button>
                         <div class="fastInfoCourse">
                             <div class="line"></div>
@@ -109,6 +109,8 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import Notification from '../Notification.vue';
+import VueCookies from 'vue-cookies';
+
 
 const notificationRef = ref(null);
 const route = useRoute();
@@ -133,164 +135,15 @@ const buy = async () => {
 }
 
 const getCourseInfo = async () => {
-    // const response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
-    // courseInfo.value = response.data;
 
-    courseInfo.value = {
-        "category_id": 1,
-        "category_name": "Laravel",
-        "course_id": 3,
-        "course_name": "Laravel: backend development",
-        "course_amount": null,
-        "image_path": "http://localhost:8082//storage/logoCourse/xxRRRO1jG8EWSTaq8k1GZZthNpZfAxHzJHicfPuv.webp",
-        "author_id": "1",
-        "author_name": "Jovany Marvin",
-        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-        "rating": "0",
-        "tags": [
-            {
-                "id": 3,
-                "course_id": 3,
-                "tag": "Laravel-11",
-                "created_at": "2025-05-10T08:48:17.000000Z",
-                "updated_at": "2025-05-10T08:48:17.000000Z"
-            },
-            {
-                "id": 4,
-                "course_id": 3,
-                "tag": "API",
-                "created_at": "2025-05-10T08:48:17.000000Z",
-                "updated_at": "2025-05-10T08:48:17.000000Z"
-            }
-        ],
-        "preview": "Освой современную разработку серверной части на Laravel — самом популярном PHP-фреймворке.",
-        "description": [
-            {
-                "id": 3,
-                "queue": 1,
-                "str_value": "Курс «Laravel: Backend Development» — это практическое руководство по созданию мощных и гибких серверных приложений с использованием фреймворка Laravel. Вы начнете с основ маршрутизации и контроллеров, постепенно перейдете к работе с базами данных через Eloquent ORM, настройке API, системе авторизации и middleware, а также познакомитесь с архитектурными паттернами и принципами SOLID.",
-                "preview_id": 2,
-                "created_at": "2025-05-10T08:49:44.000000Z",
-                "updated_at": "2025-05-10T08:49:44.000000Z"
-            },
-            {
-                "id": 4,
-                "queue": 2,
-                "str_value": "Курс идеально подойдет тем, кто уже знаком с PHP и хочет освоить Laravel для создания профессиональных backend-решений.",
-                "preview_id": 2,
-                "created_at": "2025-05-10T08:49:54.000000Z",
-                "updated_at": "2025-05-10T08:49:54.000000Z"
-            }
-        ],
-        "modules": [
-            {
-                "id": 37,
-                "queue": 1,
-                "str_value": "Введение в Laravel",
-                "course_id": 3,
-                "created_at": "2025-05-10T08:50:20.000000Z",
-                "updated_at": "2025-05-10T08:50:20.000000Z",
-                "tasks": [
-                    {
-                        "id": 5,
-                        "name": "Структура проекта Laravel",
-                        "order_id": 2,
-                        "type": "lecture",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:51:24.000000Z",
-                        "updated_at": "2025-05-10T08:51:24.000000Z"
-                    },
-                    {
-                        "id": 6,
-                        "name": "Роутинг и базовые контроллеры",
-                        "order_id": 3,
-                        "type": "lecture",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:51:49.000000Z",
-                        "updated_at": "2025-05-10T08:51:49.000000Z"
-                    },
-                    {
-                        "id": 7,
-                        "name": "Первый API-запрос",
-                        "order_id": 4,
-                        "type": "task",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:52:10.000000Z",
-                        "updated_at": "2025-05-10T08:52:10.000000Z"
-                    },
-                    {
-                        "id": 4,
-                        "name": "Установка Laravel и настройка окружения.",
-                        "order_id": 1,
-                        "type": "lecture",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:51:04.000000Z",
-                        "updated_at": "2025-05-10T09:54:54.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 38,
-                "queue": 2,
-                "str_value": "Алгоритмы",
-                "course_id": 3,
-                "created_at": "2025-05-10T10:14:13.000000Z",
-                "updated_at": "2025-05-10T10:14:13.000000Z",
-                "tasks": [
-                    {
-                        "id": 8,
-                        "name": "Простая математика",
-                        "order_id": 5,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:14:44.000000Z",
-                        "updated_at": "2025-05-10T10:14:44.000000Z"
-                    },
-                    {
-                        "id": 9,
-                        "name": "Все о return",
-                        "order_id": 6,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:18:56.000000Z",
-                        "updated_at": "2025-05-10T10:18:56.000000Z"
-                    },
-                    {
-                        "id": 10,
-                        "name": "Тернарные операторы",
-                        "order_id": 7,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:32:03.000000Z",
-                        "updated_at": "2025-05-10T10:32:03.000000Z"
-                    },
-                    {
-                        "id": 14,
-                        "name": "Тест",
-                        "order_id": 8,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:36:38.000000Z",
-                        "updated_at": "2025-05-10T10:36:38.000000Z"
-                    }
-                ]
-            }
-        ],
-        "task_count": 8,
-        "has_course_count": 1,
-        "likes": 0,
-        "hasCertificate": true,
-        "created_at": "10-05-2025",
-        "buyed": true
-    }
+    let response = null;
+    if (VueCookies.get('token') && VueCookies.get('role') == 'student'){
+        response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
+    }else(
+        response = await axios.get(`${API_URL}/student/course/noAuth/${route.params.id}`)
+    )
+    courseInfo.value = response.data;
+
 }
 
 onMounted(() => {
