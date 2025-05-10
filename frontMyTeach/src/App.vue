@@ -66,7 +66,7 @@ const logTimeSpent = async () => {
 		try {
 			await axios.post(`${API_URL}/client/analytics/time`, data);
 		} catch (error) {
-			console.error('Error logging time:', error);
+			console.error('Error logging time:', error?.response?.data || error.message);
 		}
 	}
 };
@@ -121,7 +121,7 @@ const getUserInfo = async () => {
 			}
 			VueCookies.set('role', userInfo.value.roles[0].slug);
 		} catch (error) {
-			console.log('Ошибка при запросе user info:', error);
+			console.error('Error logging time:', error?.response?.data?.error || "Неизвестная ошибка");
 
 			if (error.response) {
 				console.log('Ошибка HTTP:', error.response.status);

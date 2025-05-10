@@ -99,7 +99,7 @@ const goToCreateCourse = async () => {
     try {
         showModal.value = true;
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при подготовке создания курса');
+        notificationRef.value.showNotification('Ошибка при подготовке создания курса' + error?.response?.data?.error || "Неизвестная ошибка");
         console.error(error);
     }
 }

@@ -52,9 +52,8 @@ const auth = async () => {
 		}
 		decodeURIComponent(VueCookies.get('token'));
 		router.push('/');
-	} catch (err) {
-		notificationRef.value.showNotification('Ошибка авторизации. Проверьте данные.');
-		console.error('Auth error:', err);
+	} catch (error) {
+		notificationRef.value.showNotification('Ошибка авторизации' + error.response.data.error);
 	}
 };
 

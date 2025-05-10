@@ -3,6 +3,9 @@
     <div class="containerBody" @click.stop="showOptionAnswer = false">
         <div class="main-content" v-if="moduleTasks.length > 0, currentTask?.id, answerEditors.length > 0">
             <div class="module-content">
+                <div class="goHome" @click="router.push(`/main/course/editor/${route.params.course_id}`)">
+                        <h3>Перейти на главную</h3>
+                    </div>
                 <div class="modules" v-for="(module, index) in moduleTasks" :key="index">
                     <div class="module-item">
                         <h3>{{ module.displayIndex }}. {{ module.str_value }}</h3>
@@ -456,7 +459,7 @@ async function handleConfirmDeleteModule() {
         }
         showConfrimModal.value = false
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
         showConfrimModal.value = false
     }
 }
@@ -499,7 +502,7 @@ async function handleSaveTaskHeader(newTaskVal) {
 
         showMainTaskCreator.value = false;
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`)
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`)
     }
 }
 
@@ -598,7 +601,7 @@ async function handleSaveValue(newItem) {
             }
         }
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error.message}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -612,7 +615,7 @@ async function handleConfirmDeleteValue() {
         showConfrimDeleteValue.value = false;
         notificationRef.value.showNotification("Блок успешно удалён");
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`)
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`)
     }
 }
 
@@ -685,7 +688,7 @@ async function handleConfirmDeleteTask() {
             router.push(`/main/course/editor/${route.params.course_id}`)
         }, 2000)
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -725,7 +728,7 @@ async function goToNextLesson() {
         showMainTaskCreator.value = true;
 
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error.message}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -754,8 +757,7 @@ async function selectType(type) {
         currentAnswerEditor.value = type;
         showOptionAnswer.value = false;
     } catch (error) {
-        const msg = error.response?.data?.error || error.message || 'Неизвестная ошибка';
-        notificationRef.value.showNotification(`Ошибка: ${msg}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -782,7 +784,7 @@ async function handleConfirmDeleteAnswer() {
             notificationRef.value.showNotification("Ответ успешно удалён");
         }
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -796,7 +798,7 @@ async function handleConfirmDeleteQuestion() {
         showConfrimDeleteQuestion.value = false;
         notificationRef.value.showNotification("Вопрос успешно удалён")
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -818,7 +820,7 @@ async function saveDescription() {
             notificationRef.value.showNotification("Описание задачи успешно добавлено")
         }
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 
 }
@@ -850,7 +852,7 @@ async function handleSaveAnswer(params) {
             showAnswerCreator.value = false;
         }
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка : ${error}`)
+        notificationRef.value.showNotification(`Ошибка : ${error?.response?.data?.error || "Неизвестная ошибка"}`)
     }
 }
 
@@ -862,7 +864,7 @@ async function handleConfirmDeleteTaskDescription() {
         taskDescription.value = '';
         notificationRef.value.showNotification("Описание задачи успешно удалено")
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -890,7 +892,7 @@ async function handleSaveQuestion(newQuestion) {
             notificationRef.value.showNotification("Вопрос успешно добавлен")
         }
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -950,7 +952,7 @@ async function handleCreateAnswer(params) {
         notificationRef.value.showNotification("Ответ успешно добавлен")
         showAnswerCreator.value = false;
     } catch (error) {
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -1025,6 +1027,14 @@ h6 {
 
 .modules button:hover {
     background-color: #7300b5;
+}
+
+.goHome{
+    background-color: #5f0096;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
 }
 
 .module-item {

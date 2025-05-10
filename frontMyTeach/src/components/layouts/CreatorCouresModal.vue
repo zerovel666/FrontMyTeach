@@ -87,7 +87,7 @@ const getCategories = async () => {
             }
         ]
     } catch (error) {
-        console.error('Ошибка при загрузке категорий:', error);
+        console.error('Ошибка при загрузке категорий:', error?.response?.data?.error || "Неизвестная ошибка");
     }
 };
 
@@ -121,7 +121,7 @@ const submitForm = async () => {
         resetForm();
         emit('close');
     } catch (error) {
-        console.error('Ошибка при создании курса:', error);
+        console.error('Ошибка при создании курса:', error?.response?.data?.error || "Неизвестная ошибка");
     }
 };
 

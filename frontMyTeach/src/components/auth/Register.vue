@@ -188,9 +188,9 @@ const register = async () => {
 				router.push('/auth');
 			}, 2000);
 		}
-	} catch (err) {
-		notificationRef.value.showNotification('Ошибка регистрации: ' + (err.response?.data?.message || err.message));
-		console.error('Registration error:', err);
+	} catch (error) {
+		notificationRef.value.showNotification('Ошибка регистрации: ' + error?.response?.data?.error || "Неизвестная ошибка");
+		console.error('Registration error:', error);
 	}
 };
 </script>

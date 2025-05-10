@@ -192,7 +192,7 @@
                             <span class="toggle-label">{{ courseInfo.has_certificate ? 'Да' : 'Нет' }}</span>
                         </div>
 
-                        <button class="btn primary purchase-btn">
+                        <button class="btn primary purchase-btn" @click="publish">
                             Опубликовать
                         </button>
 
@@ -323,7 +323,7 @@ const togglePriceEditing = async () => {
             courseInfo.value.amount = editedPrice.value;
             notificationRef.value.showNotification('Цена успешно обновлена');
         } catch (error) {
-            notificationRef.value.showNotification('Ошибка при обновлении цены');
+            notificationRef.value.showNotification('Ошибка при обновлении цены' + error?.response?.data?.error || "Неизвестная ошибка");
         }
     } else {
         editedPrice.value = courseInfo.value.amount;
@@ -340,7 +340,7 @@ async function handleConfirmDeleteCourse() {
             router.push('/');
         });
     } catch (error){
-        notificationRef.value.showNotification(`Ошибка: ${error}`);
+        notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
     }
 }
 
@@ -358,7 +358,7 @@ async function handleConfirmEditCardCourse(newValue) {
 
     } catch (error) {
         notificationRef.value.showNotification(`Ошибка ${error.message}`);
-        console.error('Ошибка при обновлении:', error);
+        console.error('Ошибка при обновлении:', error?.response?.data?.error || "Неизвестная ошибка");
     }
 }
 
@@ -369,7 +369,7 @@ const updateCertificate = async () => {
         });
         notificationRef.value.showNotification('Настройки сертификата обновлены');
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при обновлении сертификата');
+        notificationRef.value.showNotification('Ошибка при обновлении сертификата' + error?.response?.data?.error || "Неизвестная ошибка");
         courseInfo.value.hasCertificate = !courseInfo.value.hasCertificate;
     }
 };
@@ -393,7 +393,7 @@ const handleDeleteModule = async () => {
         );
         notificationRef.value.showNotification('Модуль удален');
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при удалении модуля');
+        notificationRef.value.showNotification('Ошибка при удалении модуля' + error?.response?.data?.error || "Неизвестная ошибка");
     }
     showConfirmDelete.value = false;
     currentModule.value = false;
@@ -430,7 +430,7 @@ const handleSaveModule = async (moduleData) => {
             isEditingModule.value ? 'Модуль обновлен' : 'Модуль добавлен'
         );
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при сохранении модуля');
+        notificationRef.value.showNotification('Ошибка при сохранении модуля' + error?.response?.data?.error || "Неизвестная ошибка");
         console.log(error);
     }
 
@@ -463,7 +463,7 @@ const deleteTask = async (module, task) => {
         currentModuleId.value = null;
         currentTask.value = null;
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при удалении задачи');
+        notificationRef.value.showNotification('Ошибка при удалении задачи' + error?.response?.data?.error || "Неизвестная ошибка");
     }
 };
 
@@ -521,7 +521,7 @@ const deleteDescription = async (description) => {
         currentDescription.value = null;
         isEditingDescription.value = false;
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при удалении описания');
+        notificationRef.value.showNotification('Ошибка при удалении описания' + error?.response?.data?.error || "Неизвестная ошибка");
     }
 };
 
@@ -553,7 +553,7 @@ const handleSaveDescription = async (descriptionData) => {
             descriptionData.id ? 'Описание обновлено' : 'Описание добавлено'
         );
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при сохранении описания');
+        notificationRef.value.showNotification('Ошибка при сохранении описания' + error?.response?.data?.error || "Неизвестная ошибка");
     }
 
     showDescriptionModal.value = false;
@@ -574,7 +574,7 @@ const deletePreview = async () => {
         courseInfo.value.preview = null;
         notificationRef.value.showNotification('Превью удалено');
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при удалении превью');
+        notificationRef.value.showNotification('Ошибка при удалении превью' + error?.response?.data?.error || "Неизвестная ошибка");
     }
 };
 
@@ -596,9 +596,18 @@ const savePreview = async (preview_id) => {
         showInputArea.value = false;
         notificationRef.value.showNotification('Превью сохранено');
     } catch (error) {
-        notificationRef.value.showNotification('Ошибка при сохранении превью');
+        notificationRef.value.showNotification('Ошибка при сохранении превью' + error?.response?.data?.error || "Неизвестная ошибка");
     }
 };
+
+const publish = async () => {
+    try {
+        await axios.post(`${API_URL}/course/sendAdminForCheck/${route.params.id}`);
+        notificationRef.value.showNotification('Курс передан на проверку');
+    } catch (error) {
+        notificationRef.value.showNotification('Ошибка при передаче курса' + error?.response?.data?.error || "Неизвестная ошибка");
+    }
+}
 
 watch(showAddDescriptionModal, (val) => {
     if (val) {

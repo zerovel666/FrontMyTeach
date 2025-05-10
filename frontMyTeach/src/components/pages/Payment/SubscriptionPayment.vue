@@ -163,7 +163,7 @@ const handlePayment = async () => {
         notificationRef.value.showNotification('Оплата прошла успешно, в случае неполадок обратитесь в тех.поддержку :)');
     } catch (error) {
         console.log(error);
-        notificationRef.value.showNotification(error.response.data.error);
+        notificationRef.value.showNotification(error?.response?.data?.error || "Неизвестная ошибка");
     }
 };
 

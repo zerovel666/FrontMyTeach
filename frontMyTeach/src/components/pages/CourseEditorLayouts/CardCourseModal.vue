@@ -189,7 +189,7 @@ const removeTag = async (index) => {
             notificationRef.value.showNotification('Успешно удалено');
             localCardBody.value.tags.splice(index, 1)
         } catch (error) {
-            notificationRef.value.showNotification(`Ошибка: ${error}`);
+            notificationRef.value.showNotification(`Ошибка: ${error?.response?.data?.error || "Неизвестная ошибка"}`);
         }
     } else {
         localCardBody.value.tags.splice(index, 1)
