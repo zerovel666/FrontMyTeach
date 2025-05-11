@@ -25,6 +25,7 @@ import SubscriptionPayment from './components/pages/Payment/SubscriptionPayment.
 import TeachingBible from './components/pages/TeachingBible.vue';
 import MainCourseEditor from './components/pages/MainCourseEditor.vue';
 import CourseTaskEditor from './components/pages/CourseTaskEditor.vue'
+import TaskStudent from './components/pages/TaskStudent.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -73,7 +74,7 @@ const routes = [
   { path: '/teaching', component: TeachingBible },
   { path: '/main/course/editor/:id', component: MainCourseEditor },
   { path: '/task/editor/:course_id/:id', component: CourseTaskEditor },
-  { path: '/task/:course_id/:id'},
+  { path: '/task/:course_id/:id', component: TaskStudent },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 
 ];

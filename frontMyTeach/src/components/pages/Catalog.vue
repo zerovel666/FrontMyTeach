@@ -32,6 +32,9 @@
                         </p>
                     </div>
                 </div>
+                <div class="no-course" v-else>
+                    <h1>Курсов нет</h1>
+                </div>
             </div>
             <Paginate :paginateData="paginateData" @howPage="updatePage" />
         </div>

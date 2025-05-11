@@ -289,7 +289,7 @@ const showConfrimDeleteQuestion = ref(false);
 const showAnswerCreator = ref(false);
 
 async function handleShowMainTaskEditor() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -398,7 +398,7 @@ async function handleConfirmDeleteModule() {
 }
 
 async function handleShowQuestionEditor() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -406,7 +406,7 @@ async function handleShowQuestionEditor() {
 }
 
 async function handleShowMainTaskCreator(moduleId) {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -416,7 +416,7 @@ async function handleShowMainTaskCreator(moduleId) {
 }
 
 async function handleShowModuleCreatorModal() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -424,7 +424,7 @@ async function handleShowModuleCreatorModal() {
 }
 
 async function handleShowObjectTaskCreator() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -432,7 +432,7 @@ async function handleShowObjectTaskCreator() {
 }
 
 async function handleShowConfirmModal(moduleId) {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -442,7 +442,7 @@ async function handleShowConfirmModal(moduleId) {
 }
 
 async function handleShowEditorTaskHeader() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -492,7 +492,7 @@ async function handleSaveTaskHeader(newTaskVal) {
 }
 
 async function editValue(item) {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -501,7 +501,7 @@ async function editValue(item) {
 }
 
 async function deleteValue(item) {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -668,7 +668,7 @@ async function addInTask(type) {
 }
 
 async function handleShowDeleteTask() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -731,7 +731,8 @@ async function goToNextLesson() {
 
 async function selectType(type) {
     try {
-        if (currentTask.value.status_course !== 'В работе') {
+        console.log(currentTask.value.course_status)
+        if (currentTask.value.course_status !== 'В работе') {
             notificationRef.value.showNotification('Курс на модерации');
             showOptionAnswer.value = false;
             return;
@@ -765,7 +766,7 @@ async function selectType(type) {
 
 
 async function editAnswer() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -773,7 +774,7 @@ async function editAnswer() {
 }
 
 async function deleteAnswer() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -879,7 +880,7 @@ async function handleConfirmDeleteTaskDescription() {
 }
 
 async function deleteTaskDescription() {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -911,7 +912,7 @@ async function handleSaveQuestion(newQuestion) {
 }
 
 async function editQuestion(item) {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
@@ -920,7 +921,7 @@ async function editQuestion(item) {
 }
 
 async function deleteQuestion(item) {
-    if (currentTask.value.status_course !== 'В работе') {
+    if (currentTask.value.course_status !== 'В работе') {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }

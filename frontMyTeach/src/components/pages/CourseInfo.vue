@@ -54,7 +54,7 @@
                         <h2>{{ courseInfo.course_amount === null ? 'Цена: Бесплатно' : `Цена:
                             ${courseInfo.course_amount}KZT` }}
                         </h2>
-                        <button class="btn-buy" @click="buy()" v-if="courseInfo.buyed">{{ courseInfo.buyed ? "Продолжить" : "Приобрести"
+                        <button class="btn-buy" @click="buy()"v-if="'buyed' in courseInfo">{{ courseInfo.buyed ? "Продолжить" : "Приобрести"
                         }}</button>
                         <div class="fastInfoCourse">
                             <div class="line"></div>
@@ -124,6 +124,7 @@ const buy = async () => {
             if (response.data.uuid) {
                 router.push(`/pay/course/${response.data.uuid}`);
             } else {
+                courseInfo.value.buyed = true
                 notificationRef.value.showNotification(response.data.message ?? 'Этот курс уже был приобретен вами');
             }
         } else {

@@ -800,7 +800,7 @@ const pushById = async (id) => {
 }
 
 const goToEdit = async (id) => {
-    //write logic
+    router.push(`/main/course/editor/${id}`)
 }
 
 const publish = async (id) => {
