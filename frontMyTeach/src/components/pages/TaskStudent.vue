@@ -1,7 +1,7 @@
 <template>
     <TopBar />
     <div class="containerBody">
-        <div class="content">
+        <div class="content" v-if="moduleTasks.length > 0 && task">
             <div class="modules-content" :style="{ height: `${taskContainerHeight}px` }">
                 <div class="module" v-for="(module, index) in moduleTasks">
                     <div class="module-item">
@@ -17,9 +17,9 @@
             </div>
 
             <div class="task-container">
-                <h2>{{ tasks.name }}</h2>
-                <section class="lecture-content" v-if="tasks.type == 'lecture'">
-                    <div class="lecture" v-for="(lecture, index) in tasks.lectures" :key="index">
+                <h2>{{ task.name }}</h2>
+                <section class="lecture-content" v-if="task.type == 'lecture'">
+                    <div class="lecture" v-for="(lecture, index) in task.lectures" :key="index">
                         <div class="str-value" v-if="lecture.str_value">
                             <p>{{ lecture.str_value }}</p>
                         </div>
@@ -29,13 +29,25 @@
                     </div>
                 </section>
 
-                <section class="task" v-if="tasks.type == 'task'">
+                <section class="task" v-if="task.type == 'task'">
+                    <div class="task-description">
+                        <h3>Описание</h3>
+                        <p>{{ task.task_description.description }}</p>
+                    </div>
+                    <div class="task-questions">
+                        <h3>Задание</h3>
+                        <p>{{ task.answer.answer_editors.description }}</p>
+                        <div class="questions">
+                            <p v-for="(question, index) in task.questions" :key="index">{{ question.str_value }}</p>
+                        </div>
+                    </div>
 
+                   
                 </section>
 
                 <div class="task-action">
-                    <button @click="goBackTask">К предыдущему уроку</button>
-                    <button @click="goNextTask">Следующий урок</button>
+                    <button @click="goBackTask()">К предыдущему уроку</button>
+                    <button @click="goNextTask()">Следующий урок</button>
                 </div>
             </div>
         </div>
@@ -49,72 +61,24 @@
 import { useRoute, useRouter } from 'vue-router';
 import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import Notification from '../Notification.vue';
 
 const route = useRoute();
 const router = useRouter();
-const tasks = ref([]);
+const task = ref([]);
 const moduleTasks = ref([]);
 const notificationRef = ref(null)
 const taskContainerHeight = ref(0);
 
 async function getTask() {
-    // const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
-    // tasks.value = response.data;
+    const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
+    tasks.value = response.data;
 
-    tasks.value = {
-        "id": 4,
-        "name": "Установка Laravel и настройка окружения.",
-        "order_id": 1,
-        "type": "lecture",
-        "module_id": 37,
-        "course_id": 3,
-        "created_at": "2025-05-10T08:51:04.000000Z",
-        "updated_at": "2025-05-10T09:54:54.000000Z",
-        "userTask": {
-            "id": 54,
-            "course_id": 3,
-            "task_id": 4,
-            "user_id": 2,
-            "userAnswer": null,
-            "rightAnswer": null,
-            "isCompleted": true,
-            "created_at": "2025-05-10T18:15:45.000000Z",
-            "updated_at": "2025-05-10T18:16:07.000000Z"
-        },
-        "lectures": [
-            {
-                "id": 7,
-                "str_value": "Установка PHP, Composer, MySQL/PostgreSQL",
-                "media_value": null,
-                "task_id": 4,
-                "queue": 1,
-                "created_at": "2025-05-10T09:02:40.000000Z",
-                "updated_at": "2025-05-10T09:03:08.000000Z"
-            },
-            {
-                "id": 8,
-                "str_value": "В этом уроке вы узнаете, как правильно установить Laravel и подготовить рабочее окружение для разработки. Мы рассмотрим два подхода: установку Laravel на локальной машине и использование Docker-контейнеров для изолированной и воспроизводимой среды.",
-                "media_value": null,
-                "task_id": 4,
-                "queue": 2,
-                "created_at": "2025-05-10T09:03:26.000000Z",
-                "updated_at": "2025-05-10T09:03:26.000000Z"
-            },
-            {
-                "id": 10,
-                "str_value": null,
-                "media_value": "http://localhost:8082/storage/lectureMediaValue/NJyfP7VP5HD2eSHbNqZbG7GwC6Y1Y2DYe6xNP9HM.webp",
-                "task_id": 4,
-                "queue": 3,
-                "created_at": "2025-05-10T09:40:07.000000Z",
-                "updated_at": "2025-05-10T09:40:20.000000Z"
-            }
-        ]
-    }
+  
+    updateTaskContainerHeight();
 }
 
 async function getAllTasksInModule() {
@@ -150,7 +114,7 @@ async function getAllTasksInModule() {
                     "course_id": 3,
                     "created_at": "2025-05-10T08:51:24.000000Z",
                     "updated_at": "2025-05-10T08:51:24.000000Z",
-                    "isCompleted": false
+                    "isCompleted": true
                 },
                 {
                     "id": 6,
@@ -161,7 +125,7 @@ async function getAllTasksInModule() {
                     "course_id": 3,
                     "created_at": "2025-05-10T08:51:49.000000Z",
                     "updated_at": "2025-05-10T08:51:49.000000Z",
-                    "isCompleted": false
+                    "isCompleted": true
                 },
                 {
                     "id": 7,
@@ -244,6 +208,7 @@ async function getAllTasksInModule() {
                 displayIndex: `${mIndex + 1}`
             };
         });
+    updateTaskContainerHeight();
 
 }
 
@@ -256,7 +221,7 @@ async function goBackTask() {
         for (let m = 0; m < moduleTasks.value.length; m++) {
             const module = moduleTasks.value[m];
             for (let t = 0; t < module.tasks.length; t++) {
-                if (module.tasks[t].id === tasks.value.id) {
+                if (module.tasks[t].id === task.value.id) {
                     currentModuleIndex = m;
                     currentTaskIndex = t;
                     break;
@@ -305,7 +270,7 @@ async function goNextTask() {
         for (let m = 0; m < moduleTasks.value.length; m++) {
             const module = moduleTasks.value[m];
             for (let t = 0; t < module.tasks.length; t++) {
-                if (module.tasks[t].id === tasks.value.id) {
+                if (module.tasks[t].id === task.value.id) {
                     currentModuleIndex = m;
                     currentTaskIndex = t;
                     break;
@@ -357,7 +322,8 @@ function updateTaskContainerHeight() {
 }
 
 
-watch(() => tasks.value, () => {
+
+watch(() => task.value, () => {
     updateTaskContainerHeight();
 }, { deep: true });
 
@@ -371,8 +337,6 @@ watch(() => route.params.id, (newId) => {
 onMounted(() => {
     getTask();
     getAllTasksInModule();
-    updateTaskContainerHeight();
-
 })
 </script>
 
@@ -404,8 +368,6 @@ h6 {
     gap: 40px;
     overflow-y: auto;
 }
-
-
 
 .module-task {
     display: flex;
@@ -457,6 +419,7 @@ h6 {
     background: #59008E;
     border-radius: 20px;
     padding: 30px;
+    line-height: 140%;
 }
 
 .task-container h2 {
@@ -467,10 +430,6 @@ h6 {
     display: flex;
     flex-direction: column;
     gap: 30px;
-}
-
-.lecture-content .str-value p {
-    line-height: 140%;
 }
 
 .lecture-content .media-value img {
@@ -498,6 +457,18 @@ h6 {
 
 .task-action button:hover {
     box-shadow: 0 0 20px #B14788;
-
 }
+
+.task h3 {
+    margin: 40px 0 20px 0;
+}
+
+.questions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+
 </style>

@@ -167,27 +167,6 @@
                                 </div>
                             </div>
 
-                            <div class="matching" v-if="currentTask.answerEditor?.code == 'MATCHING'">
-                                <div class="matching-content">
-                                    <h3>Сопоставление</h3>
-                                    <div class="column-matching">
-                                        <p v-for="(leftIndex, rightIndex) in currentTask.answer.json.correct"
-                                            :key="rightIndex">
-                                            <strong>{{ currentTask.answer.json.right[rightIndex] }}</strong> →
-                                            {{ currentTask.answer.json.left[leftIndex] }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="task-action">
-                                    <button @click="editAnswer()">
-                                        <img src="/src/assets/Icons/editorPencilWhite.svg" alt="">
-                                    </button>
-                                    <button @click="deleteAnswer()">
-                                        <img src="/src/assets/Icons/deleteIconWhite.svg" alt="">
-                                    </button>
-                                </div>
-                            </div>
-
                         </div>
                         <button v-else class="add-answer-btn" @click="handleShowAnswerCreator()">Добавить ответ</button>
 
@@ -341,13 +320,7 @@ const getAnswerEditors = async () => {
                 "created_at": "2025-05-01T17:05:40.000000Z",
                 "updated_at": "2025-05-01T17:05:40.000000Z"
             },
-            {
-                "id": 5,
-                "code": "MATCHING",
-                "description": "Сопоставьте:",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            },
+            
             {
                 "id": 3,
                 "code": "MULTI_CHOISE",
@@ -844,11 +817,7 @@ async function handleSaveAnswer(params) {
             if (params.str_value !== null && params.str_value !== undefined) {
                 currentTask.value.answer.str_value = params.str_value;
             } else if (params.json_value !== null && params.json_value !== undefined) {
-                if (currentTask.value.answerEditor.code === 'MATCHING') {
-                    currentTask.value.answer.json = JSON.parse(params.json_value);
-                } else {
                     currentTask.value.answer.json = params.json_value;
-                }
             }
             console.log(currentTask.value);
             console.log(response.data);
@@ -961,15 +930,9 @@ async function handleCreateAnswer(params) {
         if (params.answer.str_value !== null && params.answer.str_value !== undefined) {
             currentTask.value.answer.str_value = params.answer.str_value;
         } else if (params.answer.json !== null && params.answer.json !== undefined) {
-            if (currentTask.value.answerEditor.code === 'MATCHING') {
                 currentTask.value.answer.json = JSON.parse(params.answer.json);
-            } else {
-                currentTask.value.answer.json = JSON.parse(params.answer.json);
-            }
         }
 
-        console.log(currentTask.value);
-        console.log(response.data);
         currentTask.value.answerEditor = currentAnswerEditor.value;
         notificationRef.value.showNotification("Ответ успешно добавлен")
         showAnswerCreator.value = false;
@@ -1317,8 +1280,7 @@ h6 {
 .word,
 .one_choise,
 .multi_choise,
-.code,
-.matching {
+.code {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1361,10 +1323,4 @@ h6 {
     width: 100%;
 }
 
-.column-matching {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
 </style>
