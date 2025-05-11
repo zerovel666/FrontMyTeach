@@ -53,13 +53,12 @@
                             <div class="editor-actions">
                                 <button @click="executeCode" :disabled="isExecuting" class="execute-btn">
                                     <span v-if="!isExecuting">▶ Выполнить</span>
-                                    <span v-else>⏳ Выполняется...</span>
+                                    <span v-else> Выполняется...</span>
                                 </button>
                                 <button @click="resetCode" class="reset-btn">⟲ Сбросить</button>
                             </div>
                         </div>
 
-                        <!-- Блок вывода результатов -->
                         <div class="output-section">
                             <div class="output-header">
                                 <span>Результат:</span>
@@ -71,6 +70,11 @@
                                 class="output-content">{{ executionOutput || "Здесь будет результат выполнения вашего кода..." }}</pre>
 
                         </div>
+                    </div>
+
+                    <div class="one-choise" v-if="task.answer.answer_editors.code === 'ONE_CHOISE'">
+                        <input type="number" v-model="str_value" @input="inputOneChoise">
+                        <button @click="sendCheckOneChoise()">Отправить</button>
                     </div>
 
                 </section>
@@ -91,7 +95,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import FooterBar from '../layouts/FooterBar.vue';
 import TopBar from '../layouts/TopBar.vue';
-import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { API_URL } from '@/config';
 import Notification from '../Notification.vue';
@@ -107,11 +111,18 @@ const executionOutput = ref('')
 const executionTime = ref(0)
 const isExecuting = ref(false)
 const editorHeight = ref(150)
+const str_value = ref('');
 
 async function getTask() {
     const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
     task.value = response.data;
 
+    if (task.value.answer.answer_editors.code == 'CODE') {
+        userCode.value = String(task.value.userAnswer)
+        console.log(userCode.value);
+    } else if (task.value.answer.answer_editors.code == 'ONE_CHOISE') {
+        str_value.value = String(task.value.userAnswer)
+    }
     updateTaskContainerHeight();
 }
 
@@ -244,7 +255,6 @@ function updateTaskContainerHeight() {
     });
 }
 
-
 const adjustEditorHeight = () => {
     const lines = userCode.value.split('\n').length
     editorHeight.value = Math.max(150, Math.min(400, lines * 20))
@@ -267,7 +277,9 @@ const executeCode = async () => {
         } else {
             executionOutput.value = response.data.output;
             notificationRef.value.showNotification(response.data.message)
-            changeStatus();
+            if (response.data.success == true){
+                changeStatus();
+            }
         }
     } catch (error) {
         executionOutput.value = `Ошибка выполнения: ${error.message}`
@@ -277,15 +289,53 @@ const executeCode = async () => {
 }
 
 async function changeStatus() {
+
     task.value.isCompleted = true;
-    modules.flatMap(module => module.tasks).find(task => task.id === route.params.id).isCompleted = true;
+
+    const taskId = Number(route.params.id);
+    const foundTask = moduleTasks.value
+        .flatMap(module => module.tasks)
+        .find(task => task.id === taskId);
+
+    if (foundTask) {
+        foundTask.isCompleted = true;
+    } else {
+        console.warn(`Задача с id=${taskId} не найдена`);
+    }
+
+    console.log(moduleTasks.value);
 }
+
 
 const resetCode = () => {
     userCode.value = '';
     executionOutput.value = ''
     executionTime.value = 0
     editorHeight.value = 150
+}
+
+async function inputOneChoise() {
+    if (str_value.value > task.value.questions.length) {
+        notificationRef.value.showNotification(`Выберите ответ в диапазоне от 1 до ${task.value.questions.length}`)
+        str_value.value = 1
+    }
+}
+
+async function sendCheckOneChoise() {
+    try {
+        const response = await axios.put(`${API_URL}/student/task/complete/${route.params.id}`, {
+            userAnswer: str_value.value
+        });
+        
+        if (response.data.success == true){
+            changeStatus();
+        }        
+
+        notificationRef.value.showNotification(response.data.message);
+
+    } catch (error) {
+        notificationRef.value.showNotification(error?.response?.data?.error ?? error ?? "Неизвестная ошибка")
+    }
 }
 
 watch(() => task.value, () => {
@@ -530,5 +580,34 @@ h6 {
     color: #155724;
     border-radius: 4px;
     border-left: 4px solid #28a745;
+}
+
+.one-choise {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.one-choise button {
+    background: #470070;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.one-choise input {
+    background-color: #470070;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 </style>
