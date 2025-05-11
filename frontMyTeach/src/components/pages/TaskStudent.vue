@@ -327,7 +327,7 @@ async function sendCheckOneChoise() {
             userAnswer: str_value.value
         });
         
-        if (response.data.success == true){
+        if (Boolean(response.data.success) == true){
             changeStatus();
         }        
 
