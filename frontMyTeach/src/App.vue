@@ -74,51 +74,51 @@ const logTimeSpent = async () => {
 const getUserInfo = async () => {
 	if (VueCookies.get('token')) {
 		try {
-			const response = await axios.get(`${API_URL}/client/info`);
-			userInfo.value = response.data;
-			// userInfo.value = {
-			// 	"id": 2,
-			// 	"email": "student@gmail.com",
-			// 	"first_name": "Pete",
-			// 	"last_name": "Deckow",
-			// 	"iin": "668555715520",
-			// 	"organization_id": 1,
-			// 	"group_id": 1,
-			// 	"is_active": true,
-			// 	"created_at": "2025-04-17T07:05:23.000000Z",
-			// 	"updated_at": "2025-04-17T07:05:23.000000Z",
-			// 	"roles": [
-			// 		{
-			// 			"id": 2,
-			// 			"name": "Студент",
-			// 			"slug": "student",
-			// 			"created_at": "2025-04-17T07:05:22.000000Z",
-			// 			"updated_at": "2025-04-17T07:05:22.000000Z",
-			// 			"pivot": {
-			// 				"user_id": 2,
-			// 				"role_id": 2
-			// 			}
-			// 		}
-			// 	],
-			// 	"client_infos": {
-			// 		"id": 2,
-			// 		"user_id": 2,
-			// 		"has_courses": 0,
-			// 		"complete_course_count": 0,
-			// 		"complete_tasks": 0,
-			// 		"pastime": "1.3666666666667",
-			// 		"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
-			// 		"created_at": "2025-04-17T07:05:23.000000Z",
-			// 		"updated_at": "2025-05-10T13:07:15.000000Z"
-			// 	},
-			// 	"user_image": {
-			// 		"id": 2,
-			// 		"user_id": 2,
-			// 		"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-			// 		"created_at": "2025-04-17T07:05:23.000000Z",
-			// 		"updated_at": "2025-04-17T07:05:23.000000Z"
-			// 	}
-			// }
+			// const response = await axios.get(`${API_URL}/client/info`);
+			// userInfo.value = response.data;
+			userInfo.value = {
+				"id": 2,
+				"email": "student@gmail.com",
+				"first_name": "Pete",
+				"last_name": "Deckow",
+				"iin": "668555715520",
+				"organization_id": 1,
+				"group_id": 1,
+				"is_active": true,
+				"created_at": "2025-04-17T07:05:23.000000Z",
+				"updated_at": "2025-04-17T07:05:23.000000Z",
+				"roles": [
+					{
+						"id": 2,
+						"name": "Студент",
+						"slug": "student",
+						"created_at": "2025-04-17T07:05:22.000000Z",
+						"updated_at": "2025-04-17T07:05:22.000000Z",
+						"pivot": {
+							"user_id": 2,
+							"role_id": 2
+						}
+					}
+				],
+				"client_infos": {
+					"id": 2,
+					"user_id": 2,
+					"has_courses": 0,
+					"complete_course_count": 0,
+					"complete_tasks": 0,
+					"pastime": "1.3666666666667",
+					"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
+					"created_at": "2025-04-17T07:05:23.000000Z",
+					"updated_at": "2025-05-10T13:07:15.000000Z"
+				},
+				"user_image": {
+					"id": 2,
+					"user_id": 2,
+					"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+					"created_at": "2025-04-17T07:05:23.000000Z",
+					"updated_at": "2025-04-17T07:05:23.000000Z"
+				}
+			}
 			VueCookies.set('role', userInfo.value.roles[0].slug);
 		} catch (error) {
 			console.error('Error logging time:', error?.response?.data?.error || "Неизвестная ошибка");

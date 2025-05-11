@@ -17,7 +17,10 @@
             </div>
 
             <div class="task-container">
-                <h2>{{ task.name }}</h2>
+                <div class="header">
+                    <h2>{{ task.name }}</h2>
+                    <h3>Статус: {{ task.isCompleted ? "Выполнено" : "Не выполнено" }}</h3>
+                </div>
                 <section class="lecture-content" v-if="task.type == 'lecture'">
                     <div class="lecture" v-for="(lecture, index) in task.lectures" :key="index">
                         <div class="str-value" v-if="lecture.str_value">
@@ -42,7 +45,34 @@
                         </div>
                     </div>
 
-                   
+                    <div class="code-task-container" v-if="task.answer.answer_editors.code === 'CODE'">
+                        <div class="code-editor-wrapper">
+                            <textarea v-model="userCode" class="code-editor" placeholder="Введите ваш код здесь..."
+                                :style="{ height: editorHeight + 'px' }" @input="adjustEditorHeight"></textarea>
+
+                            <div class="editor-actions">
+                                <button @click="executeCode" :disabled="isExecuting" class="execute-btn">
+                                    <span v-if="!isExecuting">▶ Выполнить</span>
+                                    <span v-else>⏳ Выполняется...</span>
+                                </button>
+                                <button @click="resetCode" class="reset-btn">⟲ Сбросить</button>
+                            </div>
+                        </div>
+
+                        <!-- Блок вывода результатов -->
+                        <div class="output-section">
+                            <div class="output-header">
+                                <span>Результат:</span>
+                                <span class="execution-time" v-if="executionTime">
+                                    ({{ executionTime.toFixed(2) }} сек)
+                                </span>
+                            </div>
+                            <pre
+                                class="output-content">{{ executionOutput || "Здесь будет результат выполнения вашего кода..." }}</pre>
+
+                        </div>
+                    </div>
+
                 </section>
 
                 <div class="task-action">
@@ -72,129 +102,24 @@ const task = ref([]);
 const moduleTasks = ref([]);
 const notificationRef = ref(null)
 const taskContainerHeight = ref(0);
+const userCode = ref('');
+const executionOutput = ref('')
+const executionTime = ref(0)
+const isExecuting = ref(false)
+const editorHeight = ref(150)
 
 async function getTask() {
     const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
-    tasks.value = response.data;
+    task.value = response.data;
 
-  
     updateTaskContainerHeight();
 }
 
 async function getAllTasksInModule() {
-    // const response = await axios.get(`${API_URL}/student/task/all/${route.params.course_id}`)
-    // moduleTasks.value = response.data
+    const response = await axios.get(`${API_URL}/student/task/all/${route.params.course_id}`)
+    moduleTasks.value = response.data
 
-    moduleTasks.value = [
-        {
-            "id": 37,
-            "queue": 1,
-            "str_value": "Введение в Laravel",
-            "course_id": 3,
-            "created_at": "2025-05-10T08:50:20.000000Z",
-            "updated_at": "2025-05-10T08:50:20.000000Z",
-            "tasks": [
-                {
-                    "id": 4,
-                    "name": "Установка Laravel и настройка окружения.",
-                    "order_id": 1,
-                    "type": "lecture",
-                    "module_id": 37,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T08:51:04.000000Z",
-                    "updated_at": "2025-05-10T09:54:54.000000Z",
-                    "isCompleted": true
-                },
-                {
-                    "id": 5,
-                    "name": "Структура проекта Laravel",
-                    "order_id": 2,
-                    "type": "lecture",
-                    "module_id": 37,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T08:51:24.000000Z",
-                    "updated_at": "2025-05-10T08:51:24.000000Z",
-                    "isCompleted": true
-                },
-                {
-                    "id": 6,
-                    "name": "Роутинг и базовые контроллеры",
-                    "order_id": 3,
-                    "type": "lecture",
-                    "module_id": 37,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T08:51:49.000000Z",
-                    "updated_at": "2025-05-10T08:51:49.000000Z",
-                    "isCompleted": true
-                },
-                {
-                    "id": 7,
-                    "name": "Первый API-запрос",
-                    "order_id": 4,
-                    "type": "task",
-                    "module_id": 37,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T08:52:10.000000Z",
-                    "updated_at": "2025-05-10T08:52:10.000000Z",
-                    "isCompleted": false
-                }
-            ]
-        },
-        {
-            "id": 38,
-            "queue": 2,
-            "str_value": "Алгоритмы",
-            "course_id": 3,
-            "created_at": "2025-05-10T10:14:13.000000Z",
-            "updated_at": "2025-05-10T10:14:13.000000Z",
-            "tasks": [
-                {
-                    "id": 8,
-                    "name": "Простая математика",
-                    "order_id": 5,
-                    "type": "task",
-                    "module_id": 38,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T10:14:44.000000Z",
-                    "updated_at": "2025-05-10T10:14:44.000000Z",
-                    "isCompleted": false
-                },
-                {
-                    "id": 9,
-                    "name": "Все о return",
-                    "order_id": 6,
-                    "type": "task",
-                    "module_id": 38,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T10:18:56.000000Z",
-                    "updated_at": "2025-05-10T10:18:56.000000Z",
-                    "isCompleted": false
-                },
-                {
-                    "id": 10,
-                    "name": "Тернарные операторы",
-                    "order_id": 7,
-                    "type": "task",
-                    "module_id": 38,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T10:32:03.000000Z",
-                    "updated_at": "2025-05-10T10:32:03.000000Z",
-                    "isCompleted": false
-                },
-                {
-                    "id": 14,
-                    "name": "Тест",
-                    "order_id": 8,
-                    "type": "task",
-                    "module_id": 38,
-                    "course_id": 3,
-                    "created_at": "2025-05-10T10:36:38.000000Z",
-                    "updated_at": "2025-05-10T10:36:38.000000Z",
-                    "isCompleted": false
-                }
-            ]
-        }
-    ].sort((a, b) => a.queue - b.queue)
+    moduleTasks.value = moduleTasks.value.sort((a, b) => a.queue - b.queue)
         .map((module, mIndex) => {
             const sortedTasks = module.tasks
                 .sort((a, b) => a.order_id - b.order_id)
@@ -209,7 +134,6 @@ async function getAllTasksInModule() {
             };
         });
     updateTaskContainerHeight();
-
 }
 
 async function goBackTask() {
@@ -303,7 +227,6 @@ async function goNextTask() {
 
         // Переходим к следующей задаче
         const nextTask = moduleTasks.value[nextModuleIndex].tasks[nextTaskIndex];
-        console.log(nextTask);
         router.push(`/task/${route.params.course_id}/${nextTask.id}`);
 
     } catch (error) {
@@ -322,6 +245,48 @@ function updateTaskContainerHeight() {
 }
 
 
+const adjustEditorHeight = () => {
+    const lines = userCode.value.split('\n').length
+    editorHeight.value = Math.max(150, Math.min(400, lines * 20))
+}
+
+const executeCode = async () => {
+    isExecuting.value = true
+    executionOutput.value = 'Выполнение...'
+
+    try {
+        const startTime = performance.now()
+        const response = await axios.put(`${API_URL}/student/task/complete/${route.params.id}`, {
+            userAnswer: userCode.value
+        })
+        executionTime.value = (performance.now() - startTime) / 1000
+
+        if (response.data.error) {
+            executionOutput.value = `Ошибка: ${response.data.error}`;
+            notificationRef.value.showNotification(response.data.message)
+        } else {
+            executionOutput.value = response.data.output;
+            notificationRef.value.showNotification(response.data.message)
+            changeStatus();
+        }
+    } catch (error) {
+        executionOutput.value = `Ошибка выполнения: ${error.message}`
+    } finally {
+        isExecuting.value = false
+    }
+}
+
+async function changeStatus() {
+    task.value.isCompleted = true;
+    modules.flatMap(module => module.tasks).find(task => task.id === route.params.id).isCompleted = true;
+}
+
+const resetCode = () => {
+    userCode.value = '';
+    executionOutput.value = ''
+    executionTime.value = 0
+    editorHeight.value = 150
+}
 
 watch(() => task.value, () => {
     updateTaskContainerHeight();
@@ -422,8 +387,10 @@ h6 {
     line-height: 140%;
 }
 
-.task-container h2 {
-    margin-bottom: 20px;
+.task-container .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .lecture-content {
@@ -470,5 +437,98 @@ h6 {
     margin-top: 20px;
 }
 
+.code-task-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #470070;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+
+.code-editor-wrapper {
+    margin-bottom: 20px;
+}
+
+.code-editor {
+    width: 100%;
+    min-height: 150px;
+    padding: 12px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: #3a005d;
+    border-radius: 4px;
+    resize: none;
+    tab-size: 2;
+    outline: none;
+}
+
+.code-editor:focus {
+    border-color: #B14788;
+    box-shadow: 0 0 0 0.2rem #b147883d;
+}
+
+.editor-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.execute-btn,
+.reset-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.execute-btn {
+    background-color: #6e00b3;
+    border: none;
+}
+
+.reset-btn {
+    background-color: #6e00b3;
+    border: none;
+}
+
+.output-section {
+    background-color: #3a005d;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.execution-time {
+    color: #6c757d;
+    font-weight: normal;
+}
+
+.output-content {
+    background-color: #490077;
+    padding: 12px;
+    border-radius: 4px;
+    min-height: 50px;
+    white-space: pre-wrap;
+    font-family: 'Consolas', 'Monaco', monospace;
+    margin-bottom: 15px;
+}
+
+.expected-result {
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 4px;
+    border-left: 4px solid #28a745;
+}
 </style>
