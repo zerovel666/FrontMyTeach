@@ -375,7 +375,7 @@ async function handleShowQuestionEditor() {
         notificationRef.value.showNotification('Курс на модерации');
         return;
     }
-    showQuestionEditor = true
+    showQuestionEditor.value = true
 }
 
 async function handleShowMainTaskCreator(moduleId) {

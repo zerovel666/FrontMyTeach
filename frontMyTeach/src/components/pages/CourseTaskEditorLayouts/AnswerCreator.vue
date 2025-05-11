@@ -9,7 +9,7 @@
                 <h4>Тип ответа: {{ localbody.answerEditor?.description }}</h4>
             </div>
 
-            <div class="one-choise" v-if="localbody.answerEditor.code == 'ONE_CHOISE'">
+            <div class="one-choise" v-if="localbody?.answerEditor?.code == 'ONE_CHOISE'">
                 <input type="number" placeholder="Установите правильный вариант ответа"
                     v-model.number="localbody.answer.str_value" :min="1" :max="localbody.question.length"
                     @input="validateAnswer" class="default-input" />

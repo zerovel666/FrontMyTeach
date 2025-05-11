@@ -37,9 +37,11 @@
                         <h3>Описание</h3>
                         <p>{{ task.task_description.description }}</p>
                     </div>
-                    <div class="task-questions">
+                    <div class="task-questions"
+                        v-if="task.answer.answer_editors.code === 'CODE' || task.answer.answer_editors.code === 'ONE_CHOISE' || task.answer.answer_editors.code === 'WORD'">
                         <h3>Задание</h3>
                         <p>{{ task.answer.answer_editors.description }}</p>
+                        <h3>Вопрос</h3>
                         <div class="questions">
                             <p v-for="(question, index) in task.questions" :key="index">{{ question.str_value }}</p>
                         </div>
@@ -77,6 +79,27 @@
                         <button @click="sendCheckOneChoise()">Отправить</button>
                     </div>
 
+                    <div class="multi-choise" v-if="task.answer.answer_editors.code === 'MULTI_CHOISE'">
+                        <h3>Задание</h3>
+                        <p>{{ task.answer.answer_editors.description }}</p>
+                        <div class="multi-choise-content">
+                            <div class="multi-choise-item" v-for="(item, index) in task.questions" :key="index">
+                                <label class="multi-choise-checkbox">
+                                    <input type="checkbox" v-model="multiChoiseValues[index + 1]"
+                                        @change="updateMultiChoise">
+                                    <span class="multi-choise-checkmark"></span>
+                                </label>
+                                <p>{{ item.str_value }}</p>
+                            </div>
+                        </div>
+                        <button class="multi-choise-submit" @click="sendMultiChoise">Отправить</button>
+                    </div>
+
+                    <div class="word" v-if="task.answer.answer_editors.code === 'WORD'">
+                        <input type="text" v-model="str_value">
+                        <button @click="sendCheckOneChoise">Отправить</button>
+                    </div>
+
                 </section>
 
                 <div class="task-action">
@@ -112,6 +135,7 @@ const executionTime = ref(0)
 const isExecuting = ref(false)
 const editorHeight = ref(150)
 const str_value = ref('');
+const multiChoiseValues = ref({});
 
 async function getTask() {
     const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
@@ -120,9 +144,22 @@ async function getTask() {
     if (task.value.answer.answer_editors.code == 'CODE') {
         userCode.value = String(task.value.userAnswer)
         console.log(userCode.value);
-    } else if (task.value.answer.answer_editors.code == 'ONE_CHOISE') {
-        str_value.value = String(task.value.userAnswer)
-    }
+    } else if (task.value.answer.answer_editors.code == 'ONE_CHOISE' || task.value.answer.answer_editors.code == 'WORD') {
+        if (task.value.userAnswer == null){
+            str_value.value = '';
+        }else{
+            str_value.value = String(task.value.userAnswer);
+        }
+    } else if (task.value.answer.answer_editors.code == 'MULTI_CHOISE') {
+        if (task.value.userAnswer && typeof task.value.userAnswer === 'object') {
+            multiChoiseValues.value = { ...task.value.userAnswer };
+        } else {
+            multiChoiseValues.value = {};
+            task.value.questions.forEach((_, index) => {
+                multiChoiseValues.value[index + 1] = false;
+            });
+        }
+    } 
     updateTaskContainerHeight();
 }
 
@@ -277,7 +314,7 @@ const executeCode = async () => {
         } else {
             executionOutput.value = response.data.output;
             notificationRef.value.showNotification(response.data.message)
-            if (response.data.success == true){
+            if (response.data.success == true) {
                 changeStatus();
             }
         }
@@ -326,13 +363,30 @@ async function sendCheckOneChoise() {
         const response = await axios.put(`${API_URL}/student/task/complete/${route.params.id}`, {
             userAnswer: str_value.value
         });
-        
-        if (Boolean(response.data.success) == true){
+
+        if (Boolean(response.data.success) == true) {
             changeStatus();
-        }        
+        }
 
         notificationRef.value.showNotification(response.data.message);
 
+    } catch (error) {
+        notificationRef.value.showNotification(error?.response?.data?.error ?? error ?? "Неизвестная ошибка")
+    }
+}
+
+async function sendMultiChoise() {
+    try {
+
+        const response = await axios.put(`${API_URL}/student/task/complete/${route.params.id}`, {
+            userAnswer: multiChoiseValues.value
+        });
+
+        if (Boolean(response.data.success) == true) {
+            changeStatus();
+        }
+
+        notificationRef.value.showNotification(response.data.message);
     } catch (error) {
         notificationRef.value.showNotification(error?.response?.data?.error ?? error ?? "Неизвестная ошибка")
     }
@@ -353,6 +407,7 @@ onMounted(() => {
     getTask();
     getAllTasksInModule();
 })
+
 </script>
 
 <style scoped>
@@ -609,5 +664,142 @@ input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.multi-choise-content {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.multi-choise-item {
+    display: flex;
+    gap: 20px;
+}
+
+.multi-choise-item input {
+    width: 20px;
+}
+
+.multi-choise {
+    margin-top: 20px;
+}
+
+.multi-choise-content {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.multi-choise-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #470070;
+    transition: background-color 0.2s;
+}
+
+.multi-choise-item:hover {
+    background-color: #3a005d;
+}
+
+.multi-choise-checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.multi-choise-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.multi-choise-checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: #3a005d;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.multi-choise-checkbox:hover input~.multi-choise-checkmark {
+    background-color: #4d0080;
+}
+
+.multi-choise-checkbox input:checked~.multi-choise-checkmark {
+    background-color: #6e00b3;
+}
+
+.multi-choise-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.multi-choise-checkbox input:checked~.multi-choise-checkmark:after {
+    display: block;
+}
+
+.multi-choise-checkbox .multi-choise-checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.multi-choise-item p {
+    flex: 1;
+    margin: 0;
+}
+
+.multi-choise-submit {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #6e00b3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.multi-choise-submit:hover {
+    background-color: #8a00df;
+}
+
+.word{
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.word input{
+    padding: 10px;
+    background-color: #470070;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    width: 400px;
+}
+
+.word button{
+    padding: 10px 30px;
+    background-color: #470070;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
 }
 </style>
