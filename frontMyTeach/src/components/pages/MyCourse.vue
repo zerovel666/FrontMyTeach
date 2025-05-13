@@ -14,7 +14,7 @@
                             </ul>
                             <p class="author_name">{{ card.course.author_name }} <img src="/src/assets/Icons/Tap.svg"
                                     alt=""></p>
-                            <button>Продолжить</button>
+                            <button @click="goCourse(card.id)">Продолжить</button>
                         </div>
                         <div class="rInfo">
                             <p class="ratingNum">{{ card.course?.rating_course?.rating || 0 }}
@@ -84,6 +84,10 @@ const getBgImage = (index) => {
 const goCatalog = async => {
     router.push('/catalog')
 }
+
+const goCourse = async (id) => {
+    router.push(`/course/info/${id}`)
+}   
 
 onMounted(getCards);
 </script>

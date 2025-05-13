@@ -302,40 +302,9 @@ const getModuleTasks = async () => {
 
 const getAnswerEditors = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/answer/editor/all`);
-        // answerEditors.value = response.data;
+        const response = await axios.get(`${API_URL}/course/answer/editor/all`);
+        answerEditors.value = response.data;
 
-        answerEditors.value = [
-            {
-                "id": 2,
-                "code": "ONE_CHOISE",
-                "description": "Выберите одно:",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            },
-            {
-                "id": 4,
-                "code": "CODE",
-                "description": "Напишите программу..",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            },
-            
-            {
-                "id": 3,
-                "code": "MULTI_CHOISE",
-                "description": "Выберите одно или несколько:",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            },
-            {
-                "id": 1,
-                "code": "WORD",
-                "description": "Введите слово или число:",
-                "created_at": "2025-05-01T17:05:40.000000Z",
-                "updated_at": "2025-05-01T17:05:40.000000Z"
-            }
-        ]
     } catch (error) {
         console.error('Ошибка при загрузке редакторов ответов:', error);
     }

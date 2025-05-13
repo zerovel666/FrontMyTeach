@@ -139,27 +139,24 @@
         </div>
     </div>
 
-    <!-- Модальное окно редактирования пользователя -->
     <UserModal v-if="showUserModal" :user="currentUser" :groups="tree.groups" :currentGroup="currentGroup" mode="edit"
         @save="handleSaveUser" @close="closeUserModal" />
 
-    <!-- Модальное окно добавления пользователя -->
     <UserModal v-if="showAddUserModal" :groups="tree.groups" :currentGroup="currentGroup" mode="add"
         @save="handleAddUser" @close="closeAddUserModal" />
 
-    <!-- Модальное окно редактирования группы -->
     <GroupModal v-if="showGroupModal" :group="currentGroupData" mode="edit" @save="handleSaveGroup"
         @close="closeGroupModal" />
 
-    <!-- Модальное окно добавления группы -->
     <GroupModal v-if="showAddGroupModal" mode="add" @save="handleAddGroup" @close="closeAddGroupModal" />
 
-    <!-- Модальное окно подтверждения удаления -->
     <ConfirmationModal v-if="showConfirmModal" :message="confirmMessage" @confirm="handleConfirm"
         @cancel="closeConfirmModal" />
 
     <OrganizationEditModal v-if="showOrganizationModal" :organization="organizationData" @save="handleSaveOrganization"
         @close="closeOrganizationEditModal" />
+
+    <Notification ref="notificationRef"/>
     <FooterBar />
 </template>
 
@@ -174,6 +171,8 @@ import GroupModal from './OrganizationManualLayouts/GroupModal.vue';
 import UserModal from './OrganizationManualLayouts/UserModal.vue';
 import OrganizationEditModal from './OrganizationManualLayouts/OrganizationEditModal.vue';
 import { useRouter } from 'vue-router';
+import { notification } from 'ant-design-vue';
+import Notification from '../Notification.vue';
 
 
 const tree = ref({});
@@ -192,6 +191,7 @@ const confirmAction = ref(null);
 const organizationData = ref({});
 const showOrganizationModal = ref(false);
 const router = useRouter();
+const notificationRef = ref(null);
 
 const getTree = async () => {
     const response = await axios.get(`${API_URL}/organization/myAll`);
@@ -255,8 +255,10 @@ const handleSaveUser = async (updatedUser) => {
         await axios.put(`${API_URL}/users/director/updateUser${updatedUser.id}`, updatedUser);
         await getTree();
         closeUserModal();
+        notificationRef.value.showNotification("Успешно создано")
     } catch (error) {
         console.error('Error updating user:', error);
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? "неизвестная ошибка")
     }
 };
 
@@ -273,20 +275,23 @@ const handleAddUser = async (newUser) => {
             ...newUser,
             group_id: currentGroup.value.id
         });
-        await getTree(); // Обновляем данные
+        await getTree();
+        notificationRef.value.showNotification("Успешно создано")
         closeAddUserModal();
     } catch (error) {
-        console.error('Error adding user:', error);
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? "неизвестная ошибка")
+
     }
 };
 
 const handleSaveOrganization = async (updatedData) => {
     try {
         await axios.put(`${API_URL}/organization/update/${updatedData.id}`, updatedData);
-        await getTree(); // Обновляем данные после сохранения
+        await getTree(); 
         closeOrganizationEditModal();
+        notificationRef.value.showNotification("Успешно сохранено")
     } catch (error) {
-        console.error('Error updating organization:', error);
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? "неизвестная ошибка")
     }
 };
 
@@ -298,7 +303,6 @@ const confirmDeleteUser = (user, group) => {
     showConfirmModal.value = true;
 };
 
-// Group CRUD operations
 const openEditGroupModal = (group) => {
     currentGroupData.value = { ...group };
     showGroupModal.value = true;
@@ -319,22 +323,23 @@ const closeAddGroupModal = () => {
 
 const handleSaveGroup = async (updatedGroup) => {
     try {
-        // Здесь API запрос для обновления группы
         await axios.put(`${API_URL}/group/update/${updatedGroup.id}`, updatedGroup);
-        await getTree(); // Обновляем данные
+        await getTree();
         closeGroupModal();
+        notificationRef.value.showNotification("Успешно сохранено")
     } catch (error) {
-        console.error('Error updating group:', error);
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? "неизвестная ошибка")
     }
 };
 
 const handleAddGroup = async (newGroup) => {
     try {
         await axios.post(`${API_URL}/group/create`, newGroup);
-        await getTree(); // Обновляем данные
+        await getTree(); 
         closeAddGroupModal();
+        notificationRef.value.showNotification("Успешно сохранено")
     } catch (error) {
-        console.error('Error adding group:', error);
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? "неизвестная ошибка")
     }
 };
 
@@ -349,14 +354,13 @@ const handleConfirm = async () => {
     try {
         if (confirmAction.value === 'deleteUser') {
             await axios.delete(`${API_URL}/users/director/deleteUser/${currentUser.value.id}`);
-            // Или перемещение в другую группу, если удалять нельзя
         } else if (confirmAction.value === 'deleteGroup') {
             await axios.delete(`${API_URL}/group/delete/${currentGroupData.value.id}`);
-            // Или перемещение пользователей в другую группу
         }
+        notificationRef.value.showNotification("Успешно сохранено")
         await getTree();
     } catch (error) {
-        console.error('Error:', error);
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? "неизвестная ошибка")
     } finally {
         closeConfirmModal();
     }

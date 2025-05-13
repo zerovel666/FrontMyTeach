@@ -134,7 +134,8 @@ onMounted(() => {
 }
 
 .feature-card {
-    background: white;
+    color: white;
+    background: #59008E;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -163,18 +164,20 @@ onMounted(() => {
 }
 
 .course-card {
-    background: white;
+    background: #59008E;
+    color: white;
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     align-items: center;
     transition: all 0.3s;
 }
 
 .course-card:hover {
-    background-color: #f8f1ff;
+    background-color: #8100CC;
     box-shadow: 0 6px 15px rgba(129, 0, 204, 0.15);
 }
 
@@ -185,7 +188,7 @@ onMounted(() => {
 .certificate-badge {
     background-color: #59008E;
     color: white;
-    padding: 4px 10px;
+    padding: 10px 10px;
     border-radius: 20px;
     font-size: 0.8rem;
 }

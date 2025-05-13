@@ -28,6 +28,11 @@
                     class="default-input" />
             </div>
 
+            <div class="word" v-else-if="localbody.answerEditor.code == 'CODE'">
+                <input type="text" placeholder="Введите результат вывода" v-model="localbody.answer.str_value"
+                    class="default-input" />
+            </div>
+
 
             <div class="modal-action">
                 <button @click="save">Сохранить</button>
@@ -114,7 +119,7 @@ function save() {
         localbody.value.answer.str_value = null;
         emit('confirm', localbody.value);
         localbody.value = {};
-    }  else {
+    } else {
         notificationRef.value.showNotification('Неизвестный тип ответа');
     }
 }

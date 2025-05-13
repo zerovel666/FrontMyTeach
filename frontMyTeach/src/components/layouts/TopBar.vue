@@ -13,8 +13,11 @@
                         </button>
                     </div>
                     <ul v-if="showOption" class="dropdown">
-                        <li v-for="(option, index) in filteredOptions" :key="index" @click="selectOption(option)">
+                        <li v-for="(option, index) in filteredOptions" :key="index" @click="selectOption(option)" v-if="options?.length > 0">
                             {{ option.name }}
+                        </li>
+                        <li v-else>
+                            Курсов не существует
                         </li>
                     </ul>
                 </div>

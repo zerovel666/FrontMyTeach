@@ -300,167 +300,8 @@ const router = useRouter();
 const tooltipText = "Прежде чем создавать описания, модули и задачи, необходимо создать превью текст";
 
 const getCourseInfo = async () => {
-    // const response = await axios.get(`${API_URL}/course/${route.params.id}`);
-    // courseInfo.value = response.data;
-    courseInfo.value = {
-        "id": 3,
-        "name": "Laravel: backend development",
-        "image_path": "http://localhost:8082//storage/logoCourse/xxRRRO1jG8EWSTaq8k1GZZthNpZfAxHzJHicfPuv.webp",
-        "is_active": false,
-        "amount": 25000,
-        "category": {
-            "id": 1,
-            "category": "Laravel",
-            "created_at": null,
-            "updated_at": null
-        },
-        "has_certificate": true,
-        "author_name": "Jovany Marvin",
-        "author_image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
-        "status": "Проверяется",
-        "preview": {
-            "id": 2,
-            "title": "Освой современную разработку серверной части на Laravel — самом популярном PHP-фреймворке."
-        },
-        "descriptions": [
-            {
-                "id": 3,
-                "queue": 1,
-                "str_value": "Курс «Laravel: Backend Development» — это практическое руководство по созданию мощных и гибких серверных приложений с использованием фреймворка Laravel. Вы начнете с основ маршрутизации и контроллеров, постепенно перейдете к работе с базами данных через Eloquent ORM, настройке API, системе авторизации и middleware, а также познакомитесь с архитектурными паттернами и принципами SOLID.",
-                "preview_id": 2,
-                "created_at": "2025-05-10T08:49:44.000000Z",
-                "updated_at": "2025-05-10T08:49:44.000000Z"
-            },
-            {
-                "id": 4,
-                "queue": 2,
-                "str_value": "Курс идеально подойдет тем, кто уже знаком с PHP и хочет освоить Laravel для создания профессиональных backend-решений.",
-                "preview_id": 2,
-                "created_at": "2025-05-10T08:49:54.000000Z",
-                "updated_at": "2025-05-10T08:49:54.000000Z"
-            }
-        ],
-        "task_count": 8,
-        "tags": [
-            {
-                "id": 3,
-                "course_id": 3,
-                "tag": "Laravel-11",
-                "created_at": "2025-05-10T08:48:17.000000Z",
-                "updated_at": "2025-05-10T08:48:17.000000Z"
-            },
-            {
-                "id": 4,
-                "course_id": 3,
-                "tag": "API",
-                "created_at": "2025-05-10T08:48:17.000000Z",
-                "updated_at": "2025-05-10T08:48:17.000000Z"
-            }
-        ],
-        "modules": [
-            {
-                "id": 37,
-                "queue": 1,
-                "str_value": "Введение в Laravel",
-                "course_id": 3,
-                "created_at": "2025-05-10T08:50:20.000000Z",
-                "updated_at": "2025-05-10T08:50:20.000000Z",
-                "tasks": [
-                    {
-                        "id": 5,
-                        "name": "Структура проекта Laravel",
-                        "order_id": 2,
-                        "type": "lecture",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:51:24.000000Z",
-                        "updated_at": "2025-05-10T08:51:24.000000Z"
-                    },
-                    {
-                        "id": 6,
-                        "name": "Роутинг и базовые контроллеры",
-                        "order_id": 3,
-                        "type": "lecture",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:51:49.000000Z",
-                        "updated_at": "2025-05-10T08:51:49.000000Z"
-                    },
-                    {
-                        "id": 7,
-                        "name": "Первый API-запрос",
-                        "order_id": 4,
-                        "type": "task",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:52:10.000000Z",
-                        "updated_at": "2025-05-10T08:52:10.000000Z"
-                    },
-                    {
-                        "id": 4,
-                        "name": "Установка Laravel и настройка окружения.",
-                        "order_id": 1,
-                        "type": "lecture",
-                        "module_id": 37,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T08:51:04.000000Z",
-                        "updated_at": "2025-05-10T09:54:54.000000Z"
-                    }
-                ]
-            },
-            {
-                "id": 38,
-                "queue": 2,
-                "str_value": "Алгоритмы",
-                "course_id": 3,
-                "created_at": "2025-05-10T10:14:13.000000Z",
-                "updated_at": "2025-05-10T10:14:13.000000Z",
-                "tasks": [
-                    {
-                        "id": 8,
-                        "name": "Простая математика",
-                        "order_id": 5,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:14:44.000000Z",
-                        "updated_at": "2025-05-10T10:14:44.000000Z"
-                    },
-                    {
-                        "id": 9,
-                        "name": "Все о return",
-                        "order_id": 6,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:18:56.000000Z",
-                        "updated_at": "2025-05-10T10:18:56.000000Z"
-                    },
-                    {
-                        "id": 10,
-                        "name": "Тернарные операторы",
-                        "order_id": 7,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:32:03.000000Z",
-                        "updated_at": "2025-05-10T10:32:03.000000Z"
-                    },
-                    {
-                        "id": 14,
-                        "name": "Тест",
-                        "order_id": 8,
-                        "type": "task",
-                        "module_id": 38,
-                        "course_id": 3,
-                        "created_at": "2025-05-10T10:36:38.000000Z",
-                        "updated_at": "2025-05-10T10:36:38.000000Z"
-                    }
-                ]
-            }
-        ]
-    }
-
+    const response = await axios.get(`${API_URL}/course/${route.params.id}`);
+    courseInfo.value = response.data;
 
     cardBody.value = {
         name: courseInfo.value.name,
@@ -528,12 +369,13 @@ const updateCertificate = async () => {
             return;
         }
         await axios.put(`${API_URL}/course/${route.params.id}`, {
-            has_certificate: courseInfo.value.hasCertificate
+            has_certificate: courseInfo.value.has_certificate
+
         });
         notificationRef.value.showNotification('Настройки сертификата обновлены');
     } catch (error) {
         notificationRef.value.showNotification('Ошибка при обновлении сертификата' + error?.response?.data?.error || "Неизвестная ошибка");
-        courseInfo.value.hasCertificate = !courseInfo.value.hasCertificate;
+        courseInfo.value.has_certificate = !courseInfo.value.has_certificate;
     }
 };
 
@@ -803,6 +645,7 @@ const publish = async () => {
             return;
         }
         await axios.post(`${API_URL}/course/sendAdminForCheck/${route.params.id}`);
+        courseInfo.value.status == "Проверяется";
         notificationRef.value.showNotification('Курс передан на проверку');
     } catch (error) {
         notificationRef.value.showNotification('Ошибка при передаче курса' + error?.response?.data?.error || "Неизвестная ошибка");

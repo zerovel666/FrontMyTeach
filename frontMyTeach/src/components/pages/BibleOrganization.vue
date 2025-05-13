@@ -1,7 +1,9 @@
 <template>
     <TopBar />
     <div class="containerBody">
-        <button class="downloadBible" @click="addAllMe">Добавить все в личную библеотеку</button>
+        <div class="contButtonDownload">
+            <button class="downloadBible" @click="addAllMe">Добавить все в личную библеотеку</button>
+        </div>
         <div class="course-list">
             <div v-for="(card, index) in cards" :key="card.id" class="course-card"
                 :style="{ background: gradients[index % gradients.length] }" @click="getCourseInfo(card.id)">
@@ -92,10 +94,10 @@ const getCards = async () => {
 };
 
 async function addAllMe() {
-    try{
+    try {
         const response = await axios.get(`${API_URL}/student/course/getMeByAllBible/${route.params.organization_id}`);
         notificationRef.value.showNotification('Курс организации успешно добавлены в вашу библеотеку')
-    } catch (error){
+    } catch (error) {
         notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? "неизвестная ошибка");
     }
 }
@@ -104,13 +106,18 @@ onMounted(getCards);
 </script>
 
 <style scoped>
-.containerBody{
+.containerBody {
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
-.downloadBible{
+.contButtonDownload{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.downloadBible {
     padding: 20px 40px;
     background-color: #59008E;
     margin-top: 40px;
@@ -120,7 +127,7 @@ onMounted(getCards);
     cursor: pointer;
 }
 
-.downloadBible:hover{
+.downloadBible:hover {
     box-shadow: 0 0 10px #B14788;
 }
 

@@ -75,17 +75,9 @@ const formData = ref({
 
 const getCategories = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/category/all`);
-        // categories.value = response.data;
+        const response = await axios.get(`${API_URL}/course/category/all`);
+        categories.value = response.data;
 
-        categories.value = [
-            {
-                "id": 1,
-                "category": "Laravel",
-                "created_at": "2025-04-25T19:58:34.000000Z",
-                "updated_at": "2025-04-25T19:58:34.000000Z"
-            }
-        ]
     } catch (error) {
         console.error('Ошибка при загрузке категорий:', error?.response?.data?.error || "Неизвестная ошибка");
     }

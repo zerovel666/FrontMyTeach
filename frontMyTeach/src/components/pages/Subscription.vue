@@ -62,62 +62,8 @@ const router = useRouter();
 const subscriptions = ref([]);
 
 const getSubscriptions = async () => {
-    // const response = await axios.get(`${API_URL}/subscription/all`);
-    // subscriptions.value = response.data;
-
-    subscriptions.value = [
-        {
-            "id": 1,
-            "name": "Базовый",
-            "price": "5206",
-            "description": "Идеальный вариант для начала обучения с доступом к основным курсам.",
-            "currency": "KZT",
-            "interval": "year",
-            "courses": [
-                {"id": 1, "name": "Курс по PHP", "has_certificate": false},
-                {"id": 2, "name": "Курс по Java", "has_certificate": false},
-                {"id": 3, "name": "Курс по C++", "has_certificate": false},
-                {"id": 5, "name": "Курс по PHP", "has_certificate": false},
-                {"id": 4, "name": "Курс по JS", "has_certificate": true}
-            ],
-            "max_users": 92,
-            "max_course": 7
-        },
-        {
-            "id": 2,
-            "name": "Премиум",
-            "price": "5295",
-            "description": "Полный доступ ко всем курсам с возможностью получения сертификатов.",
-            "currency": "KZT",
-            "interval": "month",
-            "courses": [
-                {"id": 1, "name": "Курс по PHP", "has_certificate": false},
-                {"id": 2, "name": "Курс по Java", "has_certificate": false},
-                {"id": 3, "name": "Курс по C++", "has_certificate": false},
-                {"id": 5, "name": "Курс по PHP", "has_certificate": false},
-                {"id": 4, "name": "Курс по JS", "has_certificate": true}
-            ],
-            "max_users": 28,
-            "max_course": 2
-        },
-        {
-            "id": 3,
-            "name": "Профессиональный",
-            "price": "9075",
-            "description": "Для командного обучения с расширенными возможностями и поддержкой.",
-            "currency": "KZT",
-            "interval": "month",
-            "courses": [
-                {"id": 1, "name": "Курс по PHP", "has_certificate": false},
-                {"id": 2, "name": "Курс по Java", "has_certificate": false},
-                {"id": 3, "name": "Курс по C++", "has_certificate": false},
-                {"id": 5, "name": "Курс по PHP", "has_certificate": false},
-                {"id": 4, "name": "Курс по JS", "has_certificate": true}
-            ],
-            "max_users": 20,
-            "max_course": 6
-        }
-    ]
+    const response = await axios.get(`${API_URL}/subscription/all`);
+    subscriptions.value = response.data;
 }
 
 const goSubscriptionById = async (id) => {

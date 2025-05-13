@@ -107,6 +107,7 @@
                     <button @click="goNextTask()">Следующий урок</button>
                 </div>
             </div>
+
         </div>
     </div>
     <FooterBar />
@@ -138,29 +139,33 @@ const str_value = ref('');
 const multiChoiseValues = ref({});
 
 async function getTask() {
-    const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
-    task.value = response.data;
+    try {
+        const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
+        task.value = response.data;
 
-    if (task.value.answer.answer_editors.code == 'CODE') {
-        userCode.value = String(task.value.userAnswer)
-        console.log(userCode.value);
-    } else if (task.value.answer.answer_editors.code == 'ONE_CHOISE' || task.value.answer.answer_editors.code == 'WORD') {
-        if (task.value.userAnswer == null){
-            str_value.value = '';
-        }else{
-            str_value.value = String(task.value.userAnswer);
+        if (task.value.answer.answer_editors.code == 'CODE') {
+            userCode.value = String(task.value.userAnswer)
+            console.log(userCode.value);
+        } else if (task.value.answer.answer_editors.code == 'ONE_CHOISE' || task.value.answer.answer_editors.code == 'WORD') {
+            if (task.value.userAnswer == null) {
+                str_value.value = '';
+            } else {
+                str_value.value = String(task.value.userAnswer);
+            }
+        } else if (task.value.answer.answer_editors.code == 'MULTI_CHOISE') {
+            if (task.value.userAnswer && typeof task.value.userAnswer === 'object') {
+                multiChoiseValues.value = { ...task.value.userAnswer };
+            } else {
+                multiChoiseValues.value = {};
+                task.value.questions.forEach((_, index) => {
+                    multiChoiseValues.value[index + 1] = false;
+                });
+            }
         }
-    } else if (task.value.answer.answer_editors.code == 'MULTI_CHOISE') {
-        if (task.value.userAnswer && typeof task.value.userAnswer === 'object') {
-            multiChoiseValues.value = { ...task.value.userAnswer };
-        } else {
-            multiChoiseValues.value = {};
-            task.value.questions.forEach((_, index) => {
-                multiChoiseValues.value[index + 1] = false;
-            });
-        }
-    } 
-    updateTaskContainerHeight();
+        updateTaskContainerHeight();
+    } catch (error){
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.message ?? "неизвестная ошибка");
+    }
 }
 
 async function getAllTasksInModule() {
@@ -780,13 +785,13 @@ input[type=number]::-webkit-inner-spin-button {
     background-color: #8a00df;
 }
 
-.word{
+.word {
     display: flex;
     gap: 20px;
     margin-top: 20px;
 }
 
-.word input{
+.word input {
     padding: 10px;
     background-color: #470070;
     border: none;
@@ -795,7 +800,7 @@ input[type=number]::-webkit-inner-spin-button {
     width: 400px;
 }
 
-.word button{
+.word button {
     padding: 10px 30px;
     background-color: #470070;
     border-radius: 10px;
