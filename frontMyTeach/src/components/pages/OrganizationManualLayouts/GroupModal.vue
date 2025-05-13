@@ -49,7 +49,6 @@ const close = () => {
 </script>
 
 <style scoped>
-/* Стили такие же как в UserModal.vue */
 .modal-overlay {
     position: fixed;
     top: 0;

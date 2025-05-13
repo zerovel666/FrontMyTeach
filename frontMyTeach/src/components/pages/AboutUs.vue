@@ -99,7 +99,6 @@
             <section class="cta-section">
                 <h2>Готовы начать?</h2>
                 <p>Присоединяйтесь к MyTeach и откройте новые возможности для вашего учебного заведения.</p>
-                <button class="cta-button">Запросить демонстрацию</button>
             </section>
         </div>
     </div>

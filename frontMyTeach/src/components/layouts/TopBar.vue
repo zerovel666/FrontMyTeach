@@ -189,93 +189,9 @@ const extraSearch = async () => {
 }
 
 const getOptions = async () => {
-    // const response = await axios.get(`${API_URL}/student/course/list`);
-    // options.value = response.data.data;
+    const response = await axios.get(`${API_URL}/student/course/list`);
+    options.value = response.data.data;
 
-    const response = [
-        {
-            "id": 1,
-            "name": "Курс по PHP"
-        },
-        {
-            "id": 2,
-            "name": "Курс по Java"
-        },
-        {
-            "id": 3,
-            "name": "Курс по C++"
-        },
-        {
-            "id": 5,
-            "name": "Курс по PHP"
-        },
-        {
-            "id": 6,
-            "name": "Курс по .NET"
-        },
-        {
-            "id": 7,
-            "name": "Курс по Vue.js"
-        },
-        {
-            "id": 8,
-            "name": "Курс по Vue.js"
-        },
-        {
-            "id": 9,
-            "name": "Курс по HTML&CSS"
-        },
-        {
-            "id": 10,
-            "name": "Курс по Python"
-        },
-        {
-            "id": 11,
-            "name": "Курс по C#"
-        },
-        {
-            "id": 12,
-            "name": "Курс по JS"
-        },
-        {
-            "id": 13,
-            "name": "Курс по Java"
-        },
-        {
-            "id": 14,
-            "name": "Курс по HTML&CSS"
-        },
-        {
-            "id": 15,
-            "name": "Курс по SpringBoot"
-        },
-        {
-            "id": 16,
-            "name": "Курс по Python"
-        },
-        {
-            "id": 17,
-            "name": "Курс по Java"
-        },
-        {
-            "id": 18,
-            "name": "Курс по PHP"
-        },
-        {
-            "id": 19,
-            "name": "Курс по C#"
-        },
-        {
-            "id": 20,
-            "name": "Курс по Vue.js"
-        },
-        {
-            "id": 4,
-            "name": "Курс по JS"
-        }
-    ]
-
-    options.value = response;
 };
 
 const handleClickOutside = (event) => {

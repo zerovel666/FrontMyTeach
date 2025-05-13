@@ -17,7 +17,7 @@
                             <button>Продолжить</button>
                         </div>
                         <div class="rInfo">
-                            <p class="ratingNum">{{ card.course.rating_course.rating }}
+                            <p class="ratingNum">{{ card.course?.rating_course?.rating || 0 }}
                                 <img src="/src/assets/Icons/Star.svg" alt="">
                             </p>
                             <img :src="card.course.image_path" alt="">
@@ -37,7 +37,7 @@
         <div v-else class="no-content">
             <h1>
                 У вас нет курсов, которые вы можете продолжить. <br>
-                Пожалуйста, выберите желаемые курс и начните обучение.
+                Пожалуйста, выберите желаемые курсы и начните обучение.
             </h1>
             <button @click="goCatalog()">Перейти в каталог</button>
         </div>
@@ -89,10 +89,6 @@ onMounted(getCards);
 </script>
 
 <style scoped>
-.containerBody {
-    min-height: 200px;
-}
-
 .card {
     width: 100%;
     height: 100%;
@@ -101,34 +97,99 @@ onMounted(getCards);
     border-radius: 40px;
     overflow: hidden;
     border: 1px solid #0022FF;
+    box-shadow: 0 10px 30px rgba(0, 34, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 34, 255, 0.3);
 }
 
 .cardBgImg {
-    padding: 30px 60px;
+    padding: 40px 60px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
+/* Стили для информации в карточке */
 .cardInfo {
     position: relative;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 30px;
 }
-
-
 
 .lInfo {
     width: 50%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.lInfo h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .lInfo ul {
     padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    gap: 10px;
+    margin-bottom: 20px;
+    max-width: 300px;
 }
 
 .lInfo li {
-    margin: 10px;
-    text-align: left;
-    font-size: 23px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 1rem;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.author_name {
+    font-size: 1rem;
+    color: #219fda;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.author_name img {
+    width: 14px;
+    height: 14px;
+    margin-left: 5px;
+    filter: invert(76%) sepia(29%) saturate(6880%) hue-rotate(176deg) brightness(98%) contrast(83%);
+}
+
+/* Кнопка продолжить */
+.lInfo button {
+    background: rgba(177, 71, 136, 0.2);
+    border: 1px solid #B14788;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    backdrop-filter: blur(5px);
+}
+
+.lInfo button:hover {
+    transform: scale(1.05);
+    background: rgba(177, 71, 136, 0.4);
+    box-shadow: 0 0 15px rgba(177, 71, 136, 0.5);
+}
+
+/* Правая часть карточки */
 .rInfo {
     position: relative;
     width: 50%;
@@ -140,43 +201,21 @@ onMounted(getCards);
     height: 350px;
     object-fit: cover;
     border-radius: 100%;
-}
-
-.author_name img {
-    width: 14px;
-    height: 14px;
-    margin-left: 5px;
-}
-
-.author_name {
-    font-size: 14px;
-    cursor: pointer;
-    color: #219fda;
-}
-
-.lInfo button {
-    background: none;
-    border: 1px solid #B14788;
-    border-radius: 10px;
-    padding: 7.5px 30px;
-    font-size: 28px;
-    cursor: pointer;
-    transition: transform ease 0.3s;
-    margin-top: 50px;
-    color: white;
-
-}
-
-.lInfo button:hover {
-    transform: scale(1.1);
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
 .ratingNum {
     position: absolute;
+    top: 0;
     right: 0;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
     gap: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 1.1rem;
 }
 
 .ratingNum img {
@@ -186,52 +225,116 @@ onMounted(getCards);
 
 .percentCompletesCont {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 40px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
 }
 
 .lineCont {
-    background-color: #E58FFF;
+    background-color: rgba(229, 143, 255, 0.2);
     width: 100%;
-    height: 50px;
-    padding: 8px 5px;
-    border-radius: 10px;
+    height: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    padding: 5px;
+    border: 1px solid #A03D7A;
 }
 
 .line {
     height: 100%;
-    width: 0%;
     background: linear-gradient(90deg, #2B0052 70%, #8200F4);
-    border-radius: 10px;
+    border-radius: 8px;
+    transition: width 0.5s ease;
 }
 
 .pCont {
-    background-color: #1a282e00;
-    height: 50px;
-    font-size: 32px;
-    display: flex;
-    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-width: 80px;
+    text-align: right;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* Стили для отсутствия контента */
 .no-content {
     text-align: center;
     margin-top: 150px;
+    color: white;
 }
 
-.no-content button{
+.no-content h1 {
+    font-size: 2rem;
+    line-height: 1.5;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.no-content button {
     margin-top: 30px;
-    background: #8200F4;
-    padding: 10px 30px;
+    background: linear-gradient(90deg, #8200F4, #B14788);
+    padding: 15px 40px;
     border-radius: 10px;
-    font-size: 32px;
+    font-size: 1.5rem;
     border: none;
     cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(130, 0, 244, 0.3);
 }
 
-.no-content button:hover{
-    background: #7200d5;
+.no-content button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(130, 0, 244, 0.4);
+    background: linear-gradient(90deg, #7200d5, #A03D7A);
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .cardBgImg {
+        padding: 30px;
+    }
+
+    .cardInfo {
+        flex-direction: column;
+    }
+
+    .lInfo,
+    .rInfo {
+        width: 100%;
+    }
+
+    .rInfo {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .rInfo img {
+        width: 250px;
+        height: 250px;
+    }
+
+    .ratingNum {
+        top: -50px;
+        right: 50%;
+        transform: translateX(50%);
+    }
+}
+
+@media (max-width: 768px) {
+    .lInfo h1 {
+        font-size: 1.8rem;
+    }
+
+    .no-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .no-content button {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+    }
 }
 </style>
