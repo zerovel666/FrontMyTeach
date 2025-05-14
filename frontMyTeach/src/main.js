@@ -15,9 +15,7 @@ import Catalog from './components/pages/Catalog.vue';
 import AboutUs from './components/pages/AboutUs.vue';
 import MyProfile from './components/pages/MyProfile.vue';
 import CourseInfo from './components/pages/CourseInfo.vue';
-import { notification } from 'ant-design-vue';
 import BibleOrganization from './components/pages/BibleOrganization.vue';
-import { colProps } from 'ant-design-vue/es/grid/Col';
 import OrganizationManual from './components/pages/OrganizationManual.vue';
 import Subscription from './components/pages/Subscription.vue';
 import SubscriptionPageById from './components/pages/SubscriptionPageById.vue';
@@ -26,6 +24,8 @@ import TeachingBible from './components/pages/TeachingBible.vue';
 import MainCourseEditor from './components/pages/MainCourseEditor.vue';
 import CourseTaskEditor from './components/pages/CourseTaskEditor.vue'
 import TaskStudent from './components/pages/TaskStudent.vue';
+import AdminMainPage from './components/pages/AdminPages/AdminMainPage.vue';
+import { createPinia } from 'pinia';
 
 VueCookies.config('7d', '', '', false);
 
@@ -75,8 +75,8 @@ const routes = [
   { path: '/main/course/editor/:id', component: MainCourseEditor },
   { path: '/task/editor/:course_id/:id', component: CourseTaskEditor },
   { path: '/task/:course_id/:id', component: TaskStudent },
-  { path: '/:pathMatch(.*)*', redirect: '/' },
-
+  { path: '/admin/page', component: AdminMainPage},
+  { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
 
 const router = createRouter({
@@ -86,10 +86,13 @@ const router = createRouter({
 
 
 const app = createApp(App);
+const pinia = createPinia();
+
 app.config.globalProperties.$loading = loading;
 app.use(router);
 app.use(VueCookies);
 app.use(Antd);
+app.use(pinia)
 app.mount('#app');
 
 

@@ -74,8 +74,51 @@ const logTimeSpent = async () => {
 const getUserInfo = async () => {
 	if (VueCookies.get('token')) {
 		try {
-			const response = await axios.get(`${API_URL}/client/info`);
-			userInfo.value = response.data;
+			// const response = await axios.get(`${API_URL}/client/info`);
+			// userInfo.value = response.data;
+			userInfo.value = {
+				"id": 6,
+				"email": "master@gmail.com",
+				"first_name": "Мастер",
+				"last_name": "Мастерович",
+				"iin": "999999999999",
+				"organization_id": 2,
+				"group_id": null,
+				"is_active": true,
+				"created_at": "2025-05-13T11:33:00.000000Z",
+				"updated_at": "2025-05-13T11:33:00.000000Z",
+				"roles": [
+					{
+						"id": 1,
+						"name": "Админ",
+						"slug": "admin",
+						"created_at": "2025-05-13T09:52:13.000000Z",
+						"updated_at": "2025-05-13T09:52:13.000000Z",
+						"pivot": {
+							"user_id": 6,
+							"role_id": 1
+						}
+					}
+				],
+				"client_infos": {
+					"id": 6,
+					"user_id": 6,
+					"has_courses": null,
+					"complete_course_count": null,
+					"complete_tasks": null,
+					"pastime": null,
+					"image_bg": "http://localhost:8081/storage/bgProfile/Капли.jpg",
+					"created_at": "2025-05-13T11:33:00.000000Z",
+					"updated_at": "2025-05-13T11:33:00.000000Z"
+				},
+				"user_image": {
+					"id": 6,
+					"user_id": 6,
+					"image_path": "http://localhost:8081/storage/userAvatars/default_avatars.jpg",
+					"created_at": "2025-05-13T11:33:00.000000Z",
+					"updated_at": "2025-05-13T11:33:00.000000Z"
+				}
+			}
 			VueCookies.set('role', userInfo.value.roles[0].slug);
 		} catch (error) {
 			console.error('Error logging time:', error?.response?.data?.error || "Неизвестная ошибка");

@@ -13,11 +13,8 @@
                         </button>
                     </div>
                     <ul v-if="showOption" class="dropdown">
-                        <li v-for="(option, index) in filteredOptions" :key="index" @click="selectOption(option)" v-if="options?.length > 0">
+                        <li v-for="(option, index) in filteredOptions" :key="index" @click="selectOption(option)">
                             {{ option.name }}
-                        </li>
-                        <li v-else>
-                            Курсов не существует
                         </li>
                     </ul>
                 </div>
@@ -53,6 +50,9 @@
                                     <li @click="goToCreateCourse">Создать курс</li>
                                     <li @click="goTeaching">Преподавание</li>
                                     <li @click="goBibleCourse">Библеотека курсов</li>
+                                    <li @click="logout">Выйти из аккаунта</li>
+                                </div>
+                                <div v-else-if="VueCookies.get('role') === 'admin'">
                                     <li @click="logout">Выйти из аккаунта</li>
                                 </div>
                             </div>

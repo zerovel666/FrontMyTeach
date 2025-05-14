@@ -121,7 +121,7 @@ const buy = async () => {
     try {
         if (!courseInfo.value.buyed) {
             const response = await axios.post(`${API_URL}/student/course/${route.params.id}`)
-            if (response.data.uuid) {
+            if (response.data.uuid) {//write logic
                 router.push(`/pay/course/${response.data.uuid}`);
             } else {
                 courseInfo.value.buyed = true
