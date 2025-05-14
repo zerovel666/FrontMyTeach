@@ -6,11 +6,11 @@
             <p>Кол-во пользователей: {{ store.analytics.user_count }}</p>
             <p>Продаж совершенных: {{ store.analytics.count_sale }}</p>
             <p>Кол-во организаций: {{ store.analytics.organization_count }}</p>
-            <p>Заработано с подписок: {{ store.analytics.amount_sale_subscription }}</p>
+            <p>Заработано с подписок: {{ store.analytics.amount_sale_subscription }} KZT</p>
             <p>Время пользования сайтом: {{ store.analytics.time_use.toFixed(1) }} м</p>
-            <p>Заработано с курсов: {{ store.analytics.amount_sale_course }}₸</p>
+            <p>Заработано с курсов: {{ store.analytics.amount_sale_course }} KZT</p>
             <p>Кол-во курсов: {{ store.analytics.course_count }}</p>
-            <p>Общий заработок: {{ store.analytics.total_amount_sale }}₸</p>
+            <p>Общий заработок: {{ store.analytics.total_amount_sale }} KZT</p>
             <p>Кол-во задач: {{ store.analytics.task }}</p>
         </div>
 
@@ -23,6 +23,7 @@
             </div>
         </div>
     </div>
+    <div v-else class="loading">Загрузка аналитики...</div>
 </template>
 
 <script setup>
@@ -85,5 +86,9 @@ p {
     align-items: center;
     justify-content: left;
     padding: 10px;
+}
+
+.loading{
+    margin-top: 40px;
 }
 </style>
