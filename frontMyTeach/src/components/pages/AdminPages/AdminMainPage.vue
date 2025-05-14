@@ -1,12 +1,12 @@
 <template>
-  <div class="container">
-    <NavAdmin @changePage="changePage" />
-    <div class="content">
-      <MainComponent v-if="currentPage === 'main'" />
-      <UsersComponent v-if="currentPage === 'users'" />
+    <div class="container">
+        <NavAdmin @changePage="changePage" />
+        <div class="content">
+            <MainComponent v-if="currentPage === 'main'" />
+            <UsersComponent v-if="currentPage === 'users'" />
+        </div>
     </div>
-  </div>
-  <Notification ref="notificationRef" />
+    <Notification ref="notificationRef" />
 </template>
 
 <script setup>
@@ -24,29 +24,29 @@ const notificationRef = ref(null);
 const currentPage = ref('main');
 
 function changePage(page) {
-  if (page === 'interface') {
-    router.push('/');
-    return;
-  }
-  currentPage.value = page;
+    if (page === 'interface') {
+        router.push('/');
+        return;
+    }
+    currentPage.value = page;
 }
 
 onMounted(() => {
-  document.body.classList.remove('bg-custom');
+    document.body.classList.remove('bg-custom');
 
-  if (VueCookies.get('role') !== 'admin') {
-    notificationRef.value?.showNotification('Недостаточно прав');
-    setTimeout(() => router.push('/'), 2000);
-  }
+    if (VueCookies.get('role') !== 'admin') {
+        notificationRef.value?.showNotification('Недостаточно прав');
+        setTimeout(() => router.push('/'), 2000);
+    }
 });
 </script>
 
 <style scoped>
 .container {
-  display: flex;
+    display: flex;
 }
 
 .content {
-  padding: 50px;
+    padding: 50px;
 }
 </style>
