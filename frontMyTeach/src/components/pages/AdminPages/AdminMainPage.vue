@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <NavAdmin @changePage="changePage" />
+        <NavAdmin @changePage="changePage" class="navAdmin" />
         <div class="content">
             <MainComponent v-if="currentPage === 'main'" />
             <UsersComponent v-if="currentPage === 'users'" />
@@ -45,8 +45,13 @@ onMounted(() => {
 .container {
     display: flex;
 }
+.navAdmin{
+    width: 30%;
+    height: auto;
+}
 
 .content {
+    width: 70%;
     padding: 50px;
 }
 </style>
