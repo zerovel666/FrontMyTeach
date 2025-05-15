@@ -5,6 +5,7 @@
             <MainComponent v-if="currentPage === 'main'" />
             <UsersComponent v-if="currentPage === 'users'" />
             <CoursesComponent v-if="currentPage === 'course'" />
+            <CheckingComponent v-if="currentPage === 'checking'" />
         </div>
     </div>
     <Notification ref="notificationRef" />
@@ -20,6 +21,7 @@ import NavAdmin from './NavAdmin.vue';
 import MainComponent from './Navigation/MainComponent.vue';
 import UsersComponent from './Navigation/UsersComponent.vue';
 import CoursesComponent from './Navigation/CoursesComponent.vue';
+import CheckingComponent from './Navigation/CheckingComponent.vue';
 
 const router = useRouter();
 const notificationRef = ref(null);

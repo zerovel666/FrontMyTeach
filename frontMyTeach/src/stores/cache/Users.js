@@ -7,7 +7,6 @@ export const useUsersStore = defineStore('users', () => {
     const users = ref(null);
 
     async function getUsers() {
-        console.log(users.value)
         if (!users.value) {
             // const response = await axios.get(`${API_URL}/admin/getAllUsers`);
             // users.value = response.data

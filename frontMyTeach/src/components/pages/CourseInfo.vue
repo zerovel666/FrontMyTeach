@@ -138,7 +138,7 @@ const buy = async () => {
 const getCourseInfo = async () => {
 
     let response = null;
-    if (VueCookies.get('token') && VueCookies.get('role') == 'student'){
+    if (VueCookies.get('token') && (VueCookies.get('role') == 'student' || VueCookies.get('role') == 'admin')){
         response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
     }else(
         response = await axios.get(`${API_URL}/student/course/noAuth/${route.params.id}`)
