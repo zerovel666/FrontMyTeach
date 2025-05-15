@@ -145,14 +145,12 @@ const filteredCourses = computed(() => {
     if (!store.courses) return [];
     
     return store.courses.filter(course => {
-        // Фильтр по поиску
         const matchesSearch = 
             course.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             course.tags.some(tag => 
                 tag.tag.toLowerCase().includes(searchQuery.value.toLowerCase())
             );
         
-        // Фильтр по активности
         const matchesFilter = filterActive.value === null || 
                             course.is_active === filterActive.value;
         
