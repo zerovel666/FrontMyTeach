@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="details-section">
-                        <h4>Контактные данные</h4>
+                        <h4>Контактные данные организации</h4>
                         <div class="details-grid">
                             <div>
                                 <p><strong>Адрес:</strong> {{ user.organization.address }}</p>
@@ -70,8 +70,8 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="edit-btn">Редактировать</button>
-                        <button class="status-btn"
+                        <button class="edit-btn" @click="handleShowUserEditor(user)">Редактировать</button>
+                        <button class="status-btn" @click="handleReverseStatusUser(user)"
                             :class="{ 'deactivate': user.is_active, 'activate': !user.is_active }">
                             {{ user.is_active ? 'Деактивировать' : 'Активировать' }}
                         </button>
@@ -85,15 +85,26 @@
             <p>Загрузка пользователей...</p>
         </div>
     </div>
+
+    <Notification ref="notificationRef" />
+    <UserEditor v-if="showUserEditor" :user="currentUser" @confirm="handleUserSave"
+        @cancel="showUserEditor = false; currentUser = null" />
 </template>
 
 <script setup>
 import { useUsersStore } from '@/stores/cache/Users';
 import { ref, computed, onMounted } from 'vue';
+import UserEditor from '../LayoutComponent/UserEditor.vue';
+import axios from 'axios';
+import { API_URL } from '@/config';
+import Notification from '@/components/Notification.vue';
 
 const store = useUsersStore();
 const searchQuery = ref('');
 const expandedUsers = ref([]);
+const showUserEditor = ref(false);
+const currentUser = ref(null);
+const notificationRef = ref(null);
 
 const toggleUserDetails = (index) => {
     expandedUsers.value[index] = !expandedUsers.value[index];
@@ -126,6 +137,51 @@ const filteredUsers = computed(() => {
         );
     });
 });
+
+async function handleShowUserEditor(user) {
+    currentUser.value = user;
+    showUserEditor.value = true
+}
+
+async function handleUserSave(userData) {
+    try {
+        await axios.put(`${API_URL}/admin/updateUser/${userData.id}`, {
+            'first_name': userData.first_name,
+            'last_name': userData.last_name,
+            'email': userData.email
+        });
+
+        store.setUserById(userData, userData.id)
+        store.getUsers().then(() => {
+            expandedUsers.value = new Array(store.users.length).fill(false);
+        });
+
+        notificationRef.value.showNotification("Пользователь успешно обновлен")
+    } catch (error) {
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? error)
+    }
+}
+
+async function handleReverseStatusUser(userData) {
+       try {
+        if (userData.is_active){
+            userData.is_active = false
+        }else{
+            userData.is_active = true
+        }
+        await axios.put(`${API_URL}/admin/updateUser/${userData.id}`, {
+            "is_active" : userData.is_active
+        });
+        store.setUserById(userData, userData.id)
+        store.getUsers().then(() => {
+            expandedUsers.value = new Array(store.users.length).fill(false);
+        });
+
+        notificationRef.value.showNotification("Пользователь успешно обновлен")
+    } catch (error) {
+        notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.error ?? error)
+    }
+}
 
 onMounted(() => {
     store.getUsers().then(() => {
@@ -290,9 +346,6 @@ h1 {
     gap: 15px;
 }
 
-.details-grid p {
-    margin: 5px 0;
-}
 
 .action-buttons {
     display: flex;

@@ -315,8 +315,19 @@ export const useUsersStore = defineStore('users', () => {
         }
     }
 
+    async function setUserById(userData, user_id) {
+        if (userData && user_id) {
+            const index = users.value.findIndex(user => user.id === user_id);
+            if (index !== -1) {
+                users.value[index] = { ...userData };
+            }
+        }
+    }
+
+
     return {
         users,
-        getUsers
+        getUsers,
+        setUserById
     };
 });
