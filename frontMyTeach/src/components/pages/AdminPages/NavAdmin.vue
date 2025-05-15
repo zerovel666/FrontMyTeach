@@ -6,7 +6,7 @@
         <p @click="changePage('checking')">На проверку</p>
         <p @click="changePage('organization')">Организации</p>
         <p @click="changePage('banners')">Баннеры</p>
-        <p @click="changePage('bgImage')">Изображения профиля</p>
+        <p @click="changePage('subscriptions')">Подписки</p>
         <p @click="changePage('interface')">Пользовательский интерфейс</p>
     </div>
 </template>
