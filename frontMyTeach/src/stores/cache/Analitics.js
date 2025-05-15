@@ -9,12 +9,15 @@ export const useAnalyticsStore = defineStore('analytics', () => {
 
     function calculateRelevance(data) {
         let total = 0;
-        total += Math.min(data.user_count * 5, 20);
-        total += Math.min(data.count_sale * 2, 20);
-        total += Math.min(data.total_amount_sale / 3000, 20);
-        total += Math.min(data.time_use / 5, 20);
-        total += Math.min(data.task * 2, 20);
-        return Math.min(Math.round(total), 100);
+        total = (
+            Math.min(data.user_count * 5, 20) * 0.25 +
+            Math.min(data.count_sale * 2, 20) * 0.30 +
+            Math.min(data.total_amount_sale / 3000, 20) * 0.30 +
+            Math.min(data.time_use / 5, 20) * 0.10 +
+            Math.min(data.task * 2, 20) * 0.05
+        );
+        return Math.round(total);
+
     }
 
     async function fetchAnalytics() {
