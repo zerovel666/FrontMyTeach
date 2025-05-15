@@ -37,19 +37,6 @@
                         </div>
                     </div>
                     
-                    <div class="details-section">
-                        <h3>Структура курса</h3>
-                        <div class="modules">
-                            <div class="module" v-for="module in course.modules" :key="module.id">
-                                <h3>Модуль: {{ module.str_value }}</h3>
-                                <ul class="tasks">
-                                    <ul v-for="task in module.tasks" :key="task.id">
-                                        {{ task.name }} ({{ task.type === 'lecture' ? 'Лекция' : 'Задание' }})
-                                    </ul>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <div class="course-actions">
@@ -274,32 +261,6 @@ const approveCourse = async (courseId) => {
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
-}
-
-.modules {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.module {
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.module h3 {
-    margin: 0 0 10px;
-}
-
-.tasks {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.tasks ul {
-    padding: 0;
-    margin-top: 15px;
-    margin-bottom: 5px;
 }
 
 .course-actions {
