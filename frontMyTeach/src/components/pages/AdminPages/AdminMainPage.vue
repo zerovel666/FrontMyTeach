@@ -6,6 +6,9 @@
             <UsersComponent v-if="currentPage === 'users'" />
             <CoursesComponent v-if="currentPage === 'course'" />
             <CheckingComponent v-if="currentPage === 'checking'" />
+            <OrganizationComponent v-if="currentPage === 'organization'" />
+            <BannersComponent v-if="currentPage === 'banners'" />
+            <SubscriptionComponent v-if="currentPage === 'subscriptions'" />
         </div>
     </div>
     <Notification ref="notificationRef" />
@@ -22,6 +25,9 @@ import MainComponent from './Navigation/MainComponent.vue';
 import UsersComponent from './Navigation/UsersComponent.vue';
 import CoursesComponent from './Navigation/CoursesComponent.vue';
 import CheckingComponent from './Navigation/CheckingComponent.vue';
+import OrganizationComponent from './Navigation/OrganizationComponent.vue';
+import BannersComponent from './Navigation/BannersComponent.vue';
+import SubscriptionComponent from './Navigation/SubscriptionComponent.vue';
 
 const router = useRouter();
 const notificationRef = ref(null);
