@@ -299,6 +299,7 @@ onUnmounted(() => {
     padding: 0 20px;
     font-size: 14px;
     background-color: transparent;
+    color: black;
 }
 
 .searchButton {
