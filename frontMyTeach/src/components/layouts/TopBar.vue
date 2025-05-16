@@ -53,6 +53,7 @@
                                     <li @click="logout">Выйти из аккаунта</li>
                                 </div>
                                 <div v-else-if="VueCookies.get('role') === 'admin'">
+                                    <li @click="goAdminPage">Админ панель</li>
                                     <li @click="logout">Выйти из аккаунта</li>
                                 </div>
                             </div>
@@ -114,6 +115,10 @@ const handleCourseCreated = (newCourse) => {
 
 const goHome = async () => {
     router.push('/');
+}
+
+const goAdminPage = async () => {
+    router.push('/admin/page')
 }
 
 const goMyCourse = async () => {
