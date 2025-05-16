@@ -238,6 +238,7 @@ onUnmounted(() => {
 header {
     margin: 20px;
     margin-top: 100px;
+    margin-bottom: 50px;
     font-size: 52px;
     text-align: center;
 }
@@ -389,6 +390,7 @@ header {
 @media (max-width: 500px) {
     header {
         margin-top: 50px;
+        margin-bottom: 50px;
         font-size: 32px;
     }
 
