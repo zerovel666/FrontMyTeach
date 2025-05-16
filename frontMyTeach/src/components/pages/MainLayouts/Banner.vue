@@ -67,6 +67,7 @@ onMounted(getBanner);
     align-items: center;
     position: relative;
     overflow: hidden;
+    padding: 0 20px;
 }
 
 .banner-wrapper {
@@ -83,13 +84,64 @@ onMounted(getBanner);
     height: 100%;
     object-fit: cover;
     border-radius: inherit;
-    border-radius: 350px;
 }
-
 
 .swapBannerButton {
     cursor: pointer;
     z-index: 10;
     margin: 10px;
+    width: 40px;
+    height: 40px;
 }
+
+@media (max-width: 1024px) {
+    .container {
+        height: 400px;
+    }
+
+    .banner-wrapper {
+        width: 80%;
+        border-radius: 200px;
+    }
+
+    .swapBannerButton {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        padding: 20px 10px;
+    }
+
+    .banner-wrapper {
+        width: 100%;
+        height: 300px;
+        border-radius: 30px;
+    }
+
+    .banner img {
+        border-radius: 30px;
+    }
+
+    .swapBannerButton {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner-wrapper {
+        height: 200px;
+    }
+
+    .swapBannerButton {
+        width: 25px;
+        height: 25px;
+    }
+}
+
 </style>
