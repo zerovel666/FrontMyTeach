@@ -2,7 +2,7 @@
     <div class="filterSearch">
         <div class="searchContainer" @click.stop>
             <div class="inputContainer">
-                <input type="text" placeholder="Поиск..." @focus="showOption = true" v-model=searchInput>
+                <input type="text" placeholder="Поиск..." @focus="showOption = true" v-model="searchInput">
                 <button @click="searchAction"><img src="/src/assets/Icons/Search.svg" alt=""></button>
             </div>
             <ul v-if="showOption" class="dropdown">
@@ -24,7 +24,6 @@
         <button class="searchAllFitler" @click="searchFree">Искать</button>
     </div>
     <SettingFilter :showModal="showSettingModal" @close="showSettingModal = false" @applyFilters="updateFilters" />
-
 </template>
 
 <script setup>
@@ -557,40 +556,42 @@ onUnmounted(() => {
     document.removeEventListener("click", handleClickOutside);
 });
 </script>
-
 <style scoped>
 .filterSearch {
     width: 100%;
-    height: 90px;
-    padding: 25px 60px;
+    padding: 15px 20px;
     background: linear-gradient(125deg, #200035, #59008E 40%);
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
+    border-radius: 10px;
 }
 
 .searchContainer {
     width: 100%;
     max-width: 350px;
     position: relative;
+    order: 1;
+    flex-grow: 1;
 }
 
 .inputContainer {
     position: relative;
     display: flex;
     align-items: center;
-    max-width: 350px;
-
+    width: 100%;
 }
 
 .inputContainer input {
     border-radius: 20px;
     height: 40px;
     padding: 10px 25px;
-    max-width: 350px;
     width: 100%;
     outline: none;
     color: black;
+    font-size: 14px;
 }
 
 .inputContainer button {
@@ -610,11 +611,12 @@ onUnmounted(() => {
 
 .inputContainer button:hover {
     background-color: #7300b6;
-
 }
 
 .inputContainer button img {
     filter: invert(1);
+    width: 16px;
+    height: 16px;
 }
 
 .dropdown {
@@ -637,6 +639,7 @@ onUnmounted(() => {
     list-style: none;
     cursor: pointer;
     padding: 5px;
+    font-size: 14px;
 }
 
 .dropdown li:hover {
@@ -645,20 +648,57 @@ onUnmounted(() => {
 
 .quickFilterFree {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     gap: 5px;
+    order: 2;
 }
 
 .quickFilterFree p {
     margin: 0;
     padding: 0;
-    font-size: 24px;
+    font-size: 16px;
+    white-space: nowrap;
 }
 
-.quickFilterFree input {
-    width: 30px;
-    height: 30px;
+.settingFilter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    order: 3;
+    gap: 5px;
+}
+
+.settingFilter p {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.settingFilter img {
+    width: 24px;
+    height: 24px;
+}
+
+.searchAllFitler {
+    cursor: pointer;
+    height: 40px;
+    border-radius: 15px;
+    font-size: 16px;
+    padding: 0 15px;
+    background-color: #5A217C;
+    color: white;
+    box-shadow: inset 0px 0px 7px rgb(255, 255, 255);
+    border: none;
+    transition: transform 0.3s;
+    order: 4;
+    white-space: nowrap;
+}
+
+.searchAllFitler:hover {
+    transform: scale(1.05);
 }
 
 .custom-checkbox {
@@ -674,8 +714,8 @@ onUnmounted(() => {
 }
 
 .checkmark {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     border: 2px solid white;
     border-radius: 6px;
     display: flex;
@@ -686,14 +726,13 @@ onUnmounted(() => {
 
 .checkmark::after {
     content: "";
-    width: 16px;
-    height: 20px;
+    width: 12px;
+    height: 16px;
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
     display: none;
-    margin: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .custom-checkbox input:checked+.checkmark {
@@ -704,37 +743,80 @@ onUnmounted(() => {
 .custom-checkbox input:checked+.checkmark::after {
     display: block;
 }
-.settingFilter{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-.settingFilter p{
-    margin: 0;
-    padding: 0;
-    font-size: 24px;
-}
-.settingFilter img{
-    width: 40px;
-    height: 40px;
-}
-.searchAllFitler {
-    width: 17%;
-    cursor: pointer;
-    height: 40px;
-    border-radius: 15px;
-    font-size: 24px;
-    padding-left: 30px;
-    padding-right: 30px;
-    background-color: #5A217C;
-    color: white;
-    box-shadow: inset 0px 0px 7px rgb(255, 255, 255);
-    border: none;
-    transition: transform 0.3s;
+
+@media (min-width: 768px) {
+    .filterSearch {
+        padding: 20px 40px;
+        gap: 20px;
+    }
+    
+    .quickFilterFree p,
+    .settingFilter p {
+        font-size: 20px;
+    }
+    
+    .settingFilter img {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .searchAllFitler {
+        font-size: 20px;
+        padding: 0 20px;
+    }
+    
+    .checkmark {
+        width: 28px;
+        height: 28px;
+    }
 }
 
-.searchAllFitler:hover {
-    transform: scale(1.1);
+@media (min-width: 1024px) {
+    .filterSearch {
+        height: 90px;
+        padding: 25px 60px;
+        flex-wrap: nowrap;
+        gap: 30px;
+    }
+    
+    .searchContainer {
+        order: 0;
+    }
+    
+    .quickFilterFree {
+        order: 0;
+    }
+    
+    .settingFilter {
+        order: 0;
+    }
+    
+    .searchAllFitler {
+        order: 0;
+        width: 17%;
+        font-size: 24px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    
+    .quickFilterFree p,
+    .settingFilter p {
+        font-size: 24px;
+    }
+    
+    .settingFilter img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .checkmark {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .checkmark::after {
+        width: 16px;
+        height: 20px;
+    }
 }
 </style>

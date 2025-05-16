@@ -1,42 +1,46 @@
 <template>
-    <TopBar />
-    <div class="containerBody">
-        <Filter @updateWithFilter="updateWithFilter" @searchExtra="searchExtra" />
-        <div class="content">
-            <h1>Все курсы <img src="/src/assets/Icons/arrowBottom.svg" alt="" /></h1>
-            <div class="cards">
-                <div class="card" v-for="(card, index) in cards" :key="index"
-                    :style="{ background: getGradients(index)}">
-                    <div class="lInfo">
-                        <h4>{{ card.name ? card.name : card.course_name }}</h4>
-                        <ul>
-                            <li v-for="(tag, i) in card.tags" :key="i">{{ tag.tag ? tag.tag : '—' }}</li>
-                        </ul>
-                        <button @click="goCourseInfo(card.id)">Подробнее</button>
-                    </div>
-                    <div class="rInfo">
-                        <p class="rating">
-                            {{
-                                card.rating_course && card.rating_course.rating
-                                    ? card.rating_course.rating
-                                    : card.rating
-                                        ? card.rating
-                                        : '—'
-                            }}
-                            <img src="/src/assets/Icons/Star.svg" alt="" />
-                        </p>
-                        <img :src="card.image_path" alt="" />
-                        <p class="author">
-                            {{ card.author_name ? card.author_name : 'Неизвестный автор' }}
-                            <img src="/src/assets/Icons/Tap.svg" alt="" />
-                        </p>
+    <div class="catalog-wrapper">
+        <TopBar />
+        <div class="containerBody">
+            <Filter @updateWithFilter="updateWithFilter" @searchExtra="searchExtra" />
+            <div class="content">
+                <h1>Все курсы <img src="/src/assets/Icons/arrowBottom.svg" alt=""></h1>
+                <div class="cards">
+                    <div class="card" v-for="(card, index) in cards" :key="index"
+                        :style="{ background: getGradients(index) }" @click="goCourseInfo(card.id)">
+                        <div class="card-content">
+                            <div class="course-image-wrapper">
+                                <img :src="card.image_path" alt="" class="course-image" />
+                                <p class="rating">
+                                    {{ card.rating_course?.rating ?? card.rating ?? '—' }}
+                                    <img src="/src/assets/Icons/Star.svg" alt="" />
+                                </p>
+                            </div>
+                            <div class="course-info">
+                                <h4>{{ card.name || card.course_name }}</h4>
+                                <div class="tags">
+                                    <span v-for="(tag, i) in card.tags" :key="i" class="tag">
+                                        {{ tag.tag || '—' }}
+                                    </span>
+                                </div>
+                                <div class="course-footer">
+                                    <p class="author">
+                                        {{ card.author_name || 'Неизвестный автор' }}
+                                    </p>
+                                    <button class="details-btn" @click.stop="goCourseInfo(card.id)">
+                                        Подробнее
+                                        <img src="/src/assets/Icons/Tap.svg" alt="" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <Paginate :paginateData="paginateData" @howPage="updatePage" />
             </div>
-            <Paginate :paginateData="paginateData" @howPage="updatePage" />
         </div>
+        <FooterBar />
     </div>
-    <FooterBar />
 </template>
 
 
@@ -160,120 +164,216 @@ onMounted(() => {
     } else if (course_id) {
         extraSeacrhCourse_id.value = course_id
         searchExtra(course_id);
-    }else {
+    } else {
         getCards();
     }
 })
 </script>
 
 <style scoped>
+/* Базовые стили */
+.catalog-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.containerBody {
+    flex: 1;
+    padding: 0 16px;
+}
+
 .content h1 {
-    font-size: 48px;
+    font-size: 28px;
     font-weight: 300;
+    margin: 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .content h1 img {
-    width: 30px;
-}
-
-.content {
-    margin-top: 40px;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.card {
-    width: 400px;
-    height: 240px;
-    border-radius: 35px;
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-.lInfo {
-    font-size: 17px;
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    position: relative;
-}
-
-.lInfo ul li {
-    padding: 0;
-    padding-top: 5px;
-}
-
-.lInfo ul {
-    padding: 0 18px;
-}
-
-.lInfo button {
-    font-size: 17px !important;
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    height: 30px;
-    padding: 3px 20px;
-    border-radius: 20px;
-    border: 1px solid #B14788;
-    background: none;
-    font-size: 22px;
-    color: white;
-    transition: transform 0.3s;
-    cursor: pointer;
-}
-
-.lInfo button:hover {
-    transform: translateX(-50%) scale(1.1);
-}
-
-.rInfo {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-}
-
-.rInfo img {
-    width: 150px;
-    height: 150px;
-    border-radius: 100%;
-    object-fit: cover;
-}
-
-.rating {
-    position: absolute;
-    top: 0;
-    margin: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-around;
-    gap: 3px;
-}
-
-.rating img {
     width: 20px;
     height: 20px;
 }
 
-.author {
-    position: absolute;
-    bottom: 0;
-    margin: 0;
-    font-size: 12px;
-    right: 0;
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
 }
 
-.author img {
+.card {
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.course-image-wrapper {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+}
+
+.course-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .course-image {
+    transform: scale(1.05);
+}
+
+.rating {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+}
+
+.rating img {
     width: 14px;
     height: 14px;
+}
+
+.course-info {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.tag {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.course-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.author {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.details-btn {
+    background: none;
+    border: 1px solid #B14788;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.details-btn:hover {
+    background: rgba(177, 71, 136, 0.2);
+}
+
+.details-btn img {
+    width: 12px;
+    height: 12px;
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 500px) {
+    .containerBody {
+        padding: 0 12px;
+    }
+
+    .content h1 {
+        font-size: 24px;
+        margin: 16px 0;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .course-image-wrapper {
+        height: 140px;
+    }
+
+    .course-info {
+        padding: 12px;
+    }
+
+    .course-info h4 {
+        font-size: 16px;
+    }
+
+    .tag {
+        font-size: 11px;
+        padding: 3px 6px;
+    }
+
+    .author {
+        font-size: 13px;
+    }
+
+    .details-btn {
+        padding: 5px 10px;
+        font-size: 13px;
+    }
+}
+
+/* Адаптив для очень маленьких экранов */
+@media (max-width: 350px) {
+    .course-image-wrapper {
+        height: 120px;
+    }
+
+    .details-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
 }
 </style>

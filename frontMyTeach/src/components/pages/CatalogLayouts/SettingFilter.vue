@@ -2,40 +2,71 @@
     <Teleport to="body">
         <div class="modal-overlay" v-if="showModal" @click="$emit('close')">
             <div class="content" @click.stop v-if="categories">
+                <button class="close-btn" @click="$emit('close')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                
                 <h3>Все Фильтры</h3>
-                <h4>Категории</h4>
-                <div class="buttons">
-                    <button v-for="(category, index) in categories" :key="index" @click="pushInFiltersCategory(index)"
-                        :class="{ 'buttonSelected': filters.category.includes(category) }">
-                        {{ category }}
-                    </button>
-                </div>
-                <h4>Дополнительные фильтры</h4>
-                <div class="addFilters">
-                    <div class="amountFilter">
-                        <p>Цена</p>
-                        <Slider v-model="rangeAmount" :min="minValue" :max="maxValue" :tooltip="'always'"
-                            class="slider" />
-                        <div class="switchCont" id="sw1">
-                            <p>Бесплатные</p>
-                            <Toggle v-model="isFree" class="toogle" />
-                        </div>
-                    </div>
-                    <div class="ratingFilter">
-                        <p>Рейтинг</p>
-                        <Slider v-model="rangeRating" :min="1" :max="5" :tooltip="'always'" class="slider" />
-                    </div>
-                    <div class="switchCertificate">
-                        <p>Наличие сертификата</p>
-                        <div class="switchCont">
-                            <Toggle v-model="isChecked" class="toogle" />
-                            {{ isChecked ? "Да" : "Нет" }}
-                        </div>
+                
+                <div class="filter-section">
+                    <h4>Категории</h4>
+                    <div class="buttons">
+                        <button 
+                            v-for="(category, index) in categories" 
+                            :key="index" 
+                            @click="pushInFiltersCategory(index)"
+                            :class="{ 'buttonSelected': filters.category.includes(category) }"
+                        >
+                            {{ category }}
+                        </button>
                     </div>
                 </div>
+                
+                <div class="filter-section">
+                    <h4>Дополнительные фильтры</h4>
+                    <div class="addFilters">
+                        <div class="filter-group amountFilter">
+                            <p>Цена</p>
+                            <Slider 
+                                v-model="rangeAmount" 
+                                :min="minValue" 
+                                :max="maxValue" 
+                                :tooltip="'always'" 
+                                class="slider" 
+                            />
+                            <div class="switchCont">
+                                <p>Бесплатные</p>
+                                <Toggle v-model="isFree" class="toogle" />
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group ratingFilter">
+                            <p>Рейтинг</p>
+                            <Slider 
+                                v-model="rangeRating" 
+                                :min="1" 
+                                :max="5" 
+                                :tooltip="'always'" 
+                                class="slider" 
+                            />
+                        </div>
+                        
+                        <div class="filter-group switchCertificate">
+                            <p>Наличие сертификата</p>
+                            <div class="switchCont">
+                                <Toggle v-model="isChecked" class="toogle" />
+                                <span>{{ isChecked ? "Да" : "Нет" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="lastAction">
-                    <button @click="allClear">Очистить</button>
-                    <button @click="applyFilters">Искать</button>
+                    <button class="clear-btn" @click="allClear">Очистить</button>
+                    <button class="apply-btn" @click="applyFilters">Искать</button>
                 </div>
             </div>
         </div>
@@ -187,134 +218,250 @@ onMounted(getCategories);
     align-items: center;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     overflow-y: auto;
+    z-index: 1000;
+    padding: 20px;
 }
 
 .content {
-    width: 1000px;
+    width: 100%;
+    max-width: 900px;
     min-height: 300px;
     background-color: #000000;
-    border-radius: 50px;
-    border: 1px solid white;
-    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 h3 {
     text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+h4 {
+    font-size: 18px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.filter-section {
+    margin-bottom: 30px;
 }
 
 .buttons {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
-    margin: 40px 0;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
     overflow-y: auto;
-    max-height: 300px;
-    padding: 20px;
+    max-height: 200px;
+    padding: 10px;
 }
 
 .buttons button {
-    padding: 3px;
+    padding: 10px;
     border-radius: 20px;
     border: none;
     background: linear-gradient(#FFB8B8, #D467FF);
-    transition: transform 0.3s;
+    transition: all 0.3s;
     cursor: pointer;
+    color: #000;
+    font-weight: 500;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .buttonSelected {
     background: linear-gradient(#FFB8B9, #FF676A) !important;
-    box-shadow: 0 0 20px #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    color: white;
 }
 
-
 .buttons button:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .addFilters {
     display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 20px;
 }
 
-.amountFilter,
-.ratingFilter,
-.switchCertificate {
+.filter-group {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-width: 200px;
-}
-
-.amountFilter p,
-.ratingFilter p {
-    margin-bottom: 30px;
-}
-
-.amountFilter {
-    width: 300px;
-}
-
-
-.ranges {
+    gap: 15px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
 }
 
-.switchCertificate {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.filter-group p {
+    margin: 0;
+    color: white;
+    font-size: 16px;
 }
 
 .slider {
     width: 100%;
-    --slider-bg: #ffffff;
+    --slider-bg: rgba(255, 255, 255, 0.2);
     --slider-connect-bg: #ffffff;
     --slider-tooltip-bg: #000000;
     --slider-tooltip-color: #fff;
     --slider-handle-bg: #fff;
-    --slider-height: 4px;
-    --slider-handle-size: 16px;
+    --slider-height: 6px;
+    --slider-handle-size: 18px;
+    --slider-handle-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 ::v-deep(.slider-tooltip) {
     border: 2px solid white !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    padding: 2px 8px !important;
+}
+
+.switchCont {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.switchCont span {
+    font-size: 14px;
 }
 
 .lastAction {
     display: flex;
-    justify-content: right;
-    margin-top: 40px;
-    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .lastAction button {
-    padding: 3px 40px;
+    padding: 10px 30px;
     border-radius: 20px;
     border: none;
-    background: linear-gradient(#FFB8B8, #D467FF);
-    transition: transform 0.3s;
+    font-weight: 500;
+    transition: all 0.3s;
     cursor: pointer;
+    font-size: 16px;
+}
+
+.clear-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.apply-btn {
+    background: linear-gradient(#FFB8B8, #D467FF);
+    color: #000;
 }
 
 .lastAction button:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-#sw1 {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
+/* Адаптив для планшетов */
+@media (min-width: 768px) {
+    .content {
+        padding: 40px;
+        border-radius: 30px;
+    }
+    
+    .buttons {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    
+    .addFilters {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .filter-group {
+        width: calc(50% - 15px);
+    }
 }
 
-#sw1 p {
-    margin: 0;
+/* Адаптив для десктопов */
+@media (min-width: 992px) {
+    .content {
+        border-radius: 40px;
+        padding: 50px;
+    }
+    
+    h3 {
+        font-size: 28px;
+    }
+    
+    h4 {
+        font-size: 20px;
+    }
+    
+    .buttons {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+    }
+    
+    .addFilters {
+        flex-direction: row;
+    }
+    
+    .filter-group {
+        width: calc(33.333% - 20px);
+    }
+    
+    .lastAction {
+        justify-content: flex-end;
+    }
+}
+
+/* Адаптив для очень маленьких экранов */
+@media (max-width: 400px) {
+    .content {
+        padding: 20px 15px;
+        border-radius: 15px;
+    }
+    
+    .buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .buttons button {
+        font-size: 12px;
+        padding: 8px 5px;
+    }
+    
+    .lastAction button {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
 }
 </style>
