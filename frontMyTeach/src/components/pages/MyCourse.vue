@@ -8,9 +8,9 @@
                         <div class="lInfo">
                             <h1>{{ card.course.name }}</h1>
                             <ul>
-                                <li v-for="(tag, key) in card.course.tags">
+                                <ul v-for="(tag, key) in card.course.tags">
                                     {{ tag.tag }}
-                                </li>
+                                </ul>
                             </ul>
                             <p class="author_name">{{ card.course.author_name }} <img src="/src/assets/Icons/Tap.svg"
                                     alt=""></p>
@@ -20,7 +20,7 @@
                             <p class="ratingNum">{{ card.course?.rating_course?.rating || 0 }}
                                 <img src="/src/assets/Icons/Star.svg" alt="">
                             </p>
-                            <img :src="card.course.image_path" alt="">
+                            <img :src="card.course.image_path" alt="" class="courseImage">
                         </div>
                     </div>
                     <div class="percentCompletesCont">
@@ -87,18 +87,24 @@ const goCatalog = async => {
 
 const goCourse = async (id) => {
     router.push(`/course/info/${id}`)
-}   
+}
 
 onMounted(getCards);
 </script>
 
 <style scoped>
+.containerBody {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
 .card {
     width: 100%;
     height: 100%;
     max-height: 500px;
-    margin: 60px 0;
-    border-radius: 40px;
+    margin: 40px 0;
+    border-radius: 30px;
     overflow: hidden;
     border: 1px solid #0022FF;
     box-shadow: 0 10px 30px rgba(0, 34, 255, 0.2);
@@ -111,31 +117,32 @@ onMounted(getCards);
 }
 
 .cardBgImg {
-    padding: 40px 60px;
+    padding: 30px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-/* Стили для информации в карточке */
 .cardInfo {
     position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .lInfo {
-    width: 50%;
+    width: 100%;
     color: white;
     display: flex;
     flex-direction: column;
+    order: 2;
 }
 
 .lInfo h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
     line-height: 1.2;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -143,48 +150,47 @@ onMounted(getCards);
 .lInfo ul {
     padding-left: 10px;
     display: flex;
-    flex-direction: column;
-    width: auto;
-    gap: 10px;
-    margin-bottom: 20px;
-    max-width: 300px;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+    max-width: 100%;
 }
 
-.lInfo li {
+.lInfo ul ul {
     background: rgba(255, 255, 255, 0.1);
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 1rem;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .author_name {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #219fda;
     display: inline-flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .author_name img {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     margin-left: 5px;
     filter: invert(76%) sepia(29%) saturate(6880%) hue-rotate(176deg) brightness(98%) contrast(83%);
 }
 
-/* Кнопка продолжить */
 .lInfo button {
     background: rgba(177, 71, 136, 0.2);
     border: 1px solid #B14788;
-    border-radius: 10px;
-    padding: 12px 30px;
-    font-size: 1.25rem;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     color: white;
     backdrop-filter: blur(5px);
+    max-width: 200px;
 }
 
 .lInfo button:hover {
@@ -193,95 +199,97 @@ onMounted(getCards);
     box-shadow: 0 0 15px rgba(177, 71, 136, 0.5);
 }
 
-/* Правая часть карточки */
 .rInfo {
     position: relative;
-    width: 50%;
-    text-align: right;
+    width: 100%;
+    text-align: center;
+    order: 1;
+    margin-bottom: 20px;
 }
 
-.rInfo img {
-    width: 350px;
-    height: 350px;
+.rInfo img.courseImage {
+    width: 200px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 100%;
-    border: 5px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .ratingNum {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 10px;
     display: flex;
     align-items: center;
     gap: 5px;
     background: rgba(0, 0, 0, 0.5);
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 1.1rem;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    z-index: 2;
 }
 
 .ratingNum img {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
 }
 
 .percentCompletesCont {
     width: 100%;
-    margin-top: 40px;
+    margin-top: 20px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 .lineCont {
     background-color: rgba(229, 143, 255, 0.2);
     width: 100%;
-    height: 30px;
-    border-radius: 8px;
+    height: 20px;
+    border-radius: 6px;
     overflow: hidden;
     backdrop-filter: blur(5px);
-    padding: 5px;
+    padding: 3px;
     border: 1px solid #A03D7A;
 }
 
 .line {
     height: 100%;
     background: linear-gradient(90deg, #2B0052 70%, #8200F4);
-    border-radius: 8px;
+    border-radius: 6px;
     transition: width 0.5s ease;
 }
 
 .pCont {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    min-width: 80px;
+    min-width: 60px;
     text-align: right;
     color: white;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Стили для отсутствия контента */
 .no-content {
     text-align: center;
-    margin-top: 150px;
+    margin-top: 100px;
     color: white;
+    padding: 0 20px;
 }
 
 .no-content h1 {
-    font-size: 2rem;
-    line-height: 1.5;
-    margin-bottom: 30px;
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin-bottom: 25px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .no-content button {
-    margin-top: 30px;
+    margin-top: 25px;
     background: linear-gradient(90deg, #8200F4, #B14788);
-    padding: 15px 40px;
-    border-radius: 10px;
-    font-size: 1.5rem;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 1.2rem;
     border: none;
     cursor: pointer;
     color: white;
@@ -295,50 +303,201 @@ onMounted(getCards);
     background: linear-gradient(90deg, #7200d5, #A03D7A);
 }
 
-/* Адаптивность */
-@media (max-width: 1200px) {
-    .cardBgImg {
+/* Медиа-запросы для адаптации */
+@media (min-width: 768px) {
+    .containerBody {
         padding: 30px;
     }
 
-    .cardInfo {
-        flex-direction: column;
+    .card {
+        margin: 50px 0;
+        border-radius: 35px;
     }
 
-    .lInfo,
+    .cardBgImg {
+        padding: 40px;
+    }
+
+    .lInfo {
+        width: 60%;
+        order: 1;
+    }
+
+    .lInfo h1 {
+        font-size: 2rem;
+    }
+
+    .lInfo button {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+    }
+
     .rInfo {
-        width: 100%;
+        width: 40%;
+        order: 2;
+        margin-bottom: 0;
     }
 
-    .rInfo {
-        text-align: center;
-        margin-top: 30px;
-    }
-
-    .rInfo img {
+    .rInfo img.courseImage {
         width: 250px;
         height: 250px;
     }
 
-    .ratingNum {
-        top: -50px;
-        right: 50%;
-        transform: translateX(50%);
+    .percentCompletesCont {
+        margin-top: 30px;
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 992px) {
+    .cardInfo {
+        flex-wrap: nowrap;
+        gap: 30px;
+    }
+
     .lInfo h1 {
-        font-size: 1.8rem;
+        font-size: 2.3rem;
+    }
+
+    .lInfo ul {
+        flex-wrap: nowrap;
+        flex-direction: column;
+    }
+
+    .rInfo img.courseImage {
+        width: 300px;
+        height: 300px;
     }
 
     .no-content h1 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
     .no-content button {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+        padding: 14px 35px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card {
+        max-height: 500px;
+        margin: 60px 0;
+        border-radius: 40px;
+    }
+
+    .cardBgImg {
+        padding: 40px 60px;
+    }
+
+    .lInfo h1 {
+        font-size: 2.5rem;
+    }
+
+    .lInfo button {
         padding: 12px 30px;
+        font-size: 1.25rem;
+    }
+
+    .rInfo img.courseImage {
+        width: 350px;
+        height: 350px;
+    }
+
+    .percentCompletesCont {
+        margin-top: 40px;
+    }
+
+    .lineCont {
+        height: 30px;
+        border-radius: 8px;
+    }
+
+    .pCont {
+        font-size: 1.5rem;
+    }
+
+    .no-content h1 {
+        font-size: 2rem;
+    }
+
+    .no-content button {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .card {
+        margin: 20px 0;
+        border-radius: 20px;
+    }
+
+    .cardBgImg {
+        padding: 20px;
+    }
+
+    .cardInfo {
+        gap: 15px;
+    }
+
+    .lInfo h1 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+
+    .lInfo ul {
+        gap: 6px;
+        font-size: 0.85rem;
+    }
+
+    .lInfo ul ul {
+        font-size: 0.8rem;
+    }
+
+    .lInfo button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        max-width: 100%;
+    }
+
+    .rInfo img.courseImage {
+        height: 140px;
+        border-radius: 10px;
+    }
+
+    .ratingNum {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+    }
+
+    .ratingNum img {
+        width: 14px;
+        height: 14px;
+    }
+
+    .percentCompletesCont {
+        gap: 10px;
+    }
+
+    .lineCont {
+        height: 16px;
+    }
+
+    .pCont {
+        font-size: 1rem;
+        min-width: 50px;
+    }
+
+    .no-content {
+        margin-top: 60px;
+    }
+
+    .no-content h1 {
+        font-size: 1.2rem;
+    }
+
+    .no-content button {
+        font-size: 1rem;
+        padding: 10px 20px;
     }
 }
 </style>

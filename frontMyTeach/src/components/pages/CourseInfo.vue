@@ -166,30 +166,31 @@ onMounted(() => {
 }
 
 .content {
-    margin-top: 2rem;
+    margin-top: 1rem;
     color: #E0E0E0;
+    padding: 0 1rem;
 }
 
 .top-card-info {
     display: flex;
+    flex-direction: column;
     background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
-    border-radius: 16px;
-    padding: 2rem;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    min-height: 350px;
+    border-radius: 12px;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .l-info {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.8rem;
     color: white;
 }
 
 .l-info h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     margin: 0;
     color: white;
 }
@@ -198,23 +199,25 @@ onMounted(() => {
     margin: 0;
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.5;
+    font-size: 0.9rem;
 }
 
 .r-info {
-    width: 350px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    order: -1;
 }
 
 #courseImage {
     width: 100%;
-    max-width: 350px;
-    height: 350px;
+    max-width: 200px;
+    height: 200px;
     object-fit: cover;
     border-radius: 50%;
-    border: 4px solid var(--secondary);
+    border: 3px solid var(--secondary);
 }
 
 .rating {
@@ -223,17 +226,18 @@ onMounted(() => {
     align-items: center;
     gap: 0.5rem;
     position: absolute;
-    bottom: -1rem;
-    right: -1rem;
+    bottom: -0.5rem;
+    right: 1rem;
     background-color: rgba(0, 0, 0, 0.5);
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 2rem;
     color: white;
+    font-size: 0.9rem;
 }
 
 .rating img {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
 }
 
 .tags {
@@ -242,48 +246,49 @@ onMounted(() => {
     gap: 0.5rem;
     padding-left: 0;
     list-style: none;
+    margin-top: 0.5rem;
 }
 
 .tags li {
     background-color: #a200ff;
-    padding: 0.3rem 0.8rem;
+    padding: 0.2rem 0.6rem;
     border-radius: 1rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #ffffff;
 }
 
 .obj-info {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 2rem;
-    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .l-obj-info {
     border: 1px solid var(--dark);
-    box-shadow: 0 0 12px rgba(177, 71, 136, 0.3);
-    border-radius: 16px;
-    padding: 2rem;
+    box-shadow: 0 0 8px rgba(177, 71, 136, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
     background-color: #1A1A1A;
 }
 
 .r-obj-info {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .authorInfo {
     background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
 }
 
 .bg {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    gap: 1rem;
+    padding: 1rem;
     background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
         url('/src/assets/images/layouts/BgProfile.svg');
     background-size: cover;
@@ -291,48 +296,49 @@ onMounted(() => {
 }
 
 .authorInfo img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    border: 3px solid white;
+    border: 2px solid white;
     object-fit: cover;
 }
 
 .text h3 {
-    margin: 0 0 0.3rem 0;
-    font-size: 1rem;
+    margin: 0 0 0.2rem 0;
+    font-size: 0.9rem;
     opacity: 0.8;
     color: white;
 }
 
 #author_name {
     margin: 0;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 500;
     color: white;
 }
 
 .buy-cont {
     background: linear-gradient(135deg, #59008E 0%, #6a1b9a 100%);
-    border-radius: 16px;
-    padding: 1.5rem;
+    border-radius: 12px;
+    padding: 1.2rem;
     color: white;
 }
 
 .buy-cont h2 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
 }
 
 .btn-buy {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     background-color: #9900f1;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -344,7 +350,8 @@ onMounted(() => {
 .fastInfoCourse {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.6rem;
+    font-size: 0.9rem;
 }
 
 .fastInfoCourse p {
@@ -353,61 +360,148 @@ onMounted(() => {
     justify-content: space-between;
 }
 
-.fastInfoCourse p span:first-child {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.fastInfoCourse p span:last-child {
-    font-weight: 500;
-}
-
 .row {
     display: flex;
     justify-content: space-between;
+    font-size: 0.9rem;
 }
 
 .modul-cont {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .line {
     width: 100%;
     height: 1px;
     background-color: white;
-    margin: 1.5rem 0;
-    opacity: 0.5;
+    margin: 1rem 0;
+    opacity: 0.3;
 }
 
 .modules {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .modules h4 {
-    font-size: 1.2rem;
-    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    margin: 0 0 0.8rem 0;
     color: white;
 }
 
 .modules ol {
-    padding-left: 1.5rem;
-    margin: 1.5rem 0;
+    padding-left: 1rem;
+    margin: 1rem 0;
 }
 
 .modules ol li {
     display: flex;
     align-items: center;
-    padding: 0.7rem 0;
+    padding: 0.5rem 0;
     border-bottom: 1px dashed var(--border);
     color: white;
+    font-size: 0.9rem;
 }
 
 .modules ol li:last-child {
     border-bottom: none;
 }
 
-.modules ol li::before {
-    color: var(--secondary);
-    font-weight: 500;
-    margin-right: 0.5rem;
+/* Адаптив для планшетов */
+@media (min-width: 768px) {
+    .content {
+        margin-top: 1.5rem;
+        padding: 0 1.5rem;
+    }
+    
+    .top-card-info {
+        flex-direction: row;
+        padding: 2rem;
+        gap: 2rem;
+        min-height: 300px;
+    }
+    
+    .r-info {
+        width: 300px;
+        order: 1;
+    }
+    
+    #courseImage {
+        max-width: 300px;
+        height: 300px;
+    }
+    
+    .rating {
+        bottom: -1rem;
+        right: -1rem;
+        font-size: 1rem;
+    }
+    
+    .rating img {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .obj-info {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+    }
+    
+    .authorInfo img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* Адаптив для десктопов */
+@media (min-width: 1024px) {
+    .content {
+        max-width: 1200px;
+        margin: 2rem auto 0;
+        padding: 0 2rem;
+    }
+    
+    .top-card-info {
+        border-radius: 16px;
+        padding: 2.5rem;
+        gap: 3rem;
+        min-height: 350px;
+    }
+    
+    .l-info h1 {
+        font-size: 2rem;
+    }
+    
+    .r-info {
+        width: 350px;
+    }
+    
+    #courseImage {
+        max-width: 350px;
+        height: 350px;
+    }
+    
+    .obj-info {
+        grid-template-columns: 1fr 350px;
+    }
+    
+    .l-obj-info {
+        border-radius: 16px;
+        padding: 2rem;
+    }
+    
+    .authorInfo img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    #author_name {
+        font-size: 1.4rem;
+    }
+    
+    .btn-buy {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
 }
 </style>
