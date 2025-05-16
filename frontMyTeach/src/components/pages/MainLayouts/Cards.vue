@@ -1,7 +1,8 @@
 <template>
     <header>Популярное</header>
-    <Carousel :wrap-around="true" ref="carouselRef" :items-to-show="1.7" snapAlign="center" @wheel="onScroll"
-        v-if="cards.length" :autoplay="3000" @update:modelValue="activeIndex = $event" class="carousel">
+    <Carousel :wrap-around="true" ref="carouselRef" :items-to-show="mobile ? 1.1 : 1.7" snapAlign="center"
+        @wheel="onScroll" v-if="cards.length" :autoplay="3000" @update:modelValue="activeIndex = $event"
+        class="carousel">
         <Slide v-for="(card, index) in cards" :key="index" class="slide"
             :class="{ 'active-slide': index === activeIndex, 'small-slide': index !== activeIndex }">
             <div class="card" @mouseenter="isHovered = true" @mouseleave="isHovered = false"
@@ -20,7 +21,6 @@
                     <p class="rating"><img src="/src/assets/Icons/Star.svg" alt="">{{ card.rating }}</p>
                     <img alt="" :src="card.image_path">
                     <p class="author_name">{{ card.author_name }} <img src="/src/assets/Icons/Tap.svg" alt=""></p>
-
                 </div>
             </div>
         </Slide>
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
 import axios from 'axios';
@@ -39,7 +39,10 @@ const carouselRef = ref(null);
 const isHovered = ref(false);
 const activeIndex = ref(0);
 const cards = ref([]);
-const router = useRouter()
+const router = useRouter();
+const windowWidth = ref(window.innerWidth);
+
+const mobile = computed(() => windowWidth.value <= 500);
 
 const onScroll = (event) => {
     if (!carouselRef.value || !isHovered.value) return;
@@ -52,7 +55,6 @@ const onScroll = (event) => {
     } else {
         carouselRef.value.prev();
     }
-
 };
 
 const goToCourseInfo = async (id) => {
@@ -67,26 +69,164 @@ const getGradient = (index) => {
     ];
     return colors[index % colors.length];
 }
+
 const disablePageScroll = (event) => {
     if (isHovered.value) {
         event.preventDefault();
     }
 };
+
+const handleResize = () => {
+    windowWidth.value = window.innerWidth;
+};
+
 const getCards = async () => {
-    const response = await axios.get(`${API_URL}/course/rating/getBest`);
-    cards.value = response.data
+    // const response = await axios.get(`${API_URL}/course/rating/getBest`);
+    // cards.value = response.data;
+
+    cards.value = [
+        {
+            "id": 1,
+            "name": "Быстрый курс по Laravel + Vue3: MVC API Микросервис",
+            "image_path": "http://localhost:8082//storage/logoCourse/oHo9XUt5tlwXp12KzFcXUHySEqOKBfr36ANz0Fzt.png",
+            "author_id": "2",
+            "category_id": 3,
+            "is_active": true,
+            "amount": 2000,
+            "send_check": false,
+            "checked": true,
+            "has_certificate": true,
+            "certificate_id": null,
+            "created_at": "2025-05-13T11:36:35.000000Z",
+            "updated_at": "2025-05-15T11:21:28.000000Z",
+            "rating": "0",
+            "author_name": "Азизбек Сексембай",
+            "tags": [
+                {
+                    "id": 1,
+                    "course_id": 1,
+                    "tag": "Laravel",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                },
+                {
+                    "id": 2,
+                    "course_id": 1,
+                    "tag": "Vite",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                }
+            ]
+        },{
+            "id": 1,
+            "name": "Быстрый курс по Laravel + Vue3: MVC API Микросервис",
+            "image_path": "http://localhost:8082//storage/logoCourse/oHo9XUt5tlwXp12KzFcXUHySEqOKBfr36ANz0Fzt.png",
+            "author_id": "2",
+            "category_id": 3,
+            "is_active": true,
+            "amount": 2000,
+            "send_check": false,
+            "checked": true,
+            "has_certificate": true,
+            "certificate_id": null,
+            "created_at": "2025-05-13T11:36:35.000000Z",
+            "updated_at": "2025-05-15T11:21:28.000000Z",
+            "rating": "0",
+            "author_name": "Азизбек Сексембай",
+            "tags": [
+                {
+                    "id": 1,
+                    "course_id": 1,
+                    "tag": "Laravel",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                },
+                {
+                    "id": 2,
+                    "course_id": 1,
+                    "tag": "Vite",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                }
+            ]
+        },{
+            "id": 1,
+            "name": "Быстрый курс по Laravel + Vue3: MVC API Микросервис",
+            "image_path": "http://localhost:8082//storage/logoCourse/oHo9XUt5tlwXp12KzFcXUHySEqOKBfr36ANz0Fzt.png",
+            "author_id": "2",
+            "category_id": 3,
+            "is_active": true,
+            "amount": 2000,
+            "send_check": false,
+            "checked": true,
+            "has_certificate": true,
+            "certificate_id": null,
+            "created_at": "2025-05-13T11:36:35.000000Z",
+            "updated_at": "2025-05-15T11:21:28.000000Z",
+            "rating": "0",
+            "author_name": "Азизбек Сексембай",
+            "tags": [
+                {
+                    "id": 1,
+                    "course_id": 1,
+                    "tag": "Laravel",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                },
+                {
+                    "id": 2,
+                    "course_id": 1,
+                    "tag": "Vite",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                }
+            ]
+        },{
+            "id": 1,
+            "name": "Быстрый курс по Laravel + Vue3: MVC API Микросервис",
+            "image_path": "http://localhost:8082//storage/logoCourse/oHo9XUt5tlwXp12KzFcXUHySEqOKBfr36ANz0Fzt.png",
+            "author_id": "2",
+            "category_id": 3,
+            "is_active": true,
+            "amount": 2000,
+            "send_check": false,
+            "checked": true,
+            "has_certificate": true,
+            "certificate_id": null,
+            "created_at": "2025-05-13T11:36:35.000000Z",
+            "updated_at": "2025-05-15T11:21:28.000000Z",
+            "rating": "0",
+            "author_name": "Азизбек Сексембай",
+            "tags": [
+                {
+                    "id": 1,
+                    "course_id": 1,
+                    "tag": "Laravel",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                },
+                {
+                    "id": 2,
+                    "course_id": 1,
+                    "tag": "Vite",
+                    "created_at": "2025-05-13T11:37:22.000000Z",
+                    "updated_at": "2025-05-13T11:37:22.000000Z"
+                }
+            ]
+        },  
+    ]
 }
 
 onMounted(() => {
     document.addEventListener('wheel', disablePageScroll, { passive: false });
+    window.addEventListener('resize', handleResize);
     getCards();
 });
 
 onUnmounted(() => {
     document.removeEventListener('wheel', disablePageScroll);
+    window.removeEventListener('resize', handleResize);
 });
-
-
 </script>
 
 <style scoped>
@@ -107,7 +247,6 @@ header {
     transition: transform 0.3s ease-in-out;
 }
 
-
 .card {
     display: flex;
     justify-content: space-between;
@@ -120,7 +259,6 @@ header {
     position: relative;
     border: 1px solid #6306ED;
 }
-
 
 .active-slide .card {
     width: 800px;
@@ -220,7 +358,6 @@ header {
     border-radius: 100%;
 }
 
-
 .r-cont-card p {
     font-size: 22px;
     margin: 0;
@@ -246,5 +383,93 @@ header {
     width: 20px;
     height: 20px;
     margin-right: 3px;
+}
+
+/* Мобильные стили */
+@media (max-width: 500px) {
+    header {
+        margin-top: 50px;
+        font-size: 32px;
+    }
+
+    .card {
+        flex-direction: column;
+        height: auto;
+        width: 280px !important;
+        padding: 20px;
+    }
+
+    .active-slide .card,
+    .small-slide .card {
+        width: 280px !important;
+        height: auto;
+        opacity: 1;
+        transform: none;
+        font-size: 14px;
+    }
+
+    .l-cont-card,
+    .r-cont-card {
+        width: 100%;
+        padding: 0;
+    }
+
+    .l-cont-card {
+        margin-bottom: 20px;
+    }
+
+    .l-cont-card h1 {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .l-cont-card button {
+        position: relative;
+        left: auto;
+        transform: none;
+        width: 100%;
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .l-cont-card button:hover {
+        transform: none;
+    }
+
+    .list {
+        max-height: none;
+    }
+
+    .l-cont-card ul {
+        padding: 10px 0;
+    }
+
+    .r-cont-card {
+        align-items: center;
+    }
+
+    .r-cont-card img {
+        max-width: 150px;
+        height: 150px;
+        margin: 10px 0;
+    }
+
+    .r-cont-card p {
+        font-size: 16px;
+    }
+
+    .rating img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .author_name {
+        font-size: 12px !important;
+    }
+
+    .author_name img {
+        width: 10px;
+        height: 10px;
+    }
 }
 </style>

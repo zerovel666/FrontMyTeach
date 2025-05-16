@@ -28,99 +28,6 @@ const getCategories = async () => {
     try {
         const response = await axios.get(`${API_URL}/course/category/all`);
         categories.value = response.data;
-        // const response = [
-        //     {
-        //         "id": 1,
-        //         "category": "Python",
-        //         "created_at": "2025-03-27T08:10:30.000000Z",
-        //         "updated_at": "2025-03-27T08:10:30.000000Z"
-        //     },
-        //     {
-        //         "id": 2,
-        //         "category": "PHP",
-        //         "created_at": "2025-03-27T08:10:30.000000Z",
-        //         "updated_at": "2025-03-27T08:10:30.000000Z"
-        //     },
-        //     {
-        //         "id": 3,
-        //         "category": "C#",
-        //         "created_at": "2025-03-27T08:10:30.000000Z",
-        //         "updated_at": "2025-03-27T08:10:30.000000Z"
-        //     },
-        //     {
-        //         "id": 4,
-        //         "category": "React.js",
-        //         "created_at": "2025-03-27T08:10:36.000000Z",
-        //         "updated_at": "2025-03-27T08:10:36.000000Z"
-        //     },
-        //     {
-        //         "id": 5,
-        //         "category": "C#",
-        //         "created_at": "2025-03-27T08:10:36.000000Z",
-        //         "updated_at": "2025-03-27T08:10:36.000000Z"
-        //     },
-        //     {
-        //         "id": 6,
-        //         "category": "Django",
-        //         "created_at": "2025-03-27T08:10:36.000000Z",
-        //         "updated_at": "2025-03-27T08:10:36.000000Z"
-        //     },
-        //     {
-        //         "id": 7,
-        //         "category": "PHP",
-        //         "created_at": "2025-03-27T08:10:40.000000Z",
-        //         "updated_at": "2025-03-27T08:10:40.000000Z"
-        //     },
-        //     {
-        //         "id": 8,
-        //         "category": "React.js",
-        //         "created_at": "2025-03-27T08:10:40.000000Z",
-        //         "updated_at": "2025-03-27T08:10:40.000000Z"
-        //     },
-        //     {
-        //         "id": 9,
-        //         "category": "HTML&CSS",
-        //         "created_at": "2025-03-27T08:10:40.000000Z",
-        //         "updated_at": "2025-03-27T08:10:40.000000Z"
-        //     },
-        //     {
-        //         "id": 10,
-        //         "category": "Java",
-        //         "created_at": "2025-03-27T08:10:45.000000Z",
-        //         "updated_at": "2025-03-27T08:10:45.000000Z"
-        //     },
-        //     {
-        //         "id": 11,
-        //         "category": "PHP",
-        //         "created_at": "2025-03-27T08:10:45.000000Z",
-        //         "updated_at": "2025-03-27T08:10:45.000000Z"
-        //     },
-        //     {
-        //         "id": 12,
-        //         "category": "C#",
-        //         "created_at": "2025-03-27T08:10:45.000000Z",
-        //         "updated_at": "2025-03-27T08:10:45.000000Z"
-        //     },
-        //     {
-        //         "id": 13,
-        //         "category": "Vue.js",
-        //         "created_at": "2025-03-27T08:10:49.000000Z",
-        //         "updated_at": "2025-03-27T08:10:49.000000Z"
-        //     },
-        //     {
-        //         "id": 14,
-        //         "category": "Java",
-        //         "created_at": "2025-03-27T08:10:49.000000Z",
-        //         "updated_at": "2025-03-27T08:10:49.000000Z"
-        //     },
-        //     {
-        //         "id": 15,
-        //         "category": "HTML&CSS",
-        //         "created_at": "2025-03-27T08:10:49.000000Z",
-        //         "updated_at": "2025-03-27T08:10:49.000000Z"
-        //     }
-        // ]
-        // categories.value = response;
     } catch (error) {
         console.error("Ошибка при загрузке категорий:", error);
     }
@@ -129,7 +36,6 @@ const getCategories = async () => {
 const extraSearchCategories = (category) => {
     router.push({ name: 'catalog', query: { category: category.category } });
 };
-
 
 onMounted(getCategories);
 </script>
@@ -140,10 +46,12 @@ onMounted(getCategories);
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 20px;
 }
 
 .textContent {
     margin-bottom: 80px;
+    text-align: center;
 }
 
 p {
@@ -161,35 +69,114 @@ p {
 }
 
 .content {
-    width: 80%;
+    width: 100%;
+    max-width: 1200px;
     height: 100%;
 }
 
 .categories {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 70px;
-    margin: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
 }
 
 .category-item {
-    padding: 10px;
+    padding: 15px;
     border: 1px solid #B14788;
     border-radius: 10px;
     text-align: left;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-
 }
 
 .category-item:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
 
 .category-item p {
     color: #B14788;
+    font-size: 16px;
+}
+
+.category-item img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1200px) {
+    #p1 {
+        font-size: 72px;
+    }
+}
+
+@media (max-width: 992px) {
+    #p1 {
+        font-size: 60px;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 60px;
+    }
+    
+    #p1 {
+        font-size: 48px;
+    }
+    
+    #p2 {
+        font-size: 18px;
+    }
+    
+    .textContent {
+        margin-bottom: 50px;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    #p1 {
+        font-size: 36px;
+    }
+    
+    #p2 {
+        font-size: 16px;
+    }
+    
+    .textContent {
+        margin-bottom: 30px;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+    
+    .category-item {
+        padding: 10px;
+    }
+    
+    .category-item p {
+        font-size: 14px;
+    }
+    
+    .category-item img {
+        width: 16px;
+        height: 16px;
+    }
 }
 </style>
