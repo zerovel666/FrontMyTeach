@@ -54,10 +54,10 @@
 
                             <div class="editor-actions">
                                 <button @click="executeCode" :disabled="isExecuting" class="execute-btn">
-                                    <span v-if="!isExecuting">▶ Выполнить</span>
+                                    <span v-if="!isExecuting">▶</span>
                                     <span v-else> Выполняется...</span>
                                 </button>
-                                <button @click="resetCode" class="reset-btn">⟲ Сбросить</button>
+                                <button @click="resetCode" class="reset-btn">⟲</button>
                             </div>
                         </div>
 
@@ -414,7 +414,6 @@ onMounted(() => {
 })
 
 </script>
-
 <style scoped>
 p,
 h1,
@@ -428,19 +427,20 @@ h6 {
 
 .content {
     display: flex;
-    justify-content: space-between;
-    gap: 40px;
-    margin-top: 40px;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 0 15px;
 }
 
 .modules-content {
-    width: 30%;
+    width: 100%;
     background: #59008E;
     border-radius: 20px 0 0 20px;
-    padding: 30px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 20px;
     overflow-y: auto;
 }
 
@@ -473,13 +473,13 @@ h6 {
 
 .module-item {
     background-color: #470070;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
 }
 
 .module-task {
     background-color: #470070;
-    padding: 20px 20px 20px 30px;
+    padding: 15px;
     border-radius: 10px;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
@@ -490,23 +490,23 @@ h6 {
 }
 
 .task-container {
-    width: 70%;
+    width: 100%;
     background: #59008E;
     border-radius: 20px;
-    padding: 30px;
+    padding: 20px;
     line-height: 140%;
 }
 
 .task-container .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .lecture-content {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
 .lecture-content .media-value img {
@@ -517,8 +517,9 @@ h6 {
 
 .task-action {
     display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
 }
 
 .task-action button {
@@ -530,6 +531,7 @@ h6 {
     box-shadow: 0 0 10px #B14788;
     cursor: pointer;
     transition: box-shadow 0.3s ease-in-out;
+    width: 100%;
 }
 
 .task-action button:hover {
@@ -537,26 +539,25 @@ h6 {
 }
 
 .task h3 {
-    margin: 40px 0 20px 0;
+    margin: 30px 0 15px 0;
 }
 
 .questions {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin-top: 20px;
+    gap: 15px;
+    margin-top: 15px;
 }
 
 .code-task-container {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 800px;
-    margin: 40px auto;
+    width: 100%;
+    margin: 30px auto;
     padding: 20px;
     border-radius: 8px;
     background-color: #470070;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 
 .code-editor-wrapper {
     margin-bottom: 20px;
@@ -594,6 +595,7 @@ h6 {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
+    width: 100%;
 }
 
 .execute-btn {
@@ -644,8 +646,8 @@ h6 {
 
 .one-choise {
     display: flex;
-    align-items: center;
-    gap: 20px;
+    flex-direction: column;
+    gap: 15px;
     margin-top: 20px;
 }
 
@@ -655,6 +657,7 @@ h6 {
     padding: 10px 30px;
     border-radius: 10px;
     cursor: pointer;
+    width: 100%;
 }
 
 .one-choise input {
@@ -663,6 +666,7 @@ h6 {
     border: none;
     border-radius: 10px;
     padding: 10px;
+    width: 100%;
 }
 
 input[type=number]::-webkit-outer-spin-button,
@@ -675,32 +679,11 @@ input[type=number]::-webkit-inner-spin-button {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-}
-
-.multi-choise-item {
-    display: flex;
-    gap: 20px;
-}
-
-.multi-choise-item input {
-    width: 20px;
-}
-
-.multi-choise {
-    margin-top: 20px;
-}
-
-.multi-choise-content {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
     gap: 15px;
 }
 
 .multi-choise-item {
     display: flex;
-    align-items: center;
     gap: 15px;
     padding: 10px;
     border-radius: 8px;
@@ -779,6 +762,7 @@ input[type=number]::-webkit-inner-spin-button {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s;
+    width: 100%;
 }
 
 .multi-choise-submit:hover {
@@ -787,7 +771,8 @@ input[type=number]::-webkit-inner-spin-button {
 
 .word {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    gap: 15px;
     margin-top: 20px;
 }
 
@@ -797,7 +782,7 @@ input[type=number]::-webkit-inner-spin-button {
     border: none;
     outline: none;
     border-radius: 10px;
-    width: 400px;
+    width: 100%;
 }
 
 .word button {
@@ -806,5 +791,103 @@ input[type=number]::-webkit-inner-spin-button {
     border-radius: 10px;
     border: none;
     cursor: pointer;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .content {
+        flex-direction: row;
+        gap: 30px;
+        margin-top: 30px;
+        padding: 0 20px;
+    }
+
+    .modules-content {
+        width: 35%;
+        max-height: none;
+        border-radius: 20px 0 0 20px;
+    }
+
+    .task-container {
+        width: 65%;
+        padding: 25px;
+        border-radius: 0 20px 20px 0;
+    }
+
+    .task-action {
+        flex-direction: row;
+    }
+
+    .task-action button {
+        width: auto;
+    }
+
+    .one-choise {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .one-choise button {
+        width: auto;
+    }
+
+    .one-choise input {
+        width: auto;
+        flex: 1;
+    }
+
+    .multi-choise-submit {
+        width: auto;
+    }
+
+    .word {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .word input {
+        width: auto;
+        flex: 1;
+    }
+
+    .word button {
+        width: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    .content {
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    .modules-content {
+        width: 30%;
+        padding: 30px;
+        gap: 30px;
+    }
+
+    .task-container {
+        width: 70%;
+        padding: 30px;
+    }
+
+    .module-item {
+        padding: 20px;
+    }
+
+    .module-task {
+        padding: 20px 20px 20px 30px;
+    }
+
+    .task-container .header {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .task-action button {
+        padding: 10px 20px;
+    }
 }
 </style>
