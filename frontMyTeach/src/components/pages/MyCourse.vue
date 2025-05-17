@@ -14,7 +14,7 @@
                             </ul>
                             <p class="author_name">{{ card.course.author_name }} <img src="/src/assets/Icons/Tap.svg"
                                     alt=""></p>
-                            <button @click="goCourse(card.id)">Продолжить</button>
+                            <button @click="goCourse(card.course_id)">Продолжить</button>
                         </div>
                         <div class="rInfo">
                             <p class="ratingNum">{{ card.course?.rating_course?.rating || 0 }}

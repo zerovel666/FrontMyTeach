@@ -202,6 +202,13 @@ onMounted(() => {
     font-weight: 200;
 }
 
+@media (max-width:500px){
+    .learningInfo{
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+}
+
 .time {
     text-align: center;
 }
@@ -344,4 +351,5 @@ h4 {
 .date {
     font-size: 16px;
 }
+
 </style>

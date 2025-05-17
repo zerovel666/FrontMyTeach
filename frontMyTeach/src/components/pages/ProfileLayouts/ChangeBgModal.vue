@@ -17,9 +17,8 @@
             </div>
         </div>
     </div>
-	<Notification ref="notificationRef" />
+    <Notification ref="notificationRef" />
 </template>
-
 <script setup>
 import Notification from '@/components/Notification.vue';
 import { API_URL } from '@/config';
@@ -39,13 +38,8 @@ const notificationRef = ref(null);
 const getImages = async () => {
     const response = await axios.get(`${API_URL}/client/bg/all`);
     images.value = response.data;
-    // images.value = [
-    //     { id: 1, image_path: "http://localhost:8081/storage//bgProfile/Чистилище.jpg", name: "Чистилище" },
-    //     { id: 2, image_path: "http://localhost:8081/storage//bgProfile/Таинство.jpg", name: "Таинство" },
-    //     { id: 3, image_path: "http://localhost:8081/storage//bgProfile/Иллюстрация.jpg", name: "Иллюстрация" },
-    //     { id: 4, image_path: "http://localhost:8081/storage//bgProfile/Абстракция.jpg", name: "Абстракция" },
-    //     { id: 5, image_path: "http://localhost:8081/storage//bgProfile/Капли.jpg", name: "Капли" }
-    // ];
+
+
 };
 
 const selectImage = (image) => {
@@ -84,7 +78,6 @@ onUnmounted(() => {
 });
 </script>
 
-
 <style scoped>
 .modal-overlay {
     position: fixed;
@@ -97,80 +90,153 @@ onUnmounted(() => {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(5px);
+    z-index: 1000;
 }
+
 h3 {
     color: white;
     text-align: center;
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem 0;
+    font-weight: 500;
 }
 
 .content {
-    width: 1000px;
+    width: 90%;
+    max-width: 1000px;
     min-height: 300px;
     background-color: #000000;
-    border-radius: 50px;
-    border: 1px solid white;
-    padding: 40px;
-    max-height: 600px;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    max-height: 80vh;
     position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
 }
 
 .img-block {
-    max-height: 500px;
+    max-height: calc(80vh - 180px);
     overflow-y: auto;
-    overflow-x: hidden;
+    padding-right: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #5A217C transparent;
 }
 
 .images {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0.5rem;
 }
 
 .images img {
-    width: 400px;
-    height: 300px;
+    width: 100%;
+    height: 180px;
     object-fit: cover;
-    border-radius: 10px;
-    border:1px solid #c758ff;
-
+    border-radius: 0.75rem;
+    border: 1px solid #c758ff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .image {
     position: relative;
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin: 30px;
-    transition: 0.3s;
 }
-.image:hover{
-    transform: scale(1.05);
+
+.image p {
+    margin: 0.75rem 0 0 0;
+    font-size: 1rem;
+    color: white;
+    text-align: center;
 }
-.image p{
-    margin: 0;
-    margin-top: 10px;
-}
+
 .image.selected img {
-    box-shadow: 0 0 10px #c758ff;
+    box-shadow: 0 0 15px #c758ff;
+    transform: scale(1.02);
 }
-.image.selected{
-    transform: scale(1.05);
-}
+
 .save {
     position: absolute;
-    right: 50px;
-    height: 30px;
-    border-radius: 15px;
-    font-size: 75%;
-    padding-left: 30px;
-    padding-right: 30px;
+    right: 1.5rem;
+    top: 1.5rem;
+    height: 2.5rem;
+    border-radius: 1.5rem;
+    font-size: 0.9rem;
+    padding: 0 1.5rem;
     background-color: #5A217C;
     color: white;
-    box-shadow: inset 0px 0px 7px rgb(255, 255, 255);
     border: none;
-    transition: transform 0.3s;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3);
+    font-weight: 500;
 }
+
 .save:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    background-color: #6a2c8c;
+}
+
+/* Стили для планшетов (600px и выше) */
+@media (max-width: 500px) {
+    .content {
+        padding: 2rem;
+    }
+    .content h3{
+        text-align: left;
+        font-size: 1.1rem;
+    }
+    .content button{
+        height: 35px;
+    }
+    .images {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .images img {
+        height: 200px;
+    }
+}
+@media (min-width: 900px) {
+    .content {
+        padding: 2.5rem;
+    }
+    
+    .images {
+        gap: 2rem;
+    }
+    
+    .images img {
+        height: 220px;
+    }
+    
+    .save {
+        font-size: 1rem;
+        padding: 0 2rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .images img {
+        height: 250px;
+    }
+}
+
+/* Кастомизация скроллбара */
+.img-block::-webkit-scrollbar {
+    width: 6px;
+}
+
+.img-block::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.img-block::-webkit-scrollbar-thumb {
+    background-color: #5A217C;
+    border-radius: 3px;
 }
 </style>
