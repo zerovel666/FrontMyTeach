@@ -118,24 +118,19 @@ onMounted(() => {
 })
 
     const initThreeJSLogo = () => {
-        // Размеры контейнера
         const width = logoContainer.value.clientWidth
         const height = Math.min(width, 420)
 
-        // Сцена
         const scene = new THREE.Scene()
         scene.background = new THREE.Color(0x1a1a1a)
 
-        // Камера
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
         camera.position.z = 5
 
-        // Рендерер
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
         renderer.setSize(width, height)
         logoContainer.value.appendChild(renderer.domElement)
 
-        // Освещение
         const ambientLight = new THREE.AmbientLight(0x404040)
         scene.add(ambientLight)
 
@@ -143,7 +138,6 @@ onMounted(() => {
         directionalLight.position.set(1, 1, 1)
         scene.add(directionalLight)
 
-        // Создаем центральный шар
         const createCentralSphere = () => {
             const geometry = new THREE.SphereGeometry(2.1, 32, 32)
             const material = new THREE.MeshPhongMaterial({
@@ -156,7 +150,6 @@ onMounted(() => {
             return sphere
         }
 
-        // Создаем орбитали
         const createOrbits = () => {
             const group = new THREE.Group()
 
@@ -166,20 +159,19 @@ onMounted(() => {
                 opacity: 1,
             })
 
-            // Три орбитали (X, Y, Z оси)
             const orbits = [
-                { radius: 2.9, rotation: [0, 0, 0] },       // XY плоскость
-                { radius: 2.9, rotation: [Math.PI / 2, 0, 0] }, // XZ плоскость
-                { radius: 2.9, rotation: [0, Math.PI / 3, 0] },  // YZ плоскость
+                { radius: 2.9, rotation: [0, 0, 0] },       
+                { radius: 2.9, rotation: [Math.PI / 2, 0, 0] }, 
+                { radius: 2.9, rotation: [0, Math.PI / 3, 0] },  
             ]
 
             orbits.forEach(orbit => {
                 const curve = new THREE.EllipseCurve(
-                    0, 0,            // центр
-                    orbit.radius, orbit.radius, // радиус X, Y
-                    0, 2 * Math.PI,   // начальный и конечный угол
-                    false,            // по часовой стрелке
-                    300                 // угол поворота
+                    0, 0,           
+                    orbit.radius, orbit.radius, 
+                    0, 2 * Math.PI,  
+                    false,            
+                    300                
                 )
 
                 const points = curve.getPoints(100)
@@ -199,11 +191,9 @@ onMounted(() => {
         const orbits = createOrbits()
         scene.add(orbits)
 
-        // Анимация
         const animate = () => {
             requestAnimationFrame(animate)
 
-            // Вращение орбит
             orbits.rotation.x += 0.002
             orbits.rotation.y += 0.003
 
@@ -212,7 +202,6 @@ onMounted(() => {
 
         animate()
 
-        // Обработка изменения размера
         window.addEventListener('resize', () => {
             const newWidth = logoContainer.value.clientWidth
             const newHeight = Math.min(newWidth, 400)
@@ -248,7 +237,6 @@ onMounted(() => {
     mix-blend-mode: overlay;
 }
 
-/* Остальные стили остаются без изменений */
 .about-us {
     max-width: 1200px;
     margin: 0 auto;

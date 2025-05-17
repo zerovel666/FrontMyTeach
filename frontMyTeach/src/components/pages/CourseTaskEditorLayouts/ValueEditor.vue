@@ -47,7 +47,7 @@ const media_value = ref({
 });
 
 const fileInput = ref(null);
-const currentImage = ref(null); // Отдельная ref для отображения текущего изображения
+const currentImage = ref(null); 
 
 const props = defineProps({
     currentValue: Object

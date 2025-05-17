@@ -190,14 +190,8 @@ const extraSearch = async () => {
 }
 
 const getOptions = async () => {
-    // const response = await axios.get(`${API_URL}/student/course/list`);
-    // options.value = response.data.data;
-    options.value = [
-        {
-            "id": 1,
-            "name": "Быстрый курс по Laravel + Vue3: MVC API Микросервис"
-        }
-    ]
+    const response = await axios.get(`${API_URL}/student/course/list`);
+    options.value = response.data.data;
 };
 
 const handleClickOutside = (event) => {

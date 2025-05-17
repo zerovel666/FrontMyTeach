@@ -101,65 +101,9 @@ const selectedCategory = computed(() => {
 
 const getCategories = async () => {
     try {
-        // const response = await axios.get(`${API_URL}/course/category/all`)
-        // categories.value = response.data
+        const response = await axios.get(`${API_URL}/course/category/all`)
+        categories.value = response.data
 
-        categories.value = [
-            {
-                "id": 1,
-                "category": "Django",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 2,
-                "category": "Python",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 3,
-                "category": "HTML&CSS",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 4,
-                "category": ".NET",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 5,
-                "category": "Java",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 6,
-                "category": "Java",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 7,
-                "category": "React.js",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 8,
-                "category": "C#",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            },
-            {
-                "id": 9,
-                "category": "HTML&CSS",
-                "created_at": "2025-04-26T14:55:31.000000Z",
-                "updated_at": "2025-04-26T14:55:31.000000Z"
-            }
-        ]
     } catch (error) {
         console.error('Ошибка загрузки категорий:', error)
     }

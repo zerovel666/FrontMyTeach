@@ -99,7 +99,6 @@ const close = () => {
 const validateForm = () => {
     let isValid = true;
     
-    // Validate name
     if (!formData.value.name.trim()) {
         errors.value.name = 'Введите название организации';
         isValid = false;
@@ -107,13 +106,11 @@ const validateForm = () => {
         errors.value.name = '';
     }
     
-    // Validate BIN
     validateBin();
     if (errors.value.bin) {
         isValid = false;
     }
     
-    // Validate address
     if (!formData.value.address.trim()) {
         errors.value.address = 'Введите адрес';
         isValid = false;
@@ -121,13 +118,11 @@ const validateForm = () => {
         errors.value.address = '';
     }
     
-    // Validate phone
     validatePhone();
     if (errors.value.phone) {
         isValid = false;
     }
     
-    // Validate email
     validateEmail();
     if (errors.value.email) {
         isValid = false;
@@ -147,7 +142,6 @@ const validateBin = () => {
         return;
     }
     
-    // Remove all non-digit characters
     const cleanBin = bin.replace(/\D/g, '');
     formData.value.bin = cleanBin;
     
@@ -180,7 +174,6 @@ const validatePhone = () => {
         return;
     }
     
-    // Basic phone validation - at least 6 digits
     const digitsOnly = phone.replace(/\D/g, '');
     if (digitsOnly.length < 6) {
         errors.value.phone = 'Телефон должен содержать минимум 6 цифр';
