@@ -84,14 +84,11 @@ const getUserInfo = async () => {
 				console.log('Ошибка HTTP:', error.response.status);
 				console.log('Ответ от сервера:', error.response.data);
 			} else if (error.request) {
-				// Ошибка, если запрос был отправлен, но не получили ответ
 				console.log('Ошибка запроса, ответа нет:', error.request);
 			} else {
-				// Другие ошибки
 				console.log('Ошибка в настройке запроса:', error.message);
 			}
 
-			// Обработка 401 ошибки (неавторизованный доступ)
 			if (error.response && error.response.status === 401) {
 				VueCookies.remove('token');
 				VueCookies.remove('role');

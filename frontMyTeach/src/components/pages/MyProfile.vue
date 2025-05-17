@@ -235,9 +235,23 @@ h4 {
     margin-top: 40px;
 }
 
+@media (max-width: 1200px) {
+    .certificates {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .certificates {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+
 .certificate {
     width: 100%;
-    height: 400px;
     border-radius: 20px;
     border: 1px solid #fff;
     background: linear-gradient(45deg, #001C37 6%, #460067 100%);
@@ -302,6 +316,7 @@ h4 {
     padding: 20px 0;
     display: flex;
     flex-direction: column;
+    gap: 10px;
     justify-content: center;
     align-items: center;
 }
@@ -327,7 +342,6 @@ h4 {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    position: absolute;
     bottom: 5px;
 }
 

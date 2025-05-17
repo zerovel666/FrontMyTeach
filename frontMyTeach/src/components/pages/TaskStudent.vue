@@ -143,27 +143,33 @@ async function getTask() {
         const response = await axios.get(`${API_URL}/student/task/${route.params.id}`)
         task.value = response.data;
 
-        if (task.value.answer.answer_editors.code == 'CODE') {
-            userCode.value = String(task.value.userAnswer)
-            console.log(userCode.value);
-        } else if (task.value.answer.answer_editors.code == 'ONE_CHOISE' || task.value.answer.answer_editors.code == 'WORD') {
-            if (task.value.userAnswer == null) {
-                str_value.value = '';
-            } else {
-                str_value.value = String(task.value.userAnswer);
-            }
-        } else if (task.value.answer.answer_editors.code == 'MULTI_CHOISE') {
-            if (task.value.userAnswer && typeof task.value.userAnswer === 'object') {
-                multiChoiseValues.value = { ...task.value.userAnswer };
-            } else {
-                multiChoiseValues.value = {};
-                task.value.questions.forEach((_, index) => {
-                    multiChoiseValues.value[index + 1] = false;
-                });
+        if (task.value.type != 'lecture') {
+            if (task.value.answer.answer_editors.code == 'CODE') {
+                if (task.value.userAnswer == null) {
+                    userCode.value = ''
+                } else {
+                    userCode.value = String(task.value.userAnswer)
+                }
+
+            } else if (task.value.answer.answer_editors.code == 'ONE_CHOISE' || task.value.answer.answer_editors.code == 'WORD') {
+                if (task.value.userAnswer == null) {
+                    str_value.value = '';
+                } else {
+                    str_value.value = String(task.value.userAnswer);
+                }
+            } else if (task.value.answer.answer_editors.code == 'MULTI_CHOISE') {
+                if (task.value.userAnswer && typeof task.value.userAnswer === 'object') {
+                    multiChoiseValues.value = { ...task.value.userAnswer };
+                } else {
+                    multiChoiseValues.value = {};
+                    task.value.questions.forEach((_, index) => {
+                        multiChoiseValues.value[index + 1] = false;
+                    });
+                }
             }
         }
         updateTaskContainerHeight();
-    } catch (error){
+    } catch (error) {
         notificationRef.value.showNotification("Ошибка: " + error?.response?.data?.message ?? "неизвестная ошибка");
     }
 }
@@ -191,7 +197,6 @@ async function getAllTasksInModule() {
 
 async function goBackTask() {
     try {
-        // Находим текущий модуль и индекс текущей задачи
         let currentModuleIndex = -1;
         let currentTaskIndex = -1;
 
@@ -207,35 +212,30 @@ async function goBackTask() {
             if (currentModuleIndex !== -1) break;
         }
 
-        // Если не нашли текущую задачу
         if (currentModuleIndex === -1 || currentTaskIndex === -1) {
-            notificationRef.value.showNotification('Не удалось определить текущий урок', 'error');
+            notificationRef.value.showNotification('Не удалось определить текущий урок');
             return;
         }
 
-        // Определяем предыдущую задачу
         let prevModuleIndex = currentModuleIndex;
         let prevTaskIndex = currentTaskIndex - 1;
 
-        // Если текущая задача первая в модуле, переходим к последней задаче предыдущего модуля
         if (prevTaskIndex < 0) {
             if (prevModuleIndex > 0) {
                 prevModuleIndex--;
                 prevTaskIndex = moduleTasks.value[prevModuleIndex].tasks.length - 1;
             } else {
-                // Это первая задача в первом модуле - ничего не делаем
-                notificationRef.value.showNotification('Это первый урок курса', 'info');
+                notificationRef.value.showNotification('Это первый урок курса');
                 return;
             }
         }
 
-        // Переходим к предыдущей задаче
         const prevTask = moduleTasks.value[prevModuleIndex].tasks[prevTaskIndex];
         router.push(`/task/${route.params.course_id}/${prevTask.id}`);
 
     } catch (error) {
         console.error('Error going to previous task:', error);
-        notificationRef.value.showNotification('Ошибка при переходе к предыдущему уроку', 'error');
+        notificationRef.value.showNotification('Ошибка при переходе к предыдущему уроку ' + error);
     }
 }
 
@@ -256,35 +256,29 @@ async function goNextTask() {
             if (currentModuleIndex !== -1) break;
         }
 
-        // Если не нашли текущую задачу
         if (currentModuleIndex === -1 || currentTaskIndex === -1) {
-            notificationRef.value.showNotification('Не удалось определить текущий урок', 'error');
+            notificationRef.value.showNotification('Не удалось определить текущий урок');
             return;
         }
 
-        // Определяем следующую задачу
         let nextModuleIndex = currentModuleIndex;
         let nextTaskIndex = currentTaskIndex + 1;
 
-        // Если текущая задача последняя в модуле, переходим к первой задаче следующего модуля
         if (nextTaskIndex >= moduleTasks.value[nextModuleIndex].tasks.length) {
             if (nextModuleIndex < moduleTasks.value.length - 1) {
                 nextModuleIndex++;
                 nextTaskIndex = 0;
             } else {
-                // Это последняя задача в последнем модуле - ничего не делаем
-                notificationRef.value.showNotification('Это последний урок курса', 'info');
+                notificationRef.value.showNotification('Это последний урок курса');
                 return;
             }
         }
 
-        // Переходим к следующей задаче
         const nextTask = moduleTasks.value[nextModuleIndex].tasks[nextTaskIndex];
         router.push(`/task/${route.params.course_id}/${nextTask.id}`);
 
     } catch (error) {
-        console.error('Error going to next task:', error);
-        notificationRef.value.showNotification('Ошибка при переходе к следующему уроку', 'error');
+        notificationRef.value.showNotification('Ошибка при переходе к следующему уроку');
     }
 }
 
@@ -436,7 +430,7 @@ h6 {
 .modules-content {
     width: 100%;
     background: #59008E;
-    border-radius: 20px 0 0 20px;
+    border-radius: 20px ;
     padding: 20px;
     display: flex;
     flex-direction: column;

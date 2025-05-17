@@ -33,7 +33,6 @@
                             <div v-if="VueCookies.get('token')">
                                 <div v-if="VueCookies.get('role') === 'student'">
                                     <li @click="goMyProfile">Мой профиль</li>
-                                    <li @click="goSetting">Настройки</li>
                                     <li @click="goBibleCourse">Библеотека курсов</li>
                                     <li @click="logout">Выйти из аккаунта</li>
                                 </div>
@@ -41,12 +40,10 @@
                                     <li @click="goMyProfile">Мой профиль</li>
                                     <li @click="goSubscription">Подписки</li>
                                     <li @click="goMyOrganization">Организация</li>
-                                    <li @click="goSetting">Настройки</li>
                                     <li @click="logout">Выйти из аккаунта</li>
                                 </div>
                                 <div v-else-if="VueCookies.get('role') === 'teacher'">
                                     <li @click="goMyProfile">Мой профиль</li>
-                                    <li @click="goSetting">Настройки</li>
                                     <li @click="goToCreateCourse">Создать курс</li>
                                     <li @click="goTeaching">Преподавание</li>
                                     <li @click="goBibleCourse">Библеотека курсов</li>
@@ -138,9 +135,6 @@ const goAboutUs = async () => {
 
 const goMyProfile = async () => {
     router.push('/myProfile')
-}
-const goSetting = async () => {
-    router.push('/setting')
 }
 
 const goTeaching = async () => {
