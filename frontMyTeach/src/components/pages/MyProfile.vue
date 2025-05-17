@@ -7,8 +7,13 @@
                     <div class="icon">
                         <img src="/src/assets/Icons/editorIcon.svg" alt="" @click="showModal = true">
                     </div>
-                    <div class="avatar">
+                    <div class="avatar" @mouseover="showChangeText = true" @mouseleave="showChangeText = false"  @click="triggerFileInput">
                         <img :src="userInfo.user_image.image_path" alt="">
+                        <div class="change-avatar" v-if="showChangeText">
+                            Изменить
+                        </div>
+                        <input type="file" ref="fileInput" @change="handleFileUpload" accept="image/*"
+                            style="display: none">
                     </div>
                 </div>
                 <div class="bottom">
@@ -80,6 +85,9 @@ import html2canvas from 'html2canvas';
 const userInfo = inject('userInfo');
 const showModal = ref(false)
 const certificates = ref([]);
+const showChangeText = ref(false);
+const fileInput = ref(null);
+
 
 const getCertificate = async () => {
     const response = await axios.get(`${API_URL}/certificate/my/all`);
@@ -98,6 +106,32 @@ const downloadCertificate = async (index) => {
     link.href = image;
     link.download = `certificate-${index + 1}.png`;
     link.click();
+};
+
+const triggerFileInput = () => {
+    fileInput.value.click();
+};
+
+const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+        const formData = new FormData();
+        formData.append('image_path', file);
+
+        const response = await axios.post(`${API_URL}/client/avatars/update/${userInfo.value.id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        userInfo.value.user_image.image_path = response.data.image_path;
+        
+        event.target.value = '';
+    } catch (error) {
+        console.error('Ошибка при загрузке аватарки:', error);
+    }
 };
 
 onMounted(() => {
@@ -126,9 +160,12 @@ onMounted(() => {
     height: 200px;
     border: 1px solid #fff;
 }
-
-.icon,
 .avatar {
+    position: relative;
+    cursor: pointer;
+    bottom: -50%;
+    left: 50%;
+    transform: translateX(-50%);
     position: absolute;
 }
 
@@ -138,19 +175,36 @@ onMounted(() => {
     border-radius: 100%;
     object-fit: cover;
     border: 4px solid #fff;
+    transition: filter 0.3s ease;
 }
+
+.avatar:hover img {
+    filter: brightness(0.5);
+}
+
+.change-avatar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.avatar:hover .change-avatar {
+    opacity: 1;
+}
+
 
 .icon {
     right: 10px;
     top: 10px;
     cursor: pointer;
+    position: absolute;
 }
 
-.avatar {
-    bottom: -50%;
-    left: 50%;
-    transform: translateX(-50%);
-}
+
 
 .bottom {
     background: linear-gradient(#DAA3FF, #47106B);
@@ -202,8 +256,8 @@ onMounted(() => {
     font-weight: 200;
 }
 
-@media (max-width:500px){
-    .learningInfo{
+@media (max-width:500px) {
+    .learningInfo {
         margin-top: 20px;
         margin-left: 20px;
     }
@@ -365,5 +419,4 @@ h4 {
 .date {
     font-size: 16px;
 }
-
 </style>
