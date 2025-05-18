@@ -1,6 +1,6 @@
 <template>
 	<div v-if="$loading.active" class="loader">
-		<a-spin size="large" />
+		<a-spin size="large" class="my-spinner" />
 	</div>
 	<router-view />
 	<Notification ref="notificationRef" />

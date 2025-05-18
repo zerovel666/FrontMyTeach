@@ -58,8 +58,6 @@ body.bg-custom {
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-corner {}
-
 .containerBody {
   margin: 0 9%;
   min-height: 200px;
@@ -79,4 +77,8 @@ body.bg-custom {
   font-size: 20px;
   z-index: 99999999999999999999;
   overflow: hidden;
+}
+
+.my-spinner .ant-spin-dot i {
+  background-color: #59008E !important;
 }

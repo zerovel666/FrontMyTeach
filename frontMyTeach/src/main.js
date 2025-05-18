@@ -26,6 +26,7 @@ import CourseTaskEditor from './components/pages/CourseTaskEditor.vue'
 import TaskStudent from './components/pages/TaskStudent.vue';
 import AdminMainPage from './components/pages/AdminPages/AdminMainPage.vue';
 import { createPinia } from 'pinia';
+import CoursePayment from './components/pages/Payment/CoursePayment.vue';
 
 VueCookies.config('7d', '', '', false);
 
@@ -71,6 +72,7 @@ const routes = [
   { path: '/subscription', component: Subscription },
   { path: '/subscription/:subscription_id', component: SubscriptionPageById },
   { path: '/subscription/pending/:uuid', component: SubscriptionPayment },
+  { path: '/pay/course/:uuid', component: CoursePayment },
   { path: '/teaching', component: TeachingBible },
   { path: '/main/course/editor/:id', component: MainCourseEditor },
   { path: '/task/editor/:course_id/:id', component: CourseTaskEditor },
