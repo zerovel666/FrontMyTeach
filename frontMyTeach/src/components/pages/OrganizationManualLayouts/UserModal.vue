@@ -133,11 +133,6 @@ const validateForm = () => {
         return false;
     }
     
-    if (!formData.value.group_id) {
-        notificationRef.value.showNotification("Пожалуйста, выберите группу");
-        return false;
-    }
-    
     return true;
 };
 

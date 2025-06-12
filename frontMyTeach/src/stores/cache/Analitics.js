@@ -22,19 +22,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
 
     async function fetchAnalytics() {
         if (!analytics.value) {
-            // const response = await axios.get(`${API_URL}/admin/allAnalitics`);
-            // analytics.value = response.data;
-            analytics.value = {
-                "count_sale": 8,
-                "amount_sale_subscription": 6000,
-                "amount_sale_course": 35913,
-                "total_amount_sale": 41913,
-                "course_count": 1,
-                "task": 5,
-                "user_count": 5,
-                "organization_count": 2,
-                "time_use": 97.39999999999966
-            }
+            const response = await axios.get(`${API_URL}/admin/allAnalitics`);
+            analytics.value = response.data;
+           
             progressLinePercent.value = calculateRelevance(analytics.value);
         }
     }
