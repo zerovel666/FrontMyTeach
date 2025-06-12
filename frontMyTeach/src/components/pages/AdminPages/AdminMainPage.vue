@@ -9,6 +9,7 @@
             <OrganizationComponent v-if="currentPage === 'organization'" />
             <BannersComponent v-if="currentPage === 'banners'" />
             <SubscriptionComponent v-if="currentPage === 'subscriptions'" />
+            <CategoriesComponent v-if="currentPage === 'categories'" />
         </div>
     </div>
     <Notification ref="notificationRef" />
@@ -28,6 +29,7 @@ import CheckingComponent from './Navigation/CheckingComponent.vue';
 import OrganizationComponent from './Navigation/OrganizationComponent.vue';
 import BannersComponent from './Navigation/BannersComponent.vue';
 import SubscriptionComponent from './Navigation/SubscriptionComponent.vue';
+import CategoriesComponent from './Navigation/CategoriesComponent.vue';
 
 const router = useRouter();
 const notificationRef = ref(null);

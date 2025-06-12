@@ -2,6 +2,7 @@
     <div class="header-navigation">
         <p @click="changePage('main')">Главная</p>
         <p @click="changePage('users')">Пользователи</p>
+        <p @click="changePage('categories')">Категории</p>
         <p @click="changePage('course')">Курсы</p>
         <p @click="changePage('checking')">На проверку</p>
         <p @click="changePage('organization')">Организации</p>
