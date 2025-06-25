@@ -12,6 +12,7 @@
                     <ul class="tags">
                         <li v-for="(tag, index) in courseInfo.tags" :key="index">{{ tag.tag }}</li>
                     </ul>
+                    <button @click="showLike = true">Оценить</button>
                 </div>
                 <div class="r-info">
                     <img :src="courseInfo.image_path" alt="" id="courseImage">
@@ -54,8 +55,9 @@
                         <h2>{{ courseInfo.course_amount === null ? 'Цена: Бесплатно' : `Цена:
                             ${courseInfo.course_amount}KZT` }}
                         </h2>
-                        <button class="btn-buy" @click="buy()"v-if="'buyed' in courseInfo">{{ courseInfo.buyed ? "Продолжить" : "Приобрести"
-                        }}</button>
+                        <button class="btn-buy" @click="buy()" v-if="'buyed' in courseInfo">{{ courseInfo.buyed ?
+                            "Продолжить" : "Приобрести"
+                            }}</button>
                         <div class="fastInfoCourse">
                             <div class="line"></div>
                             <div class="row">
@@ -66,8 +68,8 @@
                                 <p>Курс:</p>
                                 <p>
                                     {{ courseInfo.course_name.length > 20
-                                        ? courseInfo.course_name.slice(0, 20) + '..'
-                                        : courseInfo.course_name }}
+                                    ? courseInfo.course_name.slice(0, 20) + '..'
+                                    : courseInfo.course_name }}
                                 </p>
                             </div>
                             <div class="row">
@@ -97,6 +99,8 @@
             </div>
         </div>
     </div>
+
+    <LikeComponent v-if="showLike" @close="showLike = false" @rated="handleRated" />
     <Notification ref="notificationRef" />
     <FooterBar />
 </template>
@@ -110,6 +114,7 @@ import axios from 'axios';
 import { API_URL } from '@/config';
 import Notification from '../Notification.vue';
 import VueCookies from 'vue-cookies';
+import LikeComponent from '../layouts/LikeComponent.vue';
 
 
 const notificationRef = ref(null);
@@ -121,7 +126,7 @@ const buy = async () => {
     try {
         if (!courseInfo.value.buyed) {
             const response = await axios.post(`${API_URL}/student/course/${route.params.id}`)
-            if (response.data.uuid) {//write logic
+            if (response.data.uuid) {
                 router.push(`/pay/course/${response.data.uuid}`);
             } else {
                 courseInfo.value.buyed = true
@@ -138,14 +143,25 @@ const buy = async () => {
 const getCourseInfo = async () => {
 
     let response = null;
-    if (VueCookies.get('token') && (VueCookies.get('role') == 'student' || VueCookies.get('role') == 'admin')){
+    if (VueCookies.get('token') && (VueCookies.get('role') == 'student' || VueCookies.get('role') == 'admin')) {
         response = await axios.get(`${API_URL}/student/course/${route.params.id}`);
-    }else(
+    } else (
         response = await axios.get(`${API_URL}/student/course/noAuth/${route.params.id}`)
     )
     courseInfo.value = response.data;
 
 }
+
+const showLike = ref(false);
+
+const handleRated = async (rating) => {
+    const data = {
+        course_id : route.params.id,
+        estimation : rating
+    }
+    await axios.post(`${API_URL}/student/course/like`,data);
+    notificationRef.value.showNotification("Спасибо за оценку)");
+};
 
 onMounted(() => {
     getCourseInfo();
@@ -187,6 +203,18 @@ onMounted(() => {
     flex-direction: column;
     gap: 0.8rem;
     color: white;
+    position: relative;
+}
+
+.l-info button {
+    background-color: #9900f1;
+    border: none;
+    width: 200px;
+    height: 40px;
+    position: absolute;
+    bottom: 0;
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 .l-info h1 {
@@ -226,7 +254,7 @@ onMounted(() => {
     align-items: center;
     gap: 0.5rem;
     position: absolute;
-    bottom: -0.5rem;
+    bottom: -1rem;
     right: 1rem;
     background-color: rgba(0, 0, 0, 0.5);
     padding: 0.4rem 0.8rem;
@@ -406,99 +434,96 @@ onMounted(() => {
     border-bottom: none;
 }
 
-/* Адаптив для планшетов */
 @media (min-width: 768px) {
     .content {
         margin-top: 1.5rem;
         padding: 0 1.5rem;
     }
-    
+
     .top-card-info {
         flex-direction: row;
         padding: 2rem;
         gap: 2rem;
         min-height: 300px;
     }
-    
+
     .r-info {
         width: 300px;
         order: 1;
     }
-    
+
     #courseImage {
         max-width: 300px;
         height: 300px;
     }
-    
+
     .rating {
         bottom: -1rem;
         right: -1rem;
         font-size: 1rem;
     }
-    
+
     .rating img {
         width: 18px;
         height: 18px;
     }
-    
+
     .obj-info {
         display: grid;
         grid-template-columns: 1fr 300px;
         gap: 2rem;
     }
-    
+
     .authorInfo img {
         width: 100px;
         height: 100px;
     }
 }
 
-/* Адаптив для десктопов */
 @media (min-width: 1024px) {
     .content {
         max-width: 1200px;
         margin: 2rem auto 0;
         padding: 0 2rem;
     }
-    
+
     .top-card-info {
         border-radius: 16px;
         padding: 2.5rem;
         gap: 3rem;
         min-height: 350px;
     }
-    
+
     .l-info h1 {
         font-size: 2rem;
     }
-    
+
     .r-info {
         width: 350px;
     }
-    
+
     #courseImage {
         max-width: 350px;
         height: 350px;
     }
-    
+
     .obj-info {
         grid-template-columns: 1fr 350px;
     }
-    
+
     .l-obj-info {
         border-radius: 16px;
         padding: 2rem;
     }
-    
+
     .authorInfo img {
-        width: 120px;
-        height: 120px;
+        width: 120px;   height: 120px;
     }
-    
+
     #author_name {
         font-size: 1.4rem;
     }
-    
+
     .btn-buy {
         padding: 0.8rem;
         font-size: 1rem;
